@@ -26,15 +26,24 @@ img {
 	z-index: -1; 
 	position: absolute; 
 	color: white;
-	opacity: 0.0;
+	opacity: 1.75;
 }
 
-#frontpage pre {font-size:8px; letter-spacing:4px; line-height:8px; font-weight:bold;}
+#frontpage pre {
+	font-size: 8px;
+	letter-spacing: 4px;
+	line-height: 8px;
+	font-weight: bold;
+}
 
 #frontpage a {
-	color: inherit ! important ;
+	color: inherit;
 	text-decoration: none;
-	background: transparent url(/images/25-transparent.png);
+	font-size: 12px;
+	line-height: 8px;
+	margin: 0 0px 0 0px;
+	letter-spacing: 2px;
+	/*background: transparent url(/images/25-transparent.png);*/
 }
 
 #frontpage a:hover {
