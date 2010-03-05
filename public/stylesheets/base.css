@@ -20,3 +20,15 @@ img {
 /* Index Ascii Art */
 
 pre {font-size:8px; letter-spacing:4px; line-height:8px; font-weight:bold;}
+
+a {
+	color: inherit ! important ;
+}
+
+a:hover {
+	color: inherit ! important ;
+}
+
+a:visited {
+	color: inherit ! important ;
+}
