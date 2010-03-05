@@ -36,14 +36,18 @@ img {
 	font-weight: bold;
 }
 
-#frontpage a {
+#frontpage pre a {
 	color: inherit;
 	text-decoration: none;
 	font-size: 12px;
-	line-height: 8px;
+	line-height: 6px;
 	margin: 0 0px 0 0px;
 	letter-spacing: 2px;
 	/*background: transparent url(/images/25-transparent.png);*/
+}
+
+#frontpage pre a span {
+	line-height: 6px;	
 }
 
 #frontpage a:hover {
