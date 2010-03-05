@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 require 'rubygems'
 require 'json'
-require 'sinatra/base'
+require 'sinatra'
 
 set :app_file, __FILE__
 set :static, true

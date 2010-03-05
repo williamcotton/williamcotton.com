@@ -19,17 +19,28 @@ img {
 
 /* Index Ascii Art */
 
-pre {font-size:8px; letter-spacing:4px; line-height:8px; font-weight:bold;}
+#frontpage img#background { 
+	height: 800px; 
+	width: 900px;
+	padding: 0 0 0 140px;
+	z-index: -1; 
+	position: absolute; 
+	color: white;
+	opacity: 0.8;
+}
 
-a {
+#frontpage pre {font-size:8px; letter-spacing:4px; line-height:8px; font-weight:bold;}
+
+#frontpage a {
 	color: inherit ! important ;
 	text-decoration: none;
+	background: transparent url(/images/15-transparent.png);
 }
 
-a:hover {
+#frontpage a:hover {
 	color: inherit ! important ;
 }
 
-a:visited {
+#frontpage a:visited {
 	color: inherit ! important ;
 }
