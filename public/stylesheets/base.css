@@ -22,7 +22,7 @@ img {
 #frontpage img#background { 
 	height: 800px; 
 	width: 900px;
-	padding: 0 0 0 140px;
+	padding: 0 0 0 0px;
 	z-index: -1; 
 	position: absolute; 
 	color: white;
@@ -30,6 +30,7 @@ img {
 }
 
 #frontpage pre {
+	margin: 0 0 0 0px;
 	font-size: 8px;
 	letter-spacing: 4px;
 	line-height: 8px;
