@@ -302,8 +302,12 @@ body {
 }
 
 #tertiary-content {
-	height: 330px;
-	margin: 20px 0 0 0;
+	height: 372px;
+	margin: 0px 0 0 0;
+}
+
+#tertiary-content #content {
+	padding: 20px 0 0 0;
 }
 
 #tertiary-content ul#top {
@@ -353,6 +357,7 @@ body {
 }
 
 #tertiary-content ul#bottom li #content {
+	padding: 0 0 0 0;
 	margin: 160px 0 0 0;
 	background: transparent url(/tokbox/tertiary-blue-gradient-background.png) repeat-x;
 	height: 30px;
@@ -381,7 +386,7 @@ body {
 }
 
 #footer {
-	margin: 28px auto;
+	margin: 0px auto;
 	width: 1040px;
 	height: 40px;
 }
