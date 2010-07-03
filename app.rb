@@ -10,7 +10,3 @@ set :logging, true
 get '/' do
   erb :index
 end
-
-get '/tokbox' do
-  erb :tokbox
-end
