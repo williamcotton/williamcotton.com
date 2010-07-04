@@ -945,4 +945,7 @@ $(document).ready(function() {
 	Pages.lastDocumentHeight = $(document).height();
 	
 	wiki1();
+	
+	document.addEventListener('touchmove', function(e){ e.preventDefault(); });
+	myScroll = new iScroll('scroller');
 });

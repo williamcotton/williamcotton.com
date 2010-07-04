@@ -46,8 +46,8 @@ p.aside {
 #top-station {
 	z-index: 20;
 	top: 0px;
-	-webkit-box-shadow: 0px 0px 0px #FFF;
-	-moz-box-shadow: 0px 0px 0px #FFF;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
 }
 
 #top-station.active {
@@ -264,6 +264,11 @@ p.aside {
 }
 
 #main_content {
+	position: relative;
+    z-index: 1;
+    width: auto;
+    height: 9000;
+    overflow: auto;
 	margin: 20px 0 0 0;
 }
 
