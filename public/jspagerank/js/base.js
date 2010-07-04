@@ -1,30 +1,3 @@
-
-Array.prototype.contains = function (element) {
-	for (var i = 0; i < this.length; i++) {
-		if (this[i] == element) {
-			return true;
-		}
-	}
-	return false;
-};
-
-/* 
-Clone
------
-http://my.opera.com/GreyWyvern/blog/show.dml/1725165 
-
-*/
-
-Object.prototype.clone = function() {
-  var newObj = (this instanceof Array) ? [] : {};
-  for (i in this) {
-    if (i == 'clone') continue;
-    if (this[i] && typeof this[i] == "object") {
-      newObj[i] = this[i].clone();
-    } else newObj[i] = this[i]
-  } return newObj;
-};
-
 /*
 Matrix and Vector additions to Sylvester
 ---------------------------------------- */
@@ -43,7 +16,7 @@ Matrix.prototype.row_stochastic = function(damping_factor) {
 		}
 	}
 	
-	var a1 = this.elements.clone();
+	var a1 = this.elements.slice();
 	
 	for (var x = 0; x < row_length; x++) {
 		for (var y = 0; y < row_length; y++) {
@@ -73,7 +46,7 @@ Matrix.prototype.row_stochastic_no_damping = function() {
 		}
 	}
 	
-	var a1 = this.elements.clone();
+	var a1 = this.elements.slice();
 	
 	for (var x = 0; x < row_length; x++) {
 		for (var y = 0; y < row_length; y++) {
@@ -123,7 +96,7 @@ Vector.prototype.normalize = function() {
 }
 
 Matrix.prototype.pagerank = function() {
-	var damping_value = 0.825
+	var damping_value = Pages.dampingFactor;
 	var row_stochastic_matrix = this.row_stochastic(damping_value);
 	var transposed_matrix = row_stochastic_matrix.transpose();
 	var eigenvector = transposed_matrix.eigenvector();
@@ -132,6 +105,16 @@ Matrix.prototype.pagerank = function() {
 }
 
 var Pages = [];
+
+Pages.updateDampingFactor = function(damping_factor) {
+	Pages.dampingFactor = damping_factor;
+	Pages.updateDampingFactorView();
+	$("#damping_factor_slider").slider("value", Pages.dampingFactor);
+}
+
+Pages.updateDampingFactorView = function() {
+	$('.damping_factor').html(Pages.dampingFactor.toFixed(3));
+}
 
 Pages.clickByCoordinates = function(x,y) {
 	$(Pages).each(function() {
@@ -185,22 +168,53 @@ Pages.degreeMatrix = function() {
 	return $M(rows);
 }
 
+ratio_print = function() {
+	var h = $(document).height();
+	var s = $(window).scrollTop() + $(window).height();
+	
+	console.log("Ratio: " + s/h);
+}
+
 Pages.update = function() {
 	
-	var adjacency_matrix_array = Pages.adjacencyMatrix().elements;
-	var row_stochastic_no_damping_matrix_array = Pages.adjacencyMatrix().row_stochastic_no_damping().elements;
-	var row_stochastic_matrix_array = Pages.adjacencyMatrix().row_stochastic(0.825).elements;
+	// need to come up with a way to get the offsets working fine...
 	
-	Pages.updatePageRank();
-	Pages.updateMatrix(adjacency_matrix_array, "identity_matrix", 0, true);
-	Pages.updatePageText();
-	Pages.updateJavascriptMatrix(adjacency_matrix_array);
-	Pages.updatePageProbability();
-	Pages.updateMatrix(row_stochastic_no_damping_matrix_array, "row_stochastic_no_damping_matrix", 2, true);
-	Pages.updateMatrix(row_stochastic_matrix_array, "row_stochastic_matrix", 2, false);
-	$('.dimensionality').html(Pages.length);
+	// from 11 pages to 7 pages
 	
-	SyntaxHighlighter.all();
+	// Starts at:
+	// bottom of #identity_matrix
+	// For example, Page 1 = 188 (47*4)
+	// 
+	// Next at:
+	// bottom of #javascript_matrix
+	// For the remainder = 240 (60*4)
+	// 
+	// Next at:
+	// bottom of #row_stochastic_no_damping_matrix
+	// However, what happens = 428 (107*4)
+	// 
+	// Next at:
+	// bottom of #row_stochastic_matrix
+	// Things have suddenly become = 616 (154*4)
+	
+	if (Pages.length > 0) {
+	
+		var adjacency_matrix_array = Pages.adjacencyMatrix().elements;
+		var row_stochastic_no_damping_matrix_array = Pages.adjacencyMatrix().row_stochastic_no_damping().elements;
+		var row_stochastic_matrix_array = Pages.adjacencyMatrix().row_stochastic(Pages.dampingFactor).elements;
+	
+		Pages.updatePageRank();
+		Pages.updateMatrix(adjacency_matrix_array, "identity_matrix", 0, true);
+		Pages.updatePageText();
+		Pages.updateJavascriptMatrix(adjacency_matrix_array);
+		Pages.updatePageProbability();
+		Pages.updateMatrix(row_stochastic_no_damping_matrix_array, "row_stochastic_no_damping_matrix", 2, true);
+		Pages.updateMatrix(row_stochastic_matrix_array, "row_stochastic_matrix", 2, false);
+		$('.dimensionality').html(Pages.length);
+	
+		SyntaxHighlighter.all();
+	
+	}
 }
 
 Pages.updatePageText = function(array) {
@@ -417,7 +431,7 @@ Page.prototype = {
 		this.domJ.find(".links .link").addClass("link-to");
 		
 		$(Pages).each(function() {
-			if (this.links.contains(that)) {
+			if ($.inArray(that, this.links) > -1) {
 				this.domJ.addClass("link-from");
 				this.showPageRankInfluence();
 			}
@@ -440,7 +454,7 @@ Page.prototype = {
 	},
 	
 	createLink: function(page) {
-		if (!this.links.contains(page)) {
+		if (!($.inArray(page, this.links) > -1)) {
 			this.links.push(page);
 			$("<div class='link'><p class='name page_title'>Page " + page.id + " </p><p class='link_juice'></p></div>").addClass("link-to_" + page.id).appendTo(this.domJ.children(".links"));
 		}
@@ -456,7 +470,7 @@ Page.prototype = {
 		
 		var row = [];
 		for (var i = 0; i < page_total; i++) {
-			if (id_array.contains(i+1)) {
+			if ($.inArray(i+1, id_array) > -1) {
 				row.push(1);
 			}
 			else {
@@ -490,6 +504,89 @@ Page.prototype = {
 		p = 1 - (this.pagerank/this.links.length);
 		var bg_color = "rgb(255," + (p*255).toFixed(0) + "," + (p*255).toFixed(0) + ")";
 		this.domJ.css("background",bg_color);
+	}
+}
+
+TopStation = {
+	
+	initialize: function(options) {
+		
+		this.shownHeight = 599;
+		this.hiddenHeight = 34;
+		
+		this.topOffset = $('#top-station').offset().top;
+		
+		this.totalHeight = $('#top-station').height();
+		this.shownOffset = this.totalHeight - this.shownHeight;
+		this.hiddenOffset = this.totalHeight - this.hiddenHeight;
+		
+		this.isVisable = false;
+		
+		var that = this;
+		
+		$(window).scroll(function(event) {
+			var scrollTop = $(window).scrollTop();
+			that.on_scroll(scrollTop);
+		});
+		
+	},
+	
+	on_scroll: function(scroll_top) {
+		if (this.isVisable) {
+			var offset = this.shownOffset + this.topOffset;
+		}
+		else {
+			var offset = this.hiddenOffset + this.topOffset;
+		}
+
+		if (scroll_top >= offset) {
+			$('#top-station').addClass("active");
+			$("#top-station").css("position", "fixed");
+			if (!this.isAnimating) {
+				if (this.isVisable) {
+					$("#top-station").css("top", -this.shownOffset);
+				}
+				else {
+					$("#top-station").css("top", -this.hiddenOffset);
+				}
+			}
+			$("#sub-station").css("height", this.totalHeight);
+			$("#top-station-toggle").show();
+		}
+		else {
+			$('#top-station').removeClass("active");
+			$("#top-station-toggle").html("Show Graph");
+			this.isVisable = false;
+			$("#top-station").css("top", 0);
+			$("#top-station").css("position", "");
+			$("#sub-station").css("height", "");
+			$("#top-station-toggle").hide();
+		}
+	},
+	
+	toggle: function() {
+		if (this.isVisable) {
+			this.hide();
+		}
+		else {
+			this.show();
+		}
+	},
+	
+	show: function() {
+		this.isAnimating = true;
+		$('#top-station').animate({ top: -this.shownOffset + "px"}, 1000, function() { TopStation.isAnimating = false; TopStation.isVisable = true; });
+		$("#top-station-toggle").html("Hide Graph");
+	},
+	
+	hide: function() {
+		this.isAnimating = true;
+		$('#top-station').animate({ top: -this.hiddenOffset + "px"}, 1000, function() { TopStation.isAnimating = false; TopStation.isVisable = false; });
+		$("#top-station-toggle").html("Show Graph");
+	},
+	
+	visable: function() {
+		return this.isVisable;
 	}
 }
 
@@ -638,6 +735,8 @@ wiki1 = function() {
 	p10.createLink(p5);
 	p11.createLink(p5);
 	
+	Pages.updateDampingFactor(0.825);
+	
 	Pages.update();
 }
 
@@ -706,52 +805,13 @@ wiki2 = function() {
 	p6.createLink(p5);
 	p7.createLink(p5);
 	
+	Pages.updateDampingFactor(0.825);
+	
 	Pages.update();
 }
 
-$(document).ready(function() {
-	$("#page_space").click(function(event) {
-
-		if (event.target.id == "page_space") {
-			new Page({
-				id: Pages.length + 1,
-				xPos: event.layerX,
-				yPos: event.layerY
-			});
-
-		}
-		else if (event.target.id == "line_space" || event.target.id == "line"){
-			if (Line.visible) {
-				Line.hide();
-			}
-			
-			Pages.clickByCoordinates(event.pageX - $("#page_space").offset().left, event.pageY - $("#page_space").offset().top);
-
-		}
-		
-		Pages.update();
-		Pages.update();
-		
-	});
-	
-	Line.create();
-	
-	$("#page_space").mousemove(function(event) {
-		
-		if (event.target.id == "line_space") {
-			Line.update(Line.currentX, Line.currentY, event.layerX, event.layerY);
-		}
-	});
-	
-	$("#line_space").mousemove(function(event) {
-		Pages.mousemoveByCoordinates(event.pageX - $("#page_space").offset().left, event.pageY - $("#page_space").offset().top);
-	});
-	
-	wiki1();
-});
-
 tester = function() {
-	A = Pages.adjacencyMatrix().row_stochastic(0.825).transpose();
+	A = Pages.adjacencyMatrix().row_stochastic(Pages.dampingFactor).transpose();
 	I = Matrix.I(7)
 	
 	evA = A.eigenvector();
@@ -794,3 +854,60 @@ tester = function() {
 	console.log(evA3i.normalize().elements);
 	console.log(evA4i.normalize().elements);
 }
+
+$(document).ready(function() {
+	$("#page_space").click(function(event) {
+
+		if (event.target.id == "page_space") {
+			new Page({
+				id: Pages.length + 1,
+				xPos: event.pageX - $("#page_space").offset().left,
+				yPos: event.pageY - $("#page_space").offset().top
+			});
+
+		}
+		else if (event.target.id == "line_space" || event.target.id == "line"){
+			if (Line.visible) {
+				Line.hide();
+			}
+			
+			Pages.clickByCoordinates(event.pageX - $("#page_space").offset().left, event.pageY - $("#page_space").offset().top);
+
+		}
+		
+		Pages.update();
+		Pages.update();
+		
+	});
+	
+	Line.create();
+	
+	$("#page_space").mousemove(function(event) {
+		
+		if (event.target.id == "line_space") {			
+			Line.update(Line.currentX, Line.currentY, event.pageX - $("#page_space").offset().left, event.pageY - $("#page_space").offset().top);
+		}
+	});
+	
+	$("#line_space").mousemove(function(event) {
+		Pages.mousemoveByCoordinates(event.pageX - $("#page_space").offset().left, event.pageY - $("#page_space").offset().top);
+	});
+	
+	
+	$("#damping_factor_slider").slider({
+		min: 0,
+		max: 1,
+		step: 0.005,
+		slide: function(event, ui) {
+			Pages.dampingFactor = ui.value;
+			Pages.update();
+			Pages.updateDampingFactorView();
+		}
+	});
+	
+	TopStation.initialize();
+	
+	Pages.lastDocumentHeight = $(document).height();
+	
+	wiki1();
+});

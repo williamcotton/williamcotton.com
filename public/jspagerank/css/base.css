@@ -12,8 +12,12 @@ h1, h2, h3, h4 {
 	
 }
 
+h1#page-header {
+	margin: 0 0 20px 0;
+}
+
 body {
-	background: #fff;
+	background: #ddd;
 }
 
 .page_title {
@@ -35,14 +39,31 @@ p.aside {
 	padding: 2px;
 }
 
+#sub-station {
+	
+}
+
+#top-station {
+	z-index: 20;
+	top: 0px;
+	-webkit-box-shadow: 0px 0px 0px #FFF;
+	-moz-box-shadow: 0px 0px 0px #FFF;
+}
+
+#top-station.active {
+	-webkit-box-shadow: 1px 1px 17px rgba(0,0,0,0.4);
+	-moz-box-shadow: 1px 1px 17px rgba(0,0,0,0.4);
+}
+
 #site_wrapper {
+	background: white;
 	width: 944px;
 	padding: 20px;
 	margin: 0px auto;
 }
 
 #page_space {
-	background: url(bg.png) repeat-x;
+	background: url(../img/bg.png) repeat-x;
 	position: relative;
 	float: left;
 	width: 700px;
@@ -56,12 +77,42 @@ p.aside {
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
-	height: 20px;
+	height: 21px;
 }
 
 #page_space ul#toolbar button {
+	width: 110px;
+	font-size: 12px;
+	height: 20px;
+	float: left;
 	text-transform: uppercase;
-	padding: 3px;
+	padding: 2px;
+}
+
+#page_space ul#toolbar #damping_factor_slider_label {
+	font-size: 12px;
+	margin: 2px 0 0 40px;
+	width: 125px;
+	float: left;
+}
+
+#page_space ul#toolbar #damping_factor_slider { 
+	float: left;
+	margin: 2px 0 0 10px; 
+	height: 12px;
+	width: 130px;
+}
+
+#top-station-toggle {
+	font-size: 12px;
+	display: block;
+	height: 20px;
+	display: none;
+	position: absolute;
+	width: 100px;
+	text-transform: uppercase;
+	padding: 2px;
+	margin: 4px 0 0 135px;
 }
 
 #outline {
@@ -85,6 +136,7 @@ p.aside {
 	height: 90px;
 	background: #FFF;
 	border: 1px solid #222;
+	cursor: pointer;
 }
 
 .page.hover, .page.active {
@@ -138,13 +190,14 @@ p.aside {
 
 .page .links .every_page {
 	margin: 0 0 0 3px;
-	background: transparent url(every_page.png) no-repeat 4px 10px;
+	background: transparent url(../img/every_page.png) no-repeat 4px 10px;
 	width: 70px;
 	height: 47px;
 	font-size: 10px;
 }
 
 .page .pagerank {
+	clear:both;
 	font-weight: bold;
 	padding: 3px;
 	font-size: 12px;
@@ -172,7 +225,7 @@ p.aside {
 	position: absolute;
 	width: 700px;
 	height: 600px;
-	background: transparent url(black-trans-10.png);
+	background: transparent url(../img/black-trans-10.png);
 }
 
 #line {
@@ -183,9 +236,13 @@ p.aside {
 #outline_content {
 }
 
+#outline_content #examples {
+	height: 550px;
+}
+
 #outline_content #examples h2 {
 	font-size: 20px;
-	margin: 0 0 40px 0;
+	margin: 0 0 20px 0;
 }
 
 #outline_content ul {
@@ -270,7 +327,7 @@ p.aside {
 }
 
 img {
-	margin: 20px 0;
+	margin: 0px 0;
 }
 
 img.inline_image {
