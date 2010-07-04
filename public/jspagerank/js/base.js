@@ -177,42 +177,43 @@ ratio_print = function() {
 
 Pages.update = function() {
 	
-	// need to come up with a way to get the offsets working fine...
-	
-	// from 11 pages to 7 pages
-	
-	// Starts at:
-	// bottom of #identity_matrix
-	// For example, Page 1 = 188 (47*4)
-	// 
-	// Next at:
-	// bottom of #javascript_matrix
-	// For the remainder = 240 (60*4)
-	// 
-	// Next at:
-	// bottom of #row_stochastic_no_damping_matrix
-	// However, what happens = 428 (107*4)
-	// 
-	// Next at:
-	// bottom of #row_stochastic_matrix
-	// Things have suddenly become = 616 (154*4)
-	
 	if (Pages.length > 0) {
-	
+		
+		var pageDelta = Pages.length - Pages.lastLength;
+		
+		// Now, the clincher is being able to do this by class name and then figure out each of these numbers!
+		if (($('#row_stochastic_matrix').offset().top + $('#row_stochastic_matrix').height()) - $(window).scrollTop() <= TopStation.shownHeight) {
+			var scrollAmt = $(window).scrollTop() + ((47 + 13 + 47 + 47) * pageDelta);
+		}
+		else if (($('#row_stochastic_no_damping_matrix').offset().top + $('#row_stochastic_no_damping_matrix').height()) - $(window).scrollTop() <= TopStation.shownHeight) {
+			var scrollAmt = $(window).scrollTop() + ((47 + 13 + 47) * pageDelta);
+		}
+		else if (($('#javascript_matrix').offset().top + $('#javascript_matrix').height()) - $(window).scrollTop() <= TopStation.shownHeight) {
+			var scrollAmt = $(window).scrollTop() + ((47 + 13) * pageDelta)
+		}
+		else if (($('#identity_matrix').offset().top + $('#identity_matrix').height()) - $(window).scrollTop() <= TopStation.shownHeight) {
+			var scrollAmt = $(window).scrollTop() + (47 * pageDelta)
+		}
+		
+		$(window).scrollTop(scrollAmt);
+		
 		var adjacency_matrix_array = Pages.adjacencyMatrix().elements;
 		var row_stochastic_no_damping_matrix_array = Pages.adjacencyMatrix().row_stochastic_no_damping().elements;
 		var row_stochastic_matrix_array = Pages.adjacencyMatrix().row_stochastic(Pages.dampingFactor).elements;
-	
-		Pages.updatePageRank();
-		Pages.updateMatrix(adjacency_matrix_array, "identity_matrix", 0, true);
-		Pages.updatePageText();
 		Pages.updateJavascriptMatrix(adjacency_matrix_array);
-		Pages.updatePageProbability();
+		Pages.updateMatrix(adjacency_matrix_array, "identity_matrix", 0, true);
 		Pages.updateMatrix(row_stochastic_no_damping_matrix_array, "row_stochastic_no_damping_matrix", 2, true);
 		Pages.updateMatrix(row_stochastic_matrix_array, "row_stochastic_matrix", 2, false);
+		
+		Pages.updatePageRank();
+		Pages.updatePageText();
+		Pages.updatePageProbability();
+		
 		$('.dimensionality').html(Pages.length);
 	
 		SyntaxHighlighter.all();
+		
+		Pages.lastLength = Pages.length;
 	
 	}
 }
@@ -320,18 +321,19 @@ Pages.updateMatrix = function(array, table_id, to_fixed, color) {
 	$(array).each(function(i, page) {
 		header_row.append($("<td class='page_number'>" + (i+1) + "</td>"));
 		var row = $("<tr><td class='page_number'>" + (i+1) + "</td></tr>");
+		row.addClass("row_page_" + (i+1));
 		
-		$(page).each(function() {
+		$(page).each(function(j, e) {
 			
-			if (this > 0) {
-				var value = this.toFixed(to_fixed);
+			if (e > 0) {
+				var value = e.toFixed(to_fixed);
 			}
 			else {
-				var value = this.toFixed(0);
+				var value = e.toFixed(0);
 			}
 			
 			if (color) {
-				if (this > 0) {
+				if (e > 0) {
 					var element = $('<td class="links_to">' + value + '</td>');
 				}
 				else {
@@ -346,6 +348,7 @@ Pages.updateMatrix = function(array, table_id, to_fixed, color) {
 			
 			var bg_color = "rgb(" + brightness.toFixed(0) + "," + brightness.toFixed(0) + "," + brightness.toFixed(0) + ")";
 			element.css("background",bg_color);
+			element.addClass("col_page_" + (j+1));
 			
 			row.append(element);
 		});
@@ -441,7 +444,23 @@ Page.prototype = {
 		var bg_color = "rgb(255," + (p*255).toFixed(0) + "," + (p*255).toFixed(0) + ")";
 		this.domJ.css("background",bg_color);
 		
+		$('td.col_page_' + this.id).each(function(i, td) {
+			var bg = $(td).css("background") || "rgb(255, 255, 255)"
+			var v = bg.split("rgb(")[1].split(",")[0];
+			var bg_color = "rgb(" + (v) + "," + (v-20) + "," + (v-20) + ")";
+			$(td).css("background", bg_color);
+		});
 		
+		$('tr.row_page_' + this.id + ' td').each(function(i, td) {
+			if (i > 0) { // don't want the first element
+				var bg = $(td).css("background") || "rgb(255, 255, 255)"
+				var v = bg.split("rgb(")[1].split(",")[0];
+				var bg_color = "rgb(" + (v) + "," + (v-20) + "," + (v-20) + ")";
+				$(td).css("background", bg_color);
+			}
+		});
+		
+
 	},
 	
 	mouseleave: function(event) {
@@ -451,6 +470,22 @@ Page.prototype = {
 		$(".page").removeClass("link-from");
 		$(".page").removeClass("link-to");
 		$(".page").removeClass("hover");
+		
+		$('td.col_page_' + this.id).each(function(i, td) {
+			var bg = $(td).css("background") || "rgb(255, 255, 255)"
+			var v = bg.split("rgb(")[1].split(",")[0];
+			var bg_color = "rgb(" + v + "," + v + "," + v + ")";
+			$(td).css("background", bg_color);
+		});
+		
+		$('tr.row_page_' + this.id + ' td').each(function(i, td) {
+			var bg = $(td).css("background") || "rgb(255, 255, 255)"
+			var v = bg.split("rgb(")[1].split(",")[0];
+			var bg_color = "rgb(" + v + "," + v + "," + v + ")";
+			$(td).css("background", bg_color);
+		});
+		
+
 	},
 	
 	createLink: function(page) {
