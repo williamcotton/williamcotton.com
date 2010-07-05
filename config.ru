@@ -1,5 +1,5 @@
-require 'rubygems'
-require 'sinatra'
+# require 'rubygems'
+# require 'sinatra'
 
 # Sinatra::Application.default_options.merge!(
 #   :run => false,
@@ -12,4 +12,4 @@ require 'sinatra'
 # STDERR.reopen(log)
 
 require 'app'
-run Sinatra.application
+run Sinatra::Application
