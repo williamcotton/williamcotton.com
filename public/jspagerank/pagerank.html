@@ -270,7 +270,7 @@
 		
 		<p>A vector in 2D vector space, called a euclidean vector, is a geometric object that has a magnitude and a direction. In the case of 2D computer graphics, the relationship of pixels to one another in an image can be considered vectors.</p>
 		
-		<p>Vectors are "acted upon" by matrices.</p>
+		<p>Vectors are "acted upon" by matrices. You can also think of a matrix as being somewhat like a function that you apply to a vector space.</p>
 		
 		<img class="inline_image" src="img/2x2-matrix.png">
 		
@@ -292,6 +292,8 @@
 		
 		<p>Eigenvectors are the vectors in a space that when acted upon by a matrix have only their magnitude affected, and not their direction. In the case of our sheer mapping, vectors that are perfectly horizontal are eigenvectors, as their direction is not changed. Again, in terms of pixels, the relationship between pixels are not affected in a horizontal direction, but are in all other directions.</p>
 		
+		<p>There are an infinite amount of eigenvectors in this case, as all horizontal vectors are eigenvectors. For the remainder of the article we will refer to all eigenvectors with the same direction as just a single eigenvector, or a unit eigenvector. We are interested in finding the unit eigenvectors, of which there will sometimes be many.</p>
+		
 		<p>However, the matrix that we've constructed is not a 2x2 matrix and it doesn't exist in a 2D vector space. In inhabits a vector space that is purely abstract, so the concept of an eigenvector is harder to visualize.</p>
 		
 		<p>A vector in a stochastic vector space is called a stochastic or probability vector. It is a vector that adds up to 1 and describes the likelihood of certain events taking place. The eigenvector that we are going to compute is a probability vector. It describes the probabilities of ending up at certain web pages based on the link structure of our network, no matter what page you start on. The concept of "direction" that we discussed when referring to the above linear transformation loses it's ordinary meaning.</p>
@@ -301,6 +303,18 @@
 		<p>Phew!</p>
 		
 		<h3>How do we calculate the eigenvector?</h3>
+		
+		<img class="inline_image" src="img/eigenvector_eq.png">
+		
+		<p>Technically, an eigenvector is a vector that satisfies the equation to the left. It is a vector x, that when acted upon by a matrix A, results in the vector x multiplied by a scalar λ.</p>
+		
+		<p>There are a number of approaches that we can use to solve for the sought after eigenvector of our matrix. Some are more accurate, some are faster, some will find more eigenvectors than others.</p>
+		
+		<p>We are only looking for the eigenvector associated with the dominant eigenvalue. We don't need to know about any of the other unit eigenvectors. We want to be able to find our eigenvector as fast as possible.</p>
+		
+		<h3>Power Iteration</h3>
+		
+		<p>A great approach for our matrix is the power iteration.
 		
 		<div class="code"><pre class="brush: js">
 		Matrix.prototype.eigenvector = function() {
