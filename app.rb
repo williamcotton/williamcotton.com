@@ -10,3 +10,7 @@ set :logging, true
 get '/' do
   erb :index
 end
+
+get '/pagerank' do
+  erb :pagerank
+end

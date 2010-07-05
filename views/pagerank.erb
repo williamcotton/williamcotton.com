@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>PageRank Explained with Javascript</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="William Cotton">
+	<!-- Date: 2010-06-23 -->
+	
+	<script src="/javascripts/jquery-1.4.2.min.js"type="text/javascript" ></script>
+	<script src="/javascripts/jquery-ui-1.8.2.custom.min.js"type="text/javascript" ></script>
+	<link href="/stylesheets/smoothness/jquery-ui-1.8.2.custom.css" rel="stylesheet" type="text/css" />
+	
+	<script src="/javascripts/sylvester.js" type="text/javascript"></script>
+	
+	<script src="/javascripts/shCore.js" type="text/javascript"></script>
+	<script src="/javascripts/shAutoloader.js" type="text/javascript"></script>
+	<script src="/javascripts/shBrushJScript.js" type="text/javascript"></script>
+	<link href="/stylesheets/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/stylesheets/shThemeEclipse.css" media="screen" rel="stylesheet" type="text/css" />
+	
+	<script src="/javascripts/pagerank.js" type="text/javascript"></script>
+	<link href="/stylesheets/pagerank.css" media="screen" rel="stylesheet" type="text/css" />
+	
+	<!--[if IE]>
+	<style type="text/css">
+	#top-station.active {
+		margin-top: -5px;
+		margin-left: -5px;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Glow(color=#999999,strength=5) progid:DXImageTransform.Microsoft.Shadow(color=#333333,direction=180,strength=4)";
+		filter: progid:DXImageTransform.Microsoft.Glow(color=#999999,strength=5) progid:DXImageTransform.Microsoft.Shadow(color=#333333,direction=180,strength=4);
+	}
+	</style>
+	<![endif]-->
+	
+</head>
+<body>
+	
+	<div id="preload">
+		<img alt='' src='/images/1up.gif' />
+		<img alt='' src='/images/1down.gif' />
+		<img alt='' src='/images/2up.gif' />
+		<img alt='' src='/images/2down.gif' />
+		<img alt='' src='/images/4up.gif' />
+		<img alt='' src='/images/4down.gif' />
+		<img alt='' src='/images/8up.gif' />
+		<img alt='' src='/images/8down.gif' />
+		<img alt='' src='/images/16up.gif' />
+		<img alt='' src='/images/16down.gif' />
+		<img alt='' src='/images/32up.gif' />
+		<img alt='' src='/images/32down.gif' />
+		<img alt='' src='/images/64up.gif' />
+		<img alt='' src='/images/64down.gif' />
+		<img alt='' src='/images/128up.gif' />
+		<img alt='' src='/images/128down.gif' />
+		<img alt='' src='/images/256up.gif' />
+		<img alt='' src='/images/256down.gif' />
+	</div>
+	
+	<div id="site_wrapper">
+		
+		<div id="sub-station"></div>
+		
+		<div id="top-station">
+		
+			<h1 id="page-header">PageRank Explained with Javascript</h1>
+
+			<div id="page_space">
+				<ul id="toolbar">
+					<button onclick="Pages.clearAll();" class="fg-button ui-state-default ui-corner-all">Clear Graph</button>
+					<div id="damping_factor_slider_label">Damping Factor: <span class="damping_factor"></span></div>
+					<div id="damping_factor_slider"></div>
+				</ul>
+				<div id="line_space">
+				</div>
+			</div>
+	
+			<div id="outline">
+				<div id="outline_content">
+				
+					<ul id="examples">
+						<li class="first">
+							<h2><a onclick="wiki1();">Wikipedia Example 1</a></h2>
+							<a onclick="wiki1();"><img src="/images/PageRanks-Example.png"></a>
+						</li>
+						<li>
+							<h2><a onclick="wiki2();">Wikipedia Example 2</a></h2>
+							<a onclick="wiki2();"><img src="/images/Linkstruct3.png"></a>
+						</li>
+					</ul>
+
+					<button onclick="TopStation.toggle();" id="top-station-toggle" class="fg-button ui-state-default ui-corner-all">Show Graph</button>
+					
+				</div>
+			</div>
+			
+			<div style="clear:both;"></div>
+		
+		</div>
+		
+		<div style="clear:both;"></div>
+		
+		<p class="description">The above is a real-time representation of PageRank. Clicking anywhere other than on a Page will create a new Page. Clicking on a Page prompts you to select a Page to link to. Hovering over a Page will show you all of the Pages that link to it. In addition, example networks based on the Wikipedia article on <a href="http://en.wikipedia.org/wiki/PageRank">PageRank</a> are provided for illustrative purposes. Adding new Pages and links changes the resulting PageRank in real-time, as well as the various diagrams and code samples throughout the article.</p>
+		
+		<div id="main_content">
+			
+		
+			
+		<h2>What is PageRank?</h2>	
+		
+		<img src="/images/left-quote.png" class="left-quote">
+		<p class="quote">PageRank relies on the uniquely democratic nature of the web by using its vast link structure as an indicator of an individual page's value. In essence, Google interprets a link from page A to page B as a vote, by page A, for page B. But, Google looks at more than the sheer volume of votes, or links a page receives; it also analyzes the page that casts the vote. Votes cast by pages that are themselves "important" weigh more heavily and help to make other pages "important".</p>
+		<img src="/images/right-quote.png" class="right-quote">
+		
+		<div style="clear:both;"></div>
+		
+		<h2>Before we start...</h2>
+		
+		<p>We will need to familiarize ourselves with some of the language used herein.</p>
+		
+		<h3>What is a graph?</h3>
+		
+		
+		<p>A <a href="http://en.wikipedia.org/wiki/Graph_(mathematics)">graph</a> is an abstract representation of a set of objects that are connected by links. The objects are referred to as nodes (or vertices) and their connections as edges.</p>
+		
+		<img class="inline_image" src="/images/Directed_acyclic_graph.png">
+		
+		<p>There are two main types of graphs. Undirected graphs and directed graphs. A undirected graph is one where the edges between two nodes are considered the same. We are not interested in that type of graph for our discussion.</p>
+			
+		<p>We are concerned with directed graphs, that is, graphs where the connections have a specific direction, like in the image to the left.</p>
+		
+		<p>Nodes that have no outgoing edges are called sinks, and nodes that have no incoming edges are called pumps.
+		
+		<p>In our specific case, we are considering web pages to be the "nodes" and the links from one page to another to be the "edges". We will also deal with pages that act as "sinks", that is, pages that have no outbound links.</p>
+		
+		<p>Our graph is a representation of a network of web pages and how they are linked to one another.</p>
+		
+		<div style="clear:both;"></div>
+		
+		<h3>And what does this have to do with PageRank?</h3>
+		
+		<p>PageRank is a certain mathematical property of the graph that describes a network of pages and their links. We can't really understand this concept unless we are directly dealing with the mathematics involved.</p>
+		
+		<p>There are a number of mathematically equivalent ways to solve for the PageRank of a graph representing the link structure of a network of web pages. A convenient approach is to use matrices.</p>
+		
+		<p>When using matrices to compute PageRank we are measuring the <a href="http://en.wikipedia.org/wiki/Centrality#Eigenvector_centrality">eigenvector centrality</a> of a modified matrix based on the network.</p>
+		
+		<p>Whoa, that just got pretty dense. Don't worry. We'll wrap our heads around this stuff pretty quickly.</p>
+		
+		<h2>Adjacency Matrix</h2>	
+		
+		<p>In order to do any sort of computation we have to describe our network of interconnected web pages in some sort of mathematical language. We will be using the language of matrices. The branch of mathematics that deals with matrices is called <a href="http://en.wikipedia.org/wiki/Linear_algebra">linear algebra</a>.</p>
+		
+		<p class="aside">If you are so inclined, MIT has graciously made available a great <a href="http://www.youtube.com/watch?v=ZK3O402wf1c">video lecture series on linear algebra</a> taught by <a href="http://www-math.mit.edu/~gs/">Gilbert Strang</a>.</p>
+		
+		<h3>What is a matrix?</h3>
+		
+		<p>Simply put, a matrix is a rectangular array of elements. It has a number of rows and a number of columns. Matrices are used for a number of different purposes and are a cornerstone of computational mathematics. Almost every advanced topic in computer science, from 3D graphics, to AI, to network analysis like PageRank involves matrices.</p>
+		
+		<img class="inline_image" src="/images/2x2-matrix.png">
+		
+		<p>To the left we have a 2x2 matrix, containing four elements. It is a 2-dimensional square matrix.</p>
+		
+		<p>We'll come back to this matrix when we are discussing a very important property of matrices, their eigenvectors.</p>
+		
+		<div style="clear:both;"></div>
+		
+		<p>Let's construct a matrix of our own that is specific to our network, where the rows and columns represent the pages that we are analyzing.</p>
+		
+		<p>Here is the resulting <span class="dimensionality"></span>x<span class="dimensionality"></span> square matrix:</p>
+		
+		<table class="matrix" id="identity_matrix"></table>
+		
+		<p id="page_link_text">For example, <span class="page_title">Page 1</span> <span id="page_1_link_text"></span>. <span id="page_2_links"><span class="page_title">Page 2</span> <span id="page_2_link_text"></span>.</span></p>
+		
+		<p>This grid is what we will call the <a href="http://en.wikipedia.org/wiki/Adjacency_matrix">adjacency matrix</a> of the graph that describes our network of web pages.</p>
+		
+		<p>Now that we have described this network in the language of linear algebra, we need to further translate it in to a computer programming language. Luckily, the majority of languages have linear algebra libraries. In this example we're using a Javascript library called <a href="http://sylvester.jcoglan.com/">Sylvester</a>. It has a number of classes that allow you to model matrices and vectors in any number of dimensions.</p>
+		
+		<p>In programming terms, a matrix is similar to an array of arrays.</p>
+		
+		<div class="code" id="javascript_matrix"></div>
+		
+		<p>For the remainder of this article, we will be adding functions to Sylvester's Matrix class.</p>
+		
+		<h2>Row Stochastic Matrix</h2>
+		
+		<p>Since PageRank can also be thought of as a representation of how likely it is that a person randomly clicking on links well end up on a certain page, we need to convert our matrix in to a representation that represents that probability. "Stochastic" and "probability" are interchangeable terms within the realms of our discussion.</p>
+		
+		<p>For example, since <span class="page_title">Page <span id="page_with_links"></span></span> has <span class="page_number_of_links"></span> <span id="link_pluralizer"></span> on it, there is a 1 in <span class="page_number_of_links"></span> chance that you will randomly click on any of one of the links.</p>
+		
+		<p>This type of matrix is known as a <a href="http://en.wikipedia.org/wiki/Stochastic_matrix">stochastic matrix</a>, and in our case, we are looking for a row stochastic matrix. That is, we want every row to add up to 1. We are turning our representation of a network of links to a form that takes in to account the probabilities that a random user will browse to a certain page.</p>
+		
+		<table class="matrix" id="row_stochastic_no_damping_matrix"></table>
+		
+		<p>However, what happens if there is a page that acts as a sink, that is, it has no outbound links? How do these "dangling pages" affect the calculation?</p>
+		
+		<p>If you randomly stumble across the rare web page that has no links to other pages we will assume that you have equal probability to end up on any of the other web pages in the network. That is, we will assume that there are links to every page from a page that has no links.</p>
+		
+		<p>In order to be fair to the other pages that do have links, these random transitions are added to all pages in our network, with an additional residual probability called a "damping factor".</p>
+		
+		<p>This "damping factor" is included to increase the probability that we'll end up at a page with more network centrality and counter some of the abuses that spammers could use to game this algorithm.</p>
+		
+		<p>Neither adjustments made for "dangling pages" or "damping factors" are necessary for computing network centrality, but they are indeed properties of PageRank and are what differentiates and makes the algorithm unique.</p>
+		
+		<p>Here is our function that computes the row stochastic matrix:
+		
+		<div class="code"><pre class="brush: js">
+			Matrix.prototype.row_stochastic = function(damping_factor) {
+
+				var row_length = this.elements[0].length;
+				var d = (1 - damping_factor) / row_length;
+
+				var row_total = [];
+
+				for (var x = 0; x < row_length; x++) {
+					row_total.push(0);
+					for (y = 0; y < row_length; y++) {
+						row_total[x] += this.elements[x][y];
+					}
+				}
+
+				var a1 = this.elements.clone();
+
+				for (var x = 0; x < row_length; x++) {
+					for (var y = 0; y < row_length; y++) {
+						if (row_total[x] > 0) {
+							a1[x][y] = a1[x][y]/row_total[x] + d;
+						}
+						else {
+							a1[x][y] = (1/row_length) + d;
+						}
+					}
+				}
+
+				return $M(a1);
+
+			}
+		</pre></div>
+		
+		<p>As you can see on line 4, we compute our additional probabilities of moving from one page to another as a variable called <span class="inline_js">d</span>, which is based on a damping factor and the total number of web pages.</p>
+		
+		<p>Next, we iterate through each row and store an array of the sum of all elements in the row, as shown on lines 8 - 13.</p>
+		
+		<p>Finally, we again iterate through each row, this time dividing each element by its row's total, fulfilling our stochastic requirements. We also add our variable <span class="inline_js">d</span> to not only pages that have no outbound links (and therefore are assumed to link to all pages), but to every page, in order to be fair to the pages that do have links. This is done on lines 17 - 26.</p>
+		
+		<p>When using a damping factor of <span class="damping_factor">0.825</span> we get the resulting matrix:</p>
+		
+		<table class="matrix" id="row_stochastic_matrix"></table>
+			
+		<p>Things have very suddenly become very abstract. We've gone from one representation, our graph of a network of web pages, through to a matrix representation of that graph, and ended up with a matrix that takes in to account all sort of peculiar probabilities related to the likelihood of a user ending up on a given page.</p>
+			
+		<p>It gets confusing because we're representing something that we can think of in a number of ways, as a graph, a matrix, or a set of probabilities. In turn, our use of language jumps between "graph language", "matrix language", and "probability language" quite rapidly.</p>
+		
+		<p>This aspect of mathematics has always been the most difficult to deal with. A lot of the times the principles that are being discussed are easy to understand, but the language that mathematicians use to talk about these principles are arcane to say the least. Don't feel bad. A lot of mathematicians are only fluent in whatever specific branch they are familiar with and have just as hard a time figuring out the languages of branches they are unfamiliar with!</p>
+
+		<h2>Eigenvector Centrality</h2>
+		
+		<p>This is where things start to get magical. It as also the hardest part to visualize. Every step so far has made a good amount of sense.</p>
+		
+		<p>PageRank is a measure of network centrality with some tweaks made that are specific to web browsing, as we've discussed above. Since we are pretty much only dealing with matrices at this point we'll refer to this as eigenvector centrality.</p>
+		
+		<p>This eigenvector centrality is a property of our initial graph of the network of web pages. Our previous steps, along with quick <a href="http://en.wikipedia.org/wiki/Transpose">transposition</a> of our matrix, lead us to our penultimate step towards computing PageRank.</p>
+		
+		<h3>What is a vector?</h3>
+		
+		<p>At the most abstract level, a vector is nothing more than a member of a vector space.</p>
+		
+		<p>A vector in 2D vector space, called a euclidean vector, is a geometric object that has a magnitude and a direction. In the case of 2D computer graphics, the relationship of pixels to one another in an image can be considered vectors.</p>
+		
+		<p>Vectors are "acted upon" by matrices. You can also think of a matrix as being somewhat like a function that you apply to a vector space.</p>
+		
+		<img class="inline_image" src="/images/2x2-matrix.png">
+		
+		<p>Here is the same 2x2 matrix that we saw above. It is an example of a shear mapping.
+		
+		<p>Matrices are used for a lot of different purposes. They are heavily used in the realms of 2D and 3D graphics.</p>
+		
+		<div style="clear:both;"></div>
+		
+		<p>One way that matrices are used is for performing linear transformations. If you've ever used the transform tool in Photoshop, you are watching linear algebra in operation.</p>
+		
+		<img src="/images/VerticalShear.png">
+		
+		<p>This is the result of applying the above 2-dimensional matrix to a set of pixels in a "vector space". Matrices are always applied to vector spaces.</p>
+		
+		<h3>What is an eigenvector?</h3>
+		
+		<p>When we apply our matrix to a set of pixels, it sheers all of the pixels to the right by a factor of 1.25. Notice that the horizontal relationships of the pixels do not change at all.</p>
+		
+		<p>Eigenvectors are the vectors in a space that when acted upon by a matrix have only their magnitude affected, and not their direction. In the case of our sheer mapping, vectors that are perfectly horizontal are eigenvectors, as their direction is not changed. Again, in terms of pixels, the relationship between pixels are not affected in a horizontal direction, but are in all other directions.</p>
+		
+		<p>There are an infinite amount of eigenvectors in this case, as all horizontal vectors are eigenvectors. For the remainder of the article we will refer to all eigenvectors with the same direction as just a single eigenvector, or a unit eigenvector. We are interested in finding the unit eigenvectors, of which there will sometimes be many.</p>
+		
+		<p>However, the matrix that we've constructed is not a 2x2 matrix and it doesn't exist in a 2D vector space. In inhabits a vector space that is purely abstract, so the concept of an eigenvector is harder to visualize.</p>
+		
+		<p>A vector in a stochastic vector space is called a stochastic or probability vector. It is a vector that adds up to 1 and describes the likelihood of certain events taking place. The eigenvector that we are going to compute is a probability vector. It describes the probabilities of ending up at certain web pages based on the link structure of our network, no matter what page you start on. The concept of "direction" that we discussed when referring to the above linear transformation loses it's ordinary meaning.</p>
+		
+		<p>Instead of, as in a 2D space where applying a matrix to a set of vectors alters the literal direction that they point in, we can think of this matrix as "directing" people clicking on links towards certain pages. The "eigenprobability" of our modified adjacency matrix is the PageRank.</p>
+		
+		<p>Phew!</p>
+		
+		<h3>How do we calculate the eigenvector?</h3>
+		
+		<img class="inline_image" src="/images/eigenvector_eq.png">
+		
+		<p>Technically, an eigenvector is a vector that satisfies the equation to the left. It is a vector x, that when acted upon by a matrix A, results in the vector x multiplied by a scalar λ.</p>
+		
+		<p>There are a number of approaches that we can use to solve for the sought after eigenvector of our matrix. Some are more accurate, some are faster, some will find more eigenvectors than others.</p>
+		
+		<p>We are only looking for the eigenvector associated with the dominant eigenvalue. We don't need to know about any of the other unit eigenvectors. We want to be able to find our eigenvector as fast as possible.</p>
+		
+		<h3>Power Iteration</h3>
+		
+		<p>A great approach for our matrix is the power iteration.
+		
+		<div class="code"><pre class="brush: js">
+		Matrix.prototype.eigenvector = function() {
+
+			var row_length = this.elements[0].length;
+
+			var a = [];
+
+			for (var i = 0; i < row_length; i++) {
+				a.push([1]);
+			}
+
+			var ev = $V(a);
+
+			for (var i = 0; i < 100; i++) {
+				ev = this.multiply(ev);
+			}
+
+			return $V(ev);
+
+		}
+		</pre></div>
+		<div class="code"><pre class="brush: js">
+		Vector.prototype.normalize = function() {
+
+			var row_length = this.elements.length;
+			var t = 0;
+
+			for (var i = 0; i < row_length; i++) {
+				t += this.elements[i];
+			}
+
+			return this.multiply((1.0/t));
+		}
+		</pre></div>
+		<div class="code"><pre class="brush: js">
+		Matrix.prototype.pagerank = function() {
+			var damping_value = 0.825
+			var row_stochastic = this.row_stochastic(damping_value);
+			var transposed_matrix = row_stochastic.transpose();
+			var eigenvector = transposed_matrix.eigenvector();
+			var normalized = eigenvector.normalize();
+			return normalized.elements;
+		}
+		</pre></div>
+
+		</div>
+	
+	</div>
+
+</body>
+</html>
