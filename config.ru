@@ -7,9 +7,9 @@ require 'sinatra'
 #   :raise_errors => true
 # )
 
-log = File.new("sinatra.log", "a")
-STDOUT.reopen(log)
-STDERR.reopen(log)
+# log = File.new("sinatra.log", "a")
+# STDOUT.reopen(log)
+# STDERR.reopen(log)
 
 require 'app'
 run Sinatra.application
