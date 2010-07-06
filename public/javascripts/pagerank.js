@@ -349,6 +349,7 @@ Pages.updateMatrix = function(array, table_id, to_fixed, color) {
 			var bg_color = "rgb(" + brightness.toFixed(0) + "," + brightness.toFixed(0) + "," + brightness.toFixed(0) + ")";
 			element.css("background",bg_color);
 			element.addClass("col_page_" + (j+1));
+			element.addClass("row_page_" + (i+1));
 			
 			row.append(element);
 		});
@@ -451,13 +452,11 @@ Page.prototype = {
 			$(td).css("background", bg_color);
 		});
 		
-		$('tr.row_page_' + this.id + ' td').each(function(i, td) {
-			if (i > 0) { // don't want the first element
-				var bg = $(td).css("background") || "rgb(255, 255, 255)"
-				var v = bg.split("rgb(")[1].split(",")[0];
-				var bg_color = "rgb(" + (v) + "," + (v-20) + "," + (v-20) + ")";
-				$(td).css("background", bg_color);
-			}
+		$('td.row_page_' + this.id).each(function(i, td) {
+			var bg = $(td).css("background") || "rgb(255, 255, 255)"
+			var v = bg.split("rgb(")[1].split(",")[0];
+			var bg_color = "rgb(" + (v) + "," + (v-20) + "," + (v-20) + ")";
+			$(td).css("background", bg_color);
 		});
 		
 
@@ -478,7 +477,7 @@ Page.prototype = {
 			$(td).css("background", bg_color);
 		});
 		
-		$('tr.row_page_' + this.id + ' td').each(function(i, td) {
+		$('td.row_page_' + this.id).each(function(i, td) {
 			var bg = $(td).css("background") || "rgb(255, 255, 255)"
 			var v = bg.split("rgb(")[1].split(",")[0];
 			var bg_color = "rgb(" + v + "," + v + "," + v + ")";
@@ -546,7 +545,9 @@ TopStation = {
 	
 	initialize: function(options) {
 		
-		this.shownHeight = 599;
+		$("#top-station-toggle").hide();
+		
+		this.shownHeight = 449;
 		this.hiddenHeight = 34;
 		
 		this.topOffset = $('#top-station').offset().top;
@@ -689,67 +690,67 @@ wiki1 = function() {
 	p1 = new Page({
 		id: 1,
 		xPos: 67,
-		yPos: 92
+		yPos: 85
 	});
 	
 	p2 = new Page({
 		id: 2,
 		xPos: 282,
-		yPos: 77
+		yPos: 67
 	});
 	
 	p3 = new Page({
 		id: 3,
 		xPos: 634,
-		yPos: 88
+		yPos: 68
 	});
 	
 	p4 = new Page({
 		id: 4,
 		xPos: 64,
-		yPos: 284
+		yPos: 224
 	});
 	
 	p5 = new Page({
 		id: 5,
 		xPos: 417,
-		yPos: 330
+		yPos: 280
 	});
 	
 	p6 = new Page({
 		id: 6,
 		xPos: 638,
-		yPos: 246
+		yPos: 196
 	});
 	
 	p7 = new Page({
 		id: 7,
 		xPos: 103,
-		yPos: 420
+		yPos: 340
 	});
 	
 	p8 = new Page({
 		id: 8,
 		xPos: 203,
-		yPos: 470
+		yPos: 340
 	});
 	
 	p9 = new Page({
 		id: 9,
 		xPos: 303,
-		yPos: 470
+		yPos: 340
 	});
 	
 	p10 = new Page({
 		id: 10,
 		xPos: 503,
-		yPos: 470
+		yPos: 340
 	});
 	
 	p11 = new Page({
 		id: 11,
 		xPos: 603,
-		yPos: 470
+		yPos: 340
 	});
 
 	p2.createLink(p3);
@@ -782,43 +783,43 @@ wiki2 = function() {
 	p1 = new Page({
 		id: 1,
 		xPos: 300,
-		yPos: 300
+		yPos: 200
 	});
 
 	p2 = new Page({
 		id: 2,
 		xPos: 400,
-		yPos: 100
+		yPos: 65
 	});
 
 	p3 = new Page({
 		id: 3,
 		xPos: 500,
-		yPos: 300
+		yPos: 200
 	});
 
 	p4 = new Page({
 		id: 4,
 		xPos: 400,
-		yPos: 500
+		yPos: 340
 	});
 	
 	p5 = new Page({
 		id: 5,
 		xPos: 200,
-		yPos: 500
+		yPos: 340
 	});
 	
 	p6 = new Page({
 		id: 6,
 		xPos: 100,
-		yPos: 300
+		yPos: 200
 	});
 	
 	p7 = new Page({
 		id: 7,
 		xPos: 200,
-		yPos: 100
+		yPos: 65
 	});
 	
 	p1.createLink(p2);
@@ -944,5 +945,6 @@ $(document).ready(function() {
 	
 	Pages.lastDocumentHeight = $(document).height();
 	
+	wiki1();
 	wiki1();
 });

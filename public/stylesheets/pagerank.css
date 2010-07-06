@@ -67,7 +67,7 @@ p.aside {
 	position: relative;
 	float: left;
 	width: 700px;
-	height: 600px;
+	height: 450px;
 	border: 1px solid #000;
 	overflow: hidden;
 }
@@ -107,7 +107,6 @@ p.aside {
 	font-size: 12px;
 	display: block;
 	height: 20px;
-	display: none;
 	position: absolute;
 	width: 100px;
 	text-transform: uppercase;
@@ -118,7 +117,7 @@ p.aside {
 #outline {
 	float: left;
 	width: 240px;
-	height: 600px;
+	height: 450px;
 	background: #FFF;
 	border: 1px solid #000;
 	border-left: none;
@@ -224,7 +223,7 @@ p.aside {
 	display: none;
 	position: absolute;
 	width: 700px;
-	height: 600px;
+	height: 450px;
 	background: transparent url(/images/black-trans-10.png);
 }
 
@@ -237,26 +236,32 @@ p.aside {
 }
 
 #outline_content #examples {
-	height: 550px;
+	height: 410px;
 }
 
 #outline_content #examples h2 {
-	font-size: 20px;
-	margin: 0 0 20px 0;
+	font-size: 18px;
+	margin: 0 0 2px 0;
+}
+
+#outline_content #examples h2.second {
+	font-size: 18px;
+	margin: 0 0 7px 0;
 }
 
 #outline_content ul {
-	margin: 20px 0 0 20px;
+	margin: 10px 0 0 20px;
 }
 
 #outline_content ul li.first {
-	margin: 0 40px 0 0;
+	margin: 0 0px 0 0;
 }
+
 
 #outline_content ul li {
 	cursor: pointer;
 	float: left;
-	padding: 0 0px 40px 0;
+	padding: 0 0px 10px 0;
 }
 
 .code {
