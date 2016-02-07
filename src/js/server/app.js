@@ -36,6 +36,10 @@ module.exports = function (options) {
 
   var expectReactRenderer = require('../lib/expect-server-react-renderer')
 
+  // compression
+  var compression = require('compression')
+  app.use(compression())
+
   /*
 
     express app middleware
@@ -125,10 +129,6 @@ module.exports = function (options) {
   // static assets
   var publicDir = __dirname + '/../../../public'
   app.use(express.static(publicDir))
-
-  // compression
-  var compression = require('compression')
-  app.use(compression())
 
   return universalServerApp
 }
