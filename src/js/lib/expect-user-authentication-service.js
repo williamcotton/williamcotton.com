@@ -10,7 +10,6 @@ module.exports = function (options) {
   var issuer = options.issuer || 'expect-user-auth' // issuer owns rsaPrivateKeyPem and rsaPublicKeyPem
   var rsaPrivateKeyPem = options.rsaPrivateKeyPem // openssl genrsa -out expect-user-authentication-service.pem 1024
   var rsaPublicKeyPem = options.rsaPublicKeyPem // openssl rsa -in expect-user-authentication-service.pem -pubout -out expect-user-authentication-service-public.pem
-  console.log(rsaPublicKeyPem)
   var userAuthenticationService = {
     verificationPath: verificationPath,
     resetPasswordPath: resetPasswordPath,
