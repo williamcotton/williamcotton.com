@@ -27,11 +27,13 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 
+# Public build directory
 public/
 public/*.*
 
+# Environmental Variables
 .env
 
-build/
+# Private Keys
 
 *.pem
