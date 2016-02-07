@@ -2,7 +2,7 @@ export PATH := node_modules/.bin:$(PATH)
 
 all: build
 
-build: public/build.js public/build.css copy_images
+build: public/build.js public/build.css copy_images copy_fonts
 
 .env:
 	cp default.env $@
@@ -10,6 +10,10 @@ build: public/build.js public/build.css copy_images
 copy_images:
 	mkdir -p public/images
 	cp -f src/images/* public/images 2>/dev/null || :
+
+copy_fonts:
+	mkdir -p public/fonts
+	cp -f src/fonts/* public/fonts 2>/dev/null || :
 
 build_css: clean_css public/build.css
 
