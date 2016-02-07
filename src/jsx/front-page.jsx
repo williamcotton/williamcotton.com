@@ -1,4 +1,6 @@
 var React = require('react')
+var ReactBootstrap = require('react-bootstrap')
+var Button = ReactBootstrap.Button
 
 var FrontPage = React.createClass({
   render: function () {

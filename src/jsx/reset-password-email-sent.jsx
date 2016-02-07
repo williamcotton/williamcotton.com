@@ -1,6 +1,7 @@
 var React = require('react')
 var ReactBootstrap = require('react-bootstrap')
 var Alert = ReactBootstrap.Alert
+var Well = ReactBootstrap.Well
 
 var ResetPasswordEmailSent = React.createClass({
   propTypes: {
@@ -9,8 +10,10 @@ var ResetPasswordEmailSent = React.createClass({
   },
   render: function () {
     return <div className='reset-password-container'>
-      <h1>Reset Password Email Sent</h1>
-      <Alert bsStyle='success'>Please <strong>check your email</strong> for instructions on how to reset your password.</Alert>
+      <Well>
+        <legend>Reset Password Email Sent</legend>
+        <Alert bsStyle='success'>Please <strong>check your email</strong> for instructions on how to reset your password.</Alert>
+      </Well>
     </div>
   }
 })

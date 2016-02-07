@@ -1,9 +1,10 @@
 /* 
-  @brand-primary #337AB7
-  http://getbootstrap.com/customize/?id=a173626c83cdec7d7968
+  https://bootswatch.com/lumen/
+  https://bootswatch.com/lumen/bootstrap.min.css
+  https://bootswatch.com/lumen/_variables.scss
 */
 @import 'bootstrap.min';
-$brand-primary: #337AB7;
+@import 'variables';
 
 @import 'reset';
 @import 'root-container';
