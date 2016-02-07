@@ -20,8 +20,8 @@ var emailService = {
     var payload = {
       to: emailAddress,
       from: 'admin@williamcotton.com',
-      subject: 'Email Verification',
-      text: 'Thanks for signing up with <a href="http://williamcotton.com">williamcotton.com</a>. \n\nPlease visit this link to complete your account creation: \n\n' + verificationUrl
+      subject: 'Email Verification - williamcotton.com',
+      text: 'Thanks for signing up with williamcotton.com. \n\nPlease visit this link to complete your account creation: \n\n' + verificationUrl
     }
     if (nodeEnv === 'development') {
       console.log(payload)
@@ -36,8 +36,8 @@ var emailService = {
     var payload = {
       to: emailAddress,
       from: 'admin@williamcotton.com',
-      subject: 'Password Reset',
-      text: 'We received a request to change your password with <a href="http://williamcotton.com">williamcotton.com</a>. \n\nPlease visit this link to set your new password: \n\n' + resetPasswordUrl
+      subject: 'Password Reset - williamcotton.com',
+      text: 'We received a request to change your password with williamcotton.com. \n\nPlease visit this link to set your new password: \n\n' + resetPasswordUrl
     }
     if (nodeEnv === 'development') {
       console.log(payload)
