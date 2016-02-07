@@ -1,4 +1,4 @@
-const connection = process.env.BOOKSHELF_MODELS
+const connection = process.env.DATABASE_URL
 
 const knexConfig = {
   connection,

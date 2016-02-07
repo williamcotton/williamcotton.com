@@ -11,16 +11,13 @@ module.exports = function (options) {
 
   */
 
-  var rsaPrivateKeyPem = fs.readFileSync(__dirname + '/../../../expect-user-authentication-service.pem')
-  var rsaPublicKeyPem = fs.readFileSync(__dirname + '/../../../expect-user-authentication-service-public.pem')
-
   var userAuthenticationService = require('../lib/expect-user-authentication-service')({
     emailService: options.emailService,
     verificationPath: '/verify/:token',
     resetPasswordPath: '/reset-password/:token',
     userAuthenticationDataStore: options.userAuthenticationDataStore,
-    rsaPrivateKeyPem: rsaPrivateKeyPem,
-    rsaPublicKeyPem: rsaPublicKeyPem,
+    rsaPrivateKeyPem: options.rsaPrivateKeyPem,
+    rsaPublicKeyPem: options.rsaPublicKeyPem,
     userTokenExpiresIn: '7d'
   })
 

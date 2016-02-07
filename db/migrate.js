@@ -17,7 +17,7 @@ const down = (knex) => {
 }
 */
 
-const connection = process.env.EXPECT_POSTGRES_USER_AUTHENTICATION_DATA_STORE_URL
+const connection = process.env.DATABASE_URL
 
 const knexConfig = {
   connection,

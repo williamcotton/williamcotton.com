@@ -10,6 +10,9 @@ var sendgridPassword = process.env.SENDGRID_PASSWORD
 
 var sendgrid = require('sendgrid')(sendgridUsername, sendgridPassword)
 
+var rsaPrivateKeyPem = process.env.USER_AUTH_PRIVATE_KEY
+var rsaPublicKeyPem = process.env.USER_AUTH_PUBLIC_KEY
+
 var emailService = {
   sendVerificationUrl: function (options, callback) {
     var emailAddress = options.emailAddress
@@ -62,6 +65,8 @@ var universalServerApp = require('./app')({
   defaultTitle: defaultTitle,
   nodeEnv: nodeEnv,
   userAuthenticationDataStore: userAuthenticationDataStore,
+  rsaPrivateKeyPem: rsaPrivateKeyPem,
+  rsaPublicKeyPem: rsaPublicKeyPem,
   emailService: emailService,
   bookshelf: bookshelf
 })
