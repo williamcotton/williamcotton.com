@@ -5,8 +5,8 @@
   "description": "williamcotton.com",
   "main": "src/js/electron/main.js",
   "engines": {
-    "node": "5.5.x",
-    "npm": "3.3.x"
+    "node": "5.6.x",
+    "npm": "3.6.x"
   },
   "scripts": {
     "test": "npm run build && tapes test/**/*.js test/**/**/*-spec.js | tap-spec",
