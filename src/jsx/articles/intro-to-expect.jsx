@@ -334,7 +334,7 @@ universalApp({app})
 `}
       </Highlight>
       <p>
-        All routes defined by the {p('universalApp')} will render HTML on the server, resulting in <strong>faster page loads</strong> that are <strong>optimized for search engines and other web crawlers</strong>. This approach implicitly adds support for a wide range of <strong>text-mode browsers</strong> and <strong>screen readers</strong>.
+        All routes defined by the {p('universalApp')} will render HTML on the server, resulting in <strong>faster page loads</strong> that are <strong>optimized for search engines and other web crawlers</strong>. Not only that, but our entire application <strong>will work with JavaScript disabled</strong> in the web browser. This approach implicitly adds support for a wide range of <strong>text-mode browsers</strong> and <strong>screen readers</strong>.
       </p>
       <p>
         When building <strong>with the right set of expectations</strong>, the interactive elements of a web application form a layer of <strong>progressive enhancement</strong>, which allows for <strong>universal accessibility</strong>.
@@ -491,7 +491,12 @@ universalApp({app})
       </p>
       <Highlight className='javascript'>
 {`app.get('/item/:item_id', async ({params: {item_id}, query}, {renderApp}) => {
-  let item = await query(\`item(id: \$\{item_id}) { title }\`)
+  let item = await query(\`item(id: $item_id) { title }\`, {item_id})
+  renderApp(<div><h3>{item.title}</h3></div>)
+})
+
+app.post('/item/:item_id', async ({params: {item_id}, {body: {title}, mutation}, {renderApp}) => {
+  let item = await mutation(\`updateItemTitle(id: $item_id title: $title) { title }\`, {item_id, title})
   renderApp(<div><h3>{item.title}</h3></div>)
 })`}
       </Highlight>
