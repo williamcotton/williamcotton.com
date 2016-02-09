@@ -6,9 +6,17 @@
 @import 'bootstrap.min';
 @import 'variables';
 
+/*
+https://highlightjs.org/
+*/
+@import 'github';
+
 @import 'reset';
 @import 'root-container';
 @import 'front-page';
+@import 'user-authentication';
+@import 'article';
+@import 'markup';
 
 #universal-app-container {
   height: 100%;

@@ -1,6 +1,10 @@
 var React = require('react')
 
 var FrontPage = require('./front-page.jsx')
+
+// Articles
+var IntroToExpect = require('./articles/intro-to-expect.jsx')
+
 var About = require('./about.jsx')
 var Signup = require('./signup.jsx')
 var Welcome = require('./welcome.jsx')
@@ -14,6 +18,11 @@ var universalApp = (options) => {
 
   app.get('/', (req, res) => {
     var content = <FrontPage />
+    res.renderApp(content)
+  })
+
+  app.get('/intro-to-expect', (req, res) => {
+    var content = <IntroToExpect />
     res.renderApp(content)
   })
 

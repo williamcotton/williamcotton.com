@@ -22,7 +22,7 @@ var RootComponent = React.createClass({
     ]
 
     return <div className='root-component-container'>
-      <Navbar className='navbar-container navbar-default hidden-xs'>
+      <Navbar className='navbar-container navbar-default'>
         <Navbar.Header>
           <Navbar.Brand>
             <a href='/'>William Cotton</a>

@@ -5,6 +5,18 @@ module.exports = function (options) {
   var fs = require('fs')
 
   /*
+  ssl
+
+  https://community.letsencrypt.org/t/lets-encrypt-and-heroku-solved/4272/15
+  https://community.letsencrypt.org/t/tutorial-for-os-x-local-certificates-and-shared-hosting/6859?source_topic_id=8407
+  https://github.com/letsencrypt/letsencrypt
+  https://github.com/Daplie/letsencrypt-express
+  https://www.npmjs.com/package/letsencrypt
+  */
+
+
+
+  /*
 
     user authentication service
     ---------------------------
@@ -79,31 +91,31 @@ module.exports = function (options) {
 
   */
 
-  var expectBookshelfModel = require('../lib/expect-server-bookshelf-model')({
-    app: app,
-    bookshelf: bookshelf
-  })
+  // var expectBookshelfModel = require('../lib/expect-server-bookshelf-model')({
+  //   app: app,
+  //   bookshelf: bookshelf
+  // })
 
-  // Song -> req.songs
-  var Song = bookshelf.Model.extend({
-    tableName: 'songs'
-  })
-  app.use(expectBookshelfModel({
-    reqProp: 'songs',
-    Model: Song,
-    beforeFind: function (song, req, res, callback) {
-      song.set({read_count: song.get('read_count') + 1})
-      song.save()
-      callback(song)
-    },
-    findAll: function (Song) {
-      return function (req, res, callback) {
-        Song.query('orderBy', 'id', 'asc').fetchAll().then(function (songs) {
-          callback(songs.toJSON())
-        })
-      }
-    }
-  }))
+  // // Song -> req.songs
+  // var Song = bookshelf.Model.extend({
+  //   tableName: 'songs'
+  // })
+  // app.use(expectBookshelfModel({
+  //   reqProp: 'songs',
+  //   Model: Song,
+  //   beforeFind: function (song, req, res, callback) {
+  //     song.set({read_count: song.get('read_count') + 1})
+  //     song.save()
+  //     callback(song)
+  //   },
+  //   findAll: function (Song) {
+  //     return function (req, res, callback) {
+  //       Song.query('orderBy', 'id', 'asc').fetchAll().then(function (songs) {
+  //         callback(songs.toJSON())
+  //       })
+  //     }
+  //   }
+  // }))
 
   /*
     rpc middleware

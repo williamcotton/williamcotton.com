@@ -1,0 +1,23 @@
+.component-markup, .path-markup, .function-markup, .plain-markup {
+  display: inline;
+  padding: 5.5px;
+  @extend pre;
+  white-space: nowrap;
+}
+
+.component-markup {
+  @extend .hljs-name;
+  
+}
+
+.path-markup {
+  @extend .hljs-string;
+}
+
+.function-markup {
+  @extend .hljs-title;
+}
+
+.plain-markup {
+  @extend .hljs;
+}

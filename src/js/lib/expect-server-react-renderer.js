@@ -1,4 +1,5 @@
 var async = require('async')
+var fs = require('fs')
 
 var middlewareStack = []
 
@@ -6,7 +7,7 @@ var reactRenderApp = function (options) {
   var React = require('react')
   var ReactDOMServer = require('react-dom/server')
   var ejs = require('ejs')
-  var template = options.template
+  var template = options.template || fs.readFileSync(__dirname + '/../../ejs/index.ejs', 'utf8')
   var RootComponent = options.RootComponent ? React.createFactory(options.RootComponent) : React.createClass({propTypes: { content: React.PropTypes.element }, render: function () { return React.DOM.div({ className: 'universal-app-container' }, this.props.content) }})
   var formatTitle = options.formatTitle || function (defaultTitle, title) { return defaultTitle + (title ? ' - ' + title : '') }
   return function reactRenderer (req, res, next) {

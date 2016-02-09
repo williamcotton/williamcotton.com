@@ -22,7 +22,7 @@ var ResetPassword = React.createClass({
           <p>If you've forgot your password we can send you an e-mail with a link and instruction on how you can set a new password.</p>
           <input type='hidden' name='type' value='email' />
           <Input name='uuid' type='text' label='Email Address' />
-          <ButtonInput bsStyle='primary' type='submit' value='Send Reset Password Email' />
+          <ButtonInput bsStyle='primary' type='submit' value='Send Reset Password Email' bsSize='large' block />
         </Form>
       </Well>
     </div>

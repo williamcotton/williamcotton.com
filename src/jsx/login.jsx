@@ -26,8 +26,9 @@ var Login = React.createClass({
           <input type='hidden' name='type' value='email' />
           <Input name='uuid' type='text' label='Email Address' defaultValue={this.props.uuid} />
           <Input bsStyle={ error ? 'error' : null} name='password' type='password' label='Password' />
-          <ButtonInput bsStyle='primary' type='submit' value='Login' />
-          <a href='/reset-password'>Forgot Password?</a>
+          <p><a href='/reset-password'>Forgot Password?</a></p>
+          <ButtonInput bsStyle='primary' type='submit' value='Login' bsSize='large' block />
+          <p>Need an account? <a href='/signup'>Sign up now.</a></p>
         </Form>
       </Well>
     </div>
