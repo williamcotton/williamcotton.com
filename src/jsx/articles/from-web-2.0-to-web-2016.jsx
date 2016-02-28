@@ -136,17 +136,17 @@ class IntroToExpect extends React.Component {
 
       <p>Netflix, Amazon and Apple are continuing to finance what many are calling the <a href='https://en.wikipedia.org/wiki/Golden_Age_of_Television_(2000s%E2%80%93present)'>Golden Age of Television</a>. These are big budget creations made by a pre-existing and historical mode of cultural production. The Hollywood Studio system, it's Guilds and complex and opaque system of accounting, remain fully functional. Financing the creation and distribution of Copyrighted Works and other forms of intellectual property are important parts of what keeps the industry produtive and functional, even as it deals with the weight of collective bargaining and stardom.</p>
 
+      <p>It is hardly fair to call the media landscape of Web 2016 a sort of Fuedalism, even though analogies to content farms are apt. Feudalism implied a lack of choice on behalf of the participants. Just as No One Force You To Shop at Wal-Mart, no one forces you to use Facebook.</p>
 
-        <p>It is hardly fair to call the media landscape of Web 2016 a sort of Fuedalism, even though analogies to content farms are apt. Feudalism implied a lack of choice on behalf of the participants. Just as No One Force You To Shop at Wal-Mart, no one forces you to use Facebook.</p>
+      <p>But for those either on the inside or outside of Web 2016, the future is starting to look pretty grim for those of us who yearn for the optimism of our democratic and decentralized rhetoric of our recent past.</p>
 
-        <p>But for those either on the inside or outside of Web 2016, the future is starting to look pretty grim for those of us who yearn for the optimism of our democratic and decentralized rhetoric of our recent past.</p>
+      <p>There's a danger that this pessimism could turn people against Capitalism as they point the blame at the very notion of private property. Blockai and Open Publish want to make sure that the corporate abuses that we associate with both Capitalism and Copyright belie the underlying protections to life and liberty that we sometimes may take for granted.</p>
 
-        <p>There's a danger that this pessimism could turn people against Capitalism as they point the blame at the very notion of private property. Blockai and Open Publish want to make sure that the corporate abuses that we associate with both Capitalism and Copyright belie the underlying protections to life and liberty that we sometimes may take for granted.</p>
+      <p>There's also a danger that this pessimism could turn people against universal rights, decentralized and democratic models of production with a return of language related to colonialism and class structure. Blockai and Open Publish want to make sure that the equal and public access nature of the Web remains healthy and intact.</p>
 
-        <p>There's also a danger that this pessimism could turn people against universal rights, decentralized and democratic models of production with a return of language related to colonialism and class structure. Blockai and Open Publish want to make sure that the equal and public access nature of the Web remains healthy and intact.</p>
-
-        <p>Blockai and Open Publish posit that our future is bright and we see a lot of room for continued innovation in the creation, distribution and professional production of digital media. We just need to embrace our already existing notions of capital and apply them to the Web.</p>
-        <p>We're not stuck with Web 2016. Next year we get Web 2017, and the following year, Web 2018. We have a lot of great things to look forward to!</p>
+      <p>Blockai and Open Publish posit that our future is bright and we see a lot of room for continued innovation in the creation, distribution and professional production of digital media. We just need to embrace our already existing notions of capital and apply them to the Web. The problem isn't with the commercial nature of the Web, it's with an ineffifient market mechanism for open and free marketplaces for intellectual property.</p>
+      <p>We're not stuck with Web 2016. Next year we get Web 2017, and the following year, Web 2018. We have a lot of great things to look forward to! Open Publish is open source. We would love your feedback and help. </p>
+      <p>Blockai is our commerical product, and we would love to serve you!</p>
     </Article>
   }
 }
