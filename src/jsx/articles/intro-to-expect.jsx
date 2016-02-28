@@ -51,14 +51,11 @@ def about():
     return render_template('about.html')`}
       </Highlight>
       <p>
-        In all of the above examples we've got a dynamically-typed, interpreted language, running a minimalistic request-to-route-handler framework on a server that renders HTML using a templating engine.
-      </p>
-      <p>
-        With Expect we're using <a href='https://nodejs.org/en/'>Node</a> and <a href='http://expressjs.com/'>Express</a> with a custom middleware that attaches the {F('renderApp()')} function to the route handler's {p('res')} object on every request. This allows us to render <a href='https://facebook.github.io/react/'>React</a> components on the server.
+        With Expect we're doing the same thing, using <a href='https://nodejs.org/en/'>Node</a> and <a href='http://expressjs.com/'>Express</a> with a custom middleware that attaches the {F('renderApp()')} function to the route handler's {p('res')} object on every request. This allows us to render <a href='https://facebook.github.io/react/'>React</a> components on the server.
       </p>
       <p>
       <strong>
-      <span className='text-success'>Exp</span><span className='text-primary'>ect</span> = <span className='text-success'>Node Express router</span> × <span className='text-primary'>React static markup renderer</span>
+      Expect = <u>Exp</u>ress router × Rea<u>ct</u> renderer
       </strong>
       </p>
       <Highlight className='javascript'>
@@ -234,7 +231,7 @@ var app = options.app || express({
       </p>
       <p>
       <strong>
-      <span className='text-success'>Exp</span><span className='text-primary'>ect</span> = ( <span className='text-success'>Browser Express router</span> × <span className='text-primary'>React DOM renderer</span> ) + ( <span className='text-success'>Node Express router</span> × <span className='text-primary'>React static markup renderer</span> )
+      Expect = ( Browser Express router × React DOM renderer ) + ( Node Express router × React static markup renderer )
       </strong>
       </p>
       <Highlight className='javascript'>
@@ -438,7 +435,7 @@ universalApp({app})
 })`}
       </Highlight>
       <p>
-        We might have to build something really complex, like a real-time multithreaded chat app, or an entire photo editing suite, in which case we could benifit from a predicitable state container like <a href='http://redux.js.org/'>Redux</a>, however, starting with something as powerful as this can often be <strong>more trouble than it is worth</strong>.
+        In some distant future we might have to build something really complex, like a real-time multithreaded chat app, or an entire photo editing suite, in which case we might benefit from a predicitable state container like <a href='http://redux.js.org/'>Redux</a>, however, starting with something as powerful as this can often be <strong>more trouble than it is worth</strong>.
       </p>
       <p>
         With the right middleware for both Express and Browser Express, and <strong>with the right set of expectations</strong>, anything is possible!
@@ -469,7 +466,7 @@ universalApp({app})
 }))`}
       </Highlight>
       <p>
-        But <strong>that doesn't mean we need to be constantly repeating ourselves</strong>. In most cases a simple RPC is sufficient because our universalApp is <strong>purposefully coupled</strong>.
+        But <strong>that doesn't mean we need to be constantly repeating ourselves</strong>. In most cases a simple RPC is sufficient because our universalApp is <strong>inherently coupled</strong>.
       </p>
       <p>
         Using this middleware means that RPC functions defined on the server will <strong>automatically be added to the {p('req')} object</strong> in the browser as a <strong>simple XHR call to a JSON endpoint</strong> on the server.
@@ -481,27 +478,27 @@ universalApp({app})
         What is important is that the server-side middleware calls the functions on the {p('Item')} object in the same scope as the incoming {p('req')} and {p('res')} objects, which will come in handy once we're ready to work with sessions and user authentication.
       </p>
       <p>
-        In many ways Expect could be considered in terms of the classical model-view-controller relationship, with React rendering <strong>views</strong> that are <strong>controlled</strong> by an Express app. 
+        In many ways Expect could be considered in terms of the classical model-view-controller relationship, with React rendering <strong>views</strong> that are <strong>controlled</strong> by an Express app.
       </p>
       <p>
         Anything we might consider a <strong>model</strong> and any notion of persistance should be considered <strong>outside of the scope of an Expect application</strong>, but using the RPC middleware makes it very easy to bridge the gap.
       </p>
       <p>
-        Perhaps in the future as an application increases in complexity we would benefit from creating a more advanced solution using a custom GraphQL middleware instead of our simple and lightweight RPC middleware.
+        Perhaps in the future as our application increases in complexity we would benefit from creating a more advanced solution using a custom <a href='http://graphql.org/'>GraphQL</a> or <a href='http://netflix.github.io/falcor/'>Falcor</a> middleware instead of our simple and lightweight RPC middleware.
       </p>
       <Highlight className='javascript'>
 {`app.get('/item/:item_id', async ({params: {item_id}, query}, {renderApp}) => {
-  let item = await query(\`item(id: $item_id) { title }\`, {item_id})
+  const item = await query(\`item(id: $item_id) { title }\`, {item_id})
   renderApp(<div><h3>{item.title}</h3></div>)
 })
 
 app.post('/item/:item_id', async ({params: {item_id}, {body: {title}, mutation}, {renderApp}) => {
-  let item = await mutation(\`updateItemTitle(id: $item_id title: $title) { title }\`, {item_id, title})
+  const item = await mutation(\`updateItemTitle(id: $item_id title: $title) { title }\`, {item_id, title})
   renderApp(<div><h3>{item.title}</h3></div>)
 })`}
       </Highlight>
       <p>
-        However, starting with something as powerful as GraphQL can often be <strong>more trouble than it is worth</strong> when building a new web application.
+        However, starting with something as powerful as GraphQL or Falcor can often be <strong>more trouble than it is worth</strong> when building a new web application.
       </p>
       <h3>Beyond the Browser</h3>
       <p>

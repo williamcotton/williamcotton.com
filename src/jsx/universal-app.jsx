@@ -4,6 +4,11 @@ var FrontPage = require('./front-page.jsx')
 
 // Articles
 var IntroToExpect = require('./articles/intro-to-expect.jsx')
+var FromWeb20ToWeb2016 = require('./articles/from-web-2.0-to-web-2016.jsx')
+
+// Personified Nouns
+var PersonifiedNouns = require('./personified-nouns/personified-nouns.jsx')
+var UltimateTruth = require('./personified-nouns/ultimate-truth.jsx')
 
 var About = require('./about.jsx')
 var Signup = require('./signup.jsx')
@@ -21,8 +26,33 @@ var universalApp = (options) => {
     res.renderApp(content)
   })
 
+  /*
+    Articles
+    --------
+  */
+
   app.get('/intro-to-expect', (req, res) => {
     var content = <IntroToExpect />
+    res.renderApp(content)
+  })
+
+  app.get('/from-web-2.0-to-web-2016', (req, res) => {
+    var content = <FromWeb20ToWeb2016 />
+    res.renderApp(content)
+  })
+
+  /*
+    Personified Nouns
+    -----------------
+  */
+
+  app.get('/personified-nouns', (req, res) => {
+    var content = <PersonifiedNouns />
+    res.renderApp(content)
+  })
+
+  app.get('/ultimate-truth', (req, res) => {
+    var content = <UltimateTruth />
     res.renderApp(content)
   })
 
