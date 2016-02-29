@@ -14,6 +14,12 @@ class IntroToExpect extends React.Component {
 
       <i>If Charlie Bit My Finger Defined how we thought about things in Web 2.0, a return to Billboard chart-topping artists makes up the most viewed content on sites like YouTube.</i>
 
+      <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Charlie Bit My Finger and than got crushed by the Billboard Hot 100 on Youtube. A few new professions were born during the last decade – esports champion, Lyft driver, Etsy designer – but what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions into the commercial life of the web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing tox pay for the production of professional content that is featured on the Web</b>.</p>
+
+      <p>It is wonderful to see cultural production happen in a way that supports the livelihoods of those who produce it. The productions themselves are wonderful to consume, since it is well-made. However, the return of 20th century modes of production has also seen a return of hierarchical media relationships and opaque business arrangements. No one knows how the money flows around Spotify and no one knows the ranking algoritms on Facebook.</p>
+      
+      <i> ...wonderful to consume, they are well-made. AN </i>
+
       <p>It is wonderful to see cultural production happen in a way that supports the livelihoods of those who produce it. The productions themselves are wonderful to consume, since it is well-made. However, the return of 20th century art forms has also seen a return of hierarchical media relationships and opaque business arrangements. No one knows how the money flows around Spotify and no one knows the ranking algoritms on Facebook.</p>
 
       <p>The Internet still offers us ways to maintain the <b>voluntary, decentralized and democratic energies of Web 2.0</b>. One way to avoid such a return to corporate-centric Copyright would be to develop, for the web, the original, author-centered notions of Copyright that are both the hope of the web masses and their legal right.</p>
