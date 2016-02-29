@@ -8,15 +8,20 @@ var Article = require('./article.jsx')
 class IntroToExpect extends React.Component {
   render () {
     return <Article title='From Web 2.0 to Web 2016' >
-      <h3>The Changing Landscape of Digital Cultural Production and why need Public Platforms for Digital Ownership</h3>
+      <h3>The need Public Platforms for Digital Ownership</h3>
 
-      <p>As DUMBASS the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Commercial activity is big business in Web 2016, with Charlie Bit My Finger replaced by Gangnam Style. While a few new professions were born during the last decade, what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions in to the cultural production of the Web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing to pay for the production of professional content that is featured on the Web</b>.</p>
+      <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Charlie Bit My Finger and than got crushed by the Billboard Hot 100 on Youtube. A few new professions were born during the last decade – esports champion, Lyft driver, Etsy designer – but what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions into the commercial life of the web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing tox pay for the production of professional content that is featured on the Web</b>.</p>
+
+      <i> 
+      <i/>
 
       <p>It is wonderful to see cultural production happen in a way that supports the livelihoods of those who produce it. The productions themselves are wonderful to consume, since it is well-made. However, the return of 20th century modes of production has also seen a return of hierarchical media relationships and opaque business arrangements. No one knows how the money flows around Spotify and no one knows the ranking algoritms on Facebook.</p>
+      
+      <i> ...wonderful to consume, they are well-made. AN </i>
 
       <p>The Internet still offers us ways to maintain the <b>voluntary, decentralized and democratic energies of Web 2.0</b>. One way to avoid such a return to corporatist copyright would be to develop, for the web, the original, author-centered notions of copyright that are both the hope of the web masses and their legal right.</p>
 
-      <p>Blockai has developed an open-source and open-data protocol called <a href='https://github.com/blockai/openpublish'>Open Publish</a> which allows for people to <b>register digital assets that represent claims of ownership over digital media</b>. We've turned the Open Publish registration process in to a product that <a href='https://www.blockai.com'>you can try out for yourself</a> We think that Blockai and Open Publish have what it takes to release <a>The Dormant Value of Digital Cutural Production</a>.</p>
+      <p>Blockai has developed an open-source and open-data protocol called <a href='https://github.com/blockai/openpublish'>Open Publish</a> which allows for people to <b>register digital assets that represent claims of ownership over digital media</b>. We've turned the Open Publish registration process into a product that <a href='https://www.blockai.com'>you can try out for yourself</a> We think that Blockai and Open Publish have what it takes to release <a>The Dormant Value of Digital Cutural Production</a>.</p>
 
       <p>There's no better way to define Web 2.0 than by the <a href='https://en.wikipedia.org/wiki/Web_2.0'>definition of Web 2.0 on Wikipedia</a>. Web 2.0 mainly defines itself in relation to Web 1.0, and I'd like to define Web 2016 along a similar trajectory.</p>
 
@@ -121,10 +126,10 @@ class IntroToExpect extends React.Component {
       <p>Then the key features of Web 2016 become:</p>
 
       <ol>
-        <li>Folksonomy is replaced by <b>third-party editorial algorithms</b>. Professional editorship never went away. We're still tuning in to Fox News, ESPN, and Chelsea Handler and reading them online, even if they are now using information technology to assist in the editorial process. Facebook uses algorithmic filters to provide a better experience.</li>
+        <li>Folksonomy is replaced by <b>third-party editorial algorithms</b>. Professional editorship never went away. We're still tuning into Fox News, ESPN, and Chelsea Handler and reading them online, even if they are now using information technology to assist in the editorial process. Facebook uses algorithmic filters to provide a better experience.</li>
         <li>Rich User Experience is replaced with a <b>poor user experience</b>, with bloated web pages full of advertisements, paywalls, and ad blocking wars. The need for artificial scarcity to create the market conditions for an information economy never went away.</li>
         <li>User Participation is replaced <b>small number of professional producers</b> and large number of consumers. Mass Media never went away. People continue to appreciate the relationship between stage and audience, writer and reader.</li>
-        <li>Software as a service turned in to <b>restricted API access</b>. Twitter has long since abandoned the grassroots network of clients and has added many restrictions to it's API. Subscription data services never went away. Bloomberg continues to sell professional terminals, and Getty continues to sell professional photographs.</li>
+        <li>Software as a service turned into <b>restricted API access</b>. Twitter has long since abandoned the grassroots network of clients and has added many restrictions to it's API. Subscription data services never went away. Bloomberg continues to sell professional terminals, and Getty continues to sell professional photographs.</li>
         <li>Mass Participation is replaced by <b>private, limited web access</b>, such as Free Basics, which leads to limited choice. The private relationships between self-interested publishers and distributors never went away. Sony and Spotify are engaged in opqaue business deals.</li>
       </ol>
 
