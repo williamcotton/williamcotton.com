@@ -8,7 +8,7 @@ var Article = require('./article.jsx')
 class IntroToExpect extends React.Component {
   render () {
     return <Article title='From Web 2.0 to Web 2016' >
-      <h3>The Changing Landscape of Digital Cultural Production and why we need better Public Platforms for Digital Ownership</h3>
+      <h3>The Changing Landscape of Digital Cultural Production and why need Public Platforms for Digital Ownership</h3>
 
       <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Commercial activity is big business in Web 2016, with Charlie Bit My Finger replaced by Gangnam Style. While a few new professions were born during the last decade, what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions in to the cultural production of the Web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing to pay for the production of professional content that is featured on the Web</b>.</p>
 
