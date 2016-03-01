@@ -24,7 +24,7 @@ class IntroToExpect extends React.Component {
 
       <p>The Internet still offers many ways to maintain the <b>voluntary, decentralized and democratic energies of Web 2.0</b>. One way to avoid such a return to corporate-centric Copyright would be to develop, for the web, the original, author-centered notions of Copyright that are both the hope of the web masses and their legal right.</p>
 
-      <i> But at the same time we are seeing the end of the voluntary, decentralized and democratic energies of Web 2.0. 
+      <i> But at the same time we are seeing the end of the voluntary, decentralized and democratic energies of Web 2.0. </i>
 
 
       <p>Blockai has developed an open-source and open-data protocol called <a href='https://github.com/blockai/openpublish'>Open Publish</a> which allows for people to <b>register digital assets that represent claims of ownership over digital media</b>. We've turned the Open Publish registration process into a product that <a href='https://www.blockai.com'>you can try out for yourself</a> We think that Blockai and Open Publish have what it takes to release <a>The Dormant Value of Digital Cutural Production</a>.</p>
