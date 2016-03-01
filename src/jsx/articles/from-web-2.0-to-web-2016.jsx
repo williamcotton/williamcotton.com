@@ -12,17 +12,20 @@ class IntroToExpect extends React.Component {
 
       <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Commercial activity is big business in Web 2016, with Charlie Bit My Finger replaced by Gangnam Style. While a few new professions were born during the last decade, (esports champions, lfyt drivers, and etsy designers) what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions into the cultural production of the Web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing to pay for the production of professional content that is featured on the Web</b>.</p>
 
-      <i>If Charlie Bit My Finger Defined how we thought about things in Web 2.0, a return to Billboard chart-topping artists makes up the most viewed content on sites like YouTube.</i>
+
 
       <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Charlie Bit My Finger and than got crushed by the Billboard Hot 100 on Youtube. A few new professions were born during the last decade – esports champion, Lyft driver, Etsy designer – but what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions into the commercial life of the web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing tox pay for the production of professional content that is featured on the Web</b>.</p>
 
       <p>It is wonderful to see cultural production happen in a way that supports the livelihoods of those who produce it. The productions themselves are wonderful to consume, since it is well-made. However, the return of 20th century modes of production has also seen a return of hierarchical media relationships and opaque business arrangements. No one knows how the money flows around Spotify and no one knows the ranking algoritms on Facebook.</p>
       
-      <i> ...wonderful to consume, they are well-made. AN </i>
+      <i> ...wonderful to consume, they are well-made. And the way they are made involves the same basic guild structure that coelsceced in the histories of Hollywood, the music industry, TV. Unfortunately this familiar new source of Web commerce also brings along hierarchical relationships of IP ownership and business opacity. Spotify's deals with the major labels are as obscure and proprietary as the ranking algorithms of Facebook.</i>
 
       <p>It is wonderful to see cultural production happen in a way that supports the livelihoods of those who produce it. The productions themselves are wonderful to consume, since it is well-made. However, the return of 20th century art forms has also seen a return of hierarchical media relationships and opaque business arrangements. No one knows how the money flows around Spotify and no one knows the ranking algoritms on Facebook.</p>
 
-      <p>The Internet still offers us ways to maintain the <b>voluntary, decentralized and democratic energies of Web 2.0</b>. One way to avoid such a return to corporate-centric Copyright would be to develop, for the web, the original, author-centered notions of Copyright that are both the hope of the web masses and their legal right.</p>
+      <p>The Internet still offers many ways to maintain the <b>voluntary, decentralized and democratic energies of Web 2.0</b>. One way to avoid such a return to corporate-centric Copyright would be to develop, for the web, the original, author-centered notions of Copyright that are both the hope of the web masses and their legal right.</p>
+
+      <i> But at the same time we are seeing the end of the voluntary, decentralized and democratic energies of Web 2.0. 
+
 
       <p>Blockai has developed an open-source and open-data protocol called <a href='https://github.com/blockai/openpublish'>Open Publish</a> which allows for people to <b>register digital assets that represent claims of ownership over digital media</b>. We've turned the Open Publish registration process into a product that <a href='https://www.blockai.com'>you can try out for yourself</a> We think that Blockai and Open Publish have what it takes to release <a>The Dormant Value of Digital Cutural Production</a>.</p>
 
@@ -114,6 +117,9 @@ class IntroToExpect extends React.Component {
           </tr>
         </tbody>
       </Table>
+
+      <i> many of the best things about Web 2016 are things Web 2.0 rejected and sought to undermine, with regards to the gatekeeper status of legacy cultural corporations. Or so we thought: the former barbarians at the gate have now settled into the castle and have built it up considerably – the surviving darlings of Web 2.0 quickly joined their Web 1.0 forbears in becoming autocratic capitalists of fantastic wealth, pools of gold derived from other people's interaction with what yet other people have made. The digital things that we make don't belong to us but they are our right. If you register your digital property and then Register your digital property.
+      In 1974 they ran out of storage space and the abdicated the duty of proof to things that could be proven published. Copyright law did not dissapear. By that point industries centered on intellectual property were at peak production in New York and Los Angeles, in electronic media. They now permeate the Web. In a knowledge economy, the products of our work  intellectual property  </i>
 
       <p>If the key features of Web 2.0 include:</p>
 
