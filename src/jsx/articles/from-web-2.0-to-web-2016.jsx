@@ -3,6 +3,7 @@
 var React = require('react')
 var ReactBootstrap = require('react-bootstrap')
 var Table = ReactBootstrap.Table
+var Button = ReactBootstrap.Button
 var Article = require('./article.jsx')
 
 class IntroToExpect extends React.Component {
@@ -10,26 +11,15 @@ class IntroToExpect extends React.Component {
     return <Article title='From Web 2.0 to Web 2016' >
       <h3>The Need For Public Platforms for Digital Ownership</h3>
 
-      <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Commercial activity is big business in Web 2016, with Charlie Bit My Finger replaced by Gangnam Style. While a few new professions were born during the last decade, (esports champions, lfyt drivers, and etsy designers) what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions into the cultural production of the Web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing to pay for the production of professional content that is featured on the Web</b>.</p>
+      <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. A few new professions were born during the last decade – esports champion, Lyft driver, Etsy designer – but what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions into the commercial life of the web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing to pay for the production of professional content that is featured on the Web</b>.</p>
 
+      <p>Netflix, Amazon and Apple are continuing to finance what many are calling the <a href='https://en.wikipedia.org/wiki/Golden_Age_of_Television_(2000s%E2%80%93present)'>Golden Age of Television</a>. These are big budget creations made by a pre-existing and historical mode of cultural production. The Hollywood Studio system, it's guilds and complex accounting, remain fully functional. Financing the creation and distribution of copyrighted works and other forms of intellectual property are important parts of what keeps their industries produtive and functional, even as they deal with the weight of collective bargaining and stardom.</p>
 
+      <p>However, in our return to the old regimes of media production there's a sense that <b>we're losing the voluntary, decentralized and democratic energies of Web 2.0</b>. The natural monopolies of the Web 2.0 era are forming private alliances with old media corporations and some individuals seem to be losing a voice. The increasing commercial nature of Web 2016 carries with it some internal contradictions from this previous era.</p>
 
-      <p>As the social media- and smartphone-fueled <a href='http://techcrunch.com/2016/02/28/even-peter-thiel-has-got-soul/'>gold rush comes to an end</a>, and a few corporations continue to entrench their positions, <b>we are beginning to see the dominance of modes of cultural production that differ substantially from those heralded at the outset of Web 2.0</b>. Charlie Bit My Finger and than got crushed by the Billboard Hot 100 on Youtube. A few new professions were born during the last decade – esports champion, Lyft driver, Etsy designer – but what really defines today's media landscape is the inclusion of a large number of existing corporate-sponsored professions into the commercial life of the web. Hollywood has stayed in business and <b>now there is once again an eager public with open wallets willing tox pay for the production of professional content that is featured on the Web</b>.</p>
+      <hr />
 
-      <p>It is wonderful to see cultural production happen in a way that supports the livelihoods of those who produce it. The productions themselves are wonderful to consume, since it is well-made. However, the return of 20th century modes of production has also seen a return of hierarchical media relationships and opaque business arrangements. No one knows how the money flows around Spotify and no one knows the ranking algoritms on Facebook.</p>
-      
-      <i> ...wonderful to consume, they are well-made. And the way they are made involves the same basic guild structure that coelsceced in the histories of Hollywood, the music industry, TV. Unfortunately this familiar new source of Web commerce also brings along hierarchical relationships of IP ownership and business opacity. Spotify's deals with the major labels are as obscure and proprietary as the ranking algorithms of Facebook.</i>
-
-      <p>It is wonderful to see cultural production happen in a way that supports the livelihoods of those who produce it. The productions themselves are wonderful to consume, since it is well-made. However, the return of 20th century art forms has also seen a return of hierarchical media relationships and opaque business arrangements. No one knows how the money flows around Spotify and no one knows the ranking algoritms on Facebook.</p>
-
-      <p>The Internet still offers many ways to maintain the <b>voluntary, decentralized and democratic energies of Web 2.0</b>. One way to avoid such a return to corporate-centric Copyright would be to develop, for the web, the original, author-centered notions of Copyright that are both the hope of the web masses and their legal right.</p>
-
-      <i> But at the same time we are seeing the end of the voluntary, decentralized and democratic energies of Web 2.0. </i>
-
-
-      <p>Blockai has developed an open-source and open-data protocol called <a href='https://github.com/blockai/openpublish'>Open Publish</a> which allows for people to <b>register digital assets that represent claims of ownership over digital media</b>. We've turned the Open Publish registration process into a product that <a href='https://www.blockai.com'>you can try out for yourself</a> We think that Blockai and Open Publish have what it takes to release <a>The Dormant Value of Digital Cutural Production</a>.</p>
-
-      <p>There's no better way to define Web 2.0 than by the <a href='https://en.wikipedia.org/wiki/Web_2.0'>definition of Web 2.0 on Wikipedia</a>. Web 2.0 mainly defines itself in relation to Web 1.0, and I'd like to define Web 2016 along a similar trajectory.</p>
+      <p>There's no better way to define Web 2.0 than by the <a href='https://en.wikipedia.org/wiki/Web_2.0'>definition of Web 2.0 on Wikipedia</a>. Web 2.0 mainly defines itself in relation to Web 1.0, and I'd like to define Web 2016 along a similar trajectory, following in the path laid out by Tim O'Reilly is his influential essay <a href='http://www.oreilly.com/pub/a/web2/archive/what-is-web-20.html'>What Is Web 2.0</a>.</p>
 
       <Table striped bordered condensed hover>
         <thead>
@@ -103,12 +93,12 @@ class IntroToExpect extends React.Component {
           <tr>
             <td>directories (taxonomy)</td>
             <td>tagging (folksonomy)</td>
-            <td>Facebook News Feed algorithm (private-interest filtering)</td>
+            <td>algorithmic filtering</td>
           </tr>
           <tr>
             <td>stickiness</td>
             <td>syndication</td>
-            <td>subscriptions</td>
+            <td>paywalls</td>
           </tr>
           <tr>
             <td>HTML</td>
@@ -118,10 +108,7 @@ class IntroToExpect extends React.Component {
         </tbody>
       </Table>
 
-      <i> many of the best things about Web 2016 are things Web 2.0 rejected and sought to undermine, with regards to the gatekeeper status of legacy cultural corporations. Or so we thought: the former barbarians at the gate have now settled into the castle and have built it up considerably – the surviving darlings of Web 2.0 quickly joined their Web 1.0 forbears in becoming autocratic capitalists of fantastic wealth, pools of gold derived from other people's interaction with what yet other people have made. The digital things that we make don't belong to us but they are our right. If you register your digital property and then Register your digital property.
-      In 1974 they ran out of storage space and the abdicated the duty of proof to things that could be proven published. Copyright law did not dissapear. By that point industries centered on intellectual property were at peak production in New York and Los Angeles, in electronic media. They now permeate the Web. In a knowledge economy, the products of our work  intellectual property  </i>
-
-      <p>If the key features of Web 2.0 include:</p>
+      <p>If Wikipedia's key features of Web 2.0 include:</p>
 
       <ol>
         <li><b>Folksonomy</b> - free classification of information; allows users to collectively classify and find information (e.g. tagging)</li>
@@ -132,7 +119,7 @@ class IntroToExpect extends React.Component {
         <li><b>Mass Participation</b> - Universal web access leads to differentiation of concerns from the traditional internet user base</li>
       </ol>
 
-      <p>Then the key features of Web 2016 become:</p>
+      <p>Then these key features of Web 2016 become:</p>
 
       <ol>
         <li>Folksonomy is replaced by <b>third-party editorial algorithms</b>. Professional editorship never went away. We're still tuning into Fox News, ESPN, and Chelsea Handler and reading them online, even if they are now using information technology to assist in the editorial process. Facebook uses algorithmic filters to provide a better experience.</li>
@@ -148,23 +135,31 @@ class IntroToExpect extends React.Component {
 
       <p>Whereas previous critique of Web 2.0 has focused on the aesthetic and moral values of cultural production, exemplified by works such as <a href='https://en.wikipedia.org/wiki/The_Cult_of_the_Amateur'>The Cult of the Amateur</a> by Andrew Keen, contemporary critique of the Web 2016 modes of production are financial and political in nature, like <a href='https://en.wikipedia.org/wiki/The_People%27s_Platform:_Taking_Back_Power_and_Culture_in_the_Digital_Age'>The People's Platform</a> by Astra Taylor. These critiques reflect the dynamic shift from the aesthetic and moral conditions of Web 2.0 to the financial and political conditions of Web 2016.</p>
 
-      <p>There are many great applications and services from  Web 2.0. Wikipedia, Archive.org, Patreon, Kickstarter and many other services are bearing wonderful fruits and I expect these to continue. Web 2.0 never went away, but the sublte difference is, Hollywood never went away either!</p>
+      <p>There are many great applications and services from Web 2.0. Wikipedia, The Internet Archive, Patreon, Kickstarter and many other services are bearing wonderful fruits and I expect these to continue. Web 2.0 never went away, but the subtle difference is, Hollywood never went away either!</p>
 
-      <p>Netflix, Amazon and Apple are continuing to finance what many are calling the <a href='https://en.wikipedia.org/wiki/Golden_Age_of_Television_(2000s%E2%80%93present)'>Golden Age of Television</a>. These are big budget creations made by a pre-existing and historical mode of cultural production. The Hollywood Studio system, it's guilds and complex accounting, remain fully functional. Financing the creation and distribution of Copyrighted works and other forms of intellectual property are important parts of what keeps their industries produtive and functional, even as they deal with the weight of collective bargaining and stardom.</p>
+      <p>Tyler Cowen, in his work <a href='http://www.amazon.com/gp/product/0674001885?ie=UTF8&tag=marginalrevol-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0674001885'>In Praise of Commercial Culture</a>, takes an optimistic approach to the market production of art and shows how individual rights to intellectual property have worked for industries and artists alike. This upbeat approach seems like a needed addition to our increasingly cloudy perspectives on digital media.</p>
 
-      <p>Tyler Cowen, in his work <a href='http://www.amazon.com/gp/product/0674001885?ie=UTF8&tag=marginalrevol-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0674001885'>In Praise of Commercial Culture</a>, takes an optimistic approach to the market production of art and shows how individual rights to intellectual property have worked for industries and artists alike.</p>
+      <p>It is hardly fair to call the media landscape of Web 2016 a sort of <a href='http://cyberlaw.stanford.edu/events/digital-feudalism-upon-us-how-do-we-respond'>feudalism</a>, "with a small number of companies controlling their respective non-interoperable digital territories" and users conceptualized as serfs, even though analogies to <a href='http://motherboard.vice.com/read/dead-myspace-content-farms-time-inc'>content farms</a> are apt. Feudalism implies a lack of choice on behalf of the participants. Just as <a href='http://marginalrevolution.com/marginalrevolution/2007/05/no_one_makes_yo.html'>No One Forces You To Shop at Wal-Mart</a>, no one forces you to use Facebook. Yet for those either on the inside or outside of Web 2016 who yearn for the optimism of our very recent past, the future is starting to look pretty grim.</p>
 
-      <p>It is hardly fair to call the media landscape of Web 2016 a sort of <a href='http://cyberlaw.stanford.edu/events/digital-feudalism-upon-us-how-do-we-respond'>feudalism</a>, "with a small number of companies controlling their respective non-interoperable digital territories" and users conceptualized as serfs, even though analogies to <a href='http://motherboard.vice.com/read/the-100-million-content-farm-thats-killing-the-internet'>content farms</a> are apt. Feudalism implied a lack of choice on behalf of the participants. Just as No One Forces You To Shop at Wal-Mart, no one forces you to use Facebook. Yet for those either on the inside or outside of Web 2016 who yearn for the optimism of our very recent past, the future is starting to look pretty grim.</p>
-
-      <p>It's important that we acknowledge that none of this was anyone's fault. Facebook and Twitter were built with the technologies of the time, and at the beginning, were very open with their APIs, sharing in the material wealth of their natural monopolies. Unfortunately technologies like Bitcoin that allow for decentralized digital assets had yet to be discovered.</p>
-
-      <p>Ironically and unfortunately, this pessimism seems to find in Copyright a cause of the problems it laments, rather than a potential source of their relief. The corporate abuses that have come to be associated with Copyright over the past century belie the underlying protections to digital liberty that we sometimes take for granted. Blockai and Open Publish want to ensure for the Web a voluntary and decentralized solution.</p>
+      <p>Ironically and unfortunately, this pessimism seems to find in copyright a cause of the problems it laments, rather than a potential source of their relief. The abuses that have come to be associated with the Web 2.0 aversion to the corporate-centric copyright belie the underlying protections to digital liberty that we sometimes take for granted. Blockai and Open Publish want to ensure for the Web a voluntary and decentralized solution.</p>
 
       <p>There's also a danger that this pessimism could turn people against decentralized and democratic models of production with a return of language related to uneven relationships between consumers, producers and financiers. Blockai and Open Publish want to make sure that the egalitarian and public access nature of the Web remains healthy and intact.</p>
 
-      <p>Blockai and Open Publish posit that <b>our future is bright and we see a lot of room for continued innovation</b> in the creation, distribution and professional production of digital media, from film, music and articles to new digital artforms like gifs, games and memes. </p>
+      <p>Blockai and Open Publish posit that <b>our future is bright and we see a lot of room for continued innovation</b> in the creation, distribution and professional production of digital media, from film, music and long-form articles to new digital artforms like gifs, games and memes.</p>
 
-      <p>The problem isn't that the web is too commercial, it's that commerce on the web lacks the intellectual property protections so important to pre-Internet commerce. This privileges certain interests at the expense of others. The irony is that we still have these fundamental rights to commercial Copyright protections and that these same protections have always underwritten the financial and legal mechanics that allow for the Web to exist in the first place. We need to bring the commercial life of the Web into alignment with the commercial life that allows for the Web.</p>
+      <p>But what is Blockai and what is Open Publish?</p>
+
+      <i>Dan, could you come up with a couple of paragraphs to describe what Open Publish and Blockai are, how they function? I could do it, but I'm interetested to see your definitions!</i>
+
+      <p>How do they relate to existing Copyright systems?</p>
+
+      <i>Dan, could you expand on this answer? at the core is a the need for a centralized registry to make claims. in order to deal with infringments, we used to have to register first... now we don't, we can just have a proof of publication, as courts can later determine if infringment took place, but that is costly. Blockai let's you quickly and cheaply make provable claims to aid in protecting against infringments.</i>
+
+      <p>How do Blockai and Open Publish ensure a voluntary and decentralized solution and a system of digital ownership that remains egalitarian and public access in nature?</p>
+
+      <i>The answer is by building on top of the same properties found with Bitcoin... Dan, I'd also love to hear your answer to this question!</i>
+
+      <p>The problem isn't that the web is too commercial, it's that commerce on the web lacks the intellectual property protections so important to pre-Internet commerce. This privileges certain interests at the expense of others. The irony is that we still have these fundamental rights to commercial copyright protections and that these same protections have always underwritten the financial and legal mechanics that allow for the Web to exist in the first place. We need to bring the commercial life of the Web into alignment with the commercial life that allows for the Web.</p>
 
       <p>We've seen some incredible innovations but we really can do so much more. Kickstarter, IndieGogo, Patreon and a number of other Web 2.0 companies have shown the way forward for <b>decentralized financing of commercial digital media production</b>. We need to retain the fan support but add a notion of <b>asset ownership</b>. This will allow for Kickstarter and Patreon-like systems that support dedicated support networks of publishers and labels. Fans could possibly <b>share in the financial growth</b> of their favorite authors and artists!</p>
 
@@ -172,13 +167,12 @@ class IntroToExpect extends React.Component {
 
       <p>We need help building <b>open platform</b> versions of Spotify that use Open Publish. We need help building <b>open platform</b> versions of Kickstarter and Patreon that use Open Publish. By using Open Publish to bind the contracts between audiences on Spotify-like systems and fans and investors on Kickstarter-like systems, we can develop <b>amazing new ways to create and to share</b>! Web 2016 is the realization that we need to <b>share in the free exchange of each other's wealth</b>, not just in the free exchange of each other's ideas.</p>
 
-      <p>There's no reason why <b>existing industries</b> with organizations like ASCAP, BMI and SESAC, SoundExchange, and TuneCore couldn't <b>embrace these new financial technologies</b> like Open Publish and <b>provide new market oppurtunities</b> for their clients, while still continuing to do business with Spotify, Google, Facebook and Apple, as well as Universal, Sony, and Warners. There's no reason for Universal, Sony and Warners not to explore possible new marketplaces built on Open Publish for their existing intellectual property. There's no reason for companies like Spotify, Kickstarter, Patreon, Google, Facebook and Apple not to use Open Publish to <b>facilitate in equal-access revenue sharing</b>. We're all in the business of producing, selling, and consuming ideas and <b>we all stand to benefit from free and open commerce</b>, corporations and individuals alike.</p>
+      <p>There's no reason why <b>existing industries</b> with organizations like ASCAP, BMI and SESAC, SoundExchange, and TuneCore couldn't <b>embrace these new financial technologies</b> like Open Publish and <b>provide new market opportunities</b> for their clients, while still continuing to do business with Spotify, Google, Facebook and Apple, as well as Universal, Sony, and Warners. There's no reason for Universal, Sony and Warners not to explore possible new marketplaces built on Open Publish for their existing intellectual property. There's no reason for companies like Spotify, Kickstarter, Patreon, Google, Facebook and Apple not to use Open Publish to <b>facilitate in equal-access revenue sharing</b>. With Web 2016 we're all in the business of producing, selling, and consuming ideas and <b>we all stand to benefit from free and open commerce</b>, corporations and individuals alike.</p>
 
       <p>Blockai is our commerical product, and we would love to serve you in your needs for <b>registering your digital media with Open Publish</b>! We're setting out to build a public marketplace that needs <b>community support</b> and network effects in order to succeed.</p>
 
-      <p>The first and most important feature is being able to <b>register your work</b>. This gets you immutable proof of publishing by embedding a unique digital media fingerprint in the Bitcoin blockchain signed by a Bitcoin wallet associated with your identity. Think of it like getting a document signed, dated, numbered and notorized. Your registration creates a <b>digital certificate</b> on Blockai's website that you can use as proof for any cases of IP infringement. We've exploring a number of other features, like accepting micropayments, or allowing for you to sell licenses for private and commercial use, interfacing with existing digital media marketplaces, and tracking usage and reach. The first step is building up a large centralized repository of individually owned and controlled digital asset registrations.</p>
+      <p><Button bsStyle='primary'>Register Your Digital Works Today!</Button></p>
 
-      <p>You can of course use Open Pubish to create your own registration software. All Open Publish data is stored directly on the Bitcoin blockchain and Blockai maintains no priviliged position. This means that Open Publish is powered by Bitcoin, You'll need to acquire some of your own Bitcoin in order to use Open Publish directly. There's no such thing as a free lunch! As long as Bitcoin continues to function, Open Publish will retain the underlying public and equal-access consensus making machinery of the blockchain, allowing for a secure, open, public and completely transparent system of private ownership of digital assets.</p>
     </Article>
   }
 }
