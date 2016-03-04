@@ -5,6 +5,7 @@ var FrontPage = require('./front-page.jsx')
 // Articles
 var IntroToExpect = require('./articles/intro-to-expect.jsx')
 var FromWeb20ToWeb2016 = require('./articles/from-web-2.0-to-web-2016.jsx')
+var HowOpenPublishCanReleaseTheDormantValueOfDigitalCulturalProduction = require('./articles/how-open-publish-can-release-the-dormant-value-of-digital-cultural-production.jsx')
 
 // Personified Nouns
 var PersonifiedNouns = require('./personified-nouns/personified-nouns.jsx')
@@ -38,6 +39,11 @@ var universalApp = (options) => {
 
   app.get('/from-web-2.0-to-web-2016', (req, res) => {
     var content = <FromWeb20ToWeb2016 />
+    res.renderApp(content)
+  })
+
+  app.get('/how-open-publish-can-release-the-dormant-value-of-digital-cultural-production', (req, res) => {
+    var content = <HowOpenPublishCanReleaseTheDormantValueOfDigitalCulturalProduction />
     res.renderApp(content)
   })
 
