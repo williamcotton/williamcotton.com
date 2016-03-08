@@ -13,9 +13,9 @@ class IntroToExpect extends React.Component {
 
       <p>Hardly anyone these days continues to use 'Web 2.0' to denote the current state of the Web. It's abundantly clear that the Web 2.0 paradigm has been outgrown, and we've arrived somewhere else. Clearly, the common values underlying web business cycles today are no longer those enumerated ten years ago as belonging to Web 2.0. Still, the Web 2.0 narrative was influential, it was a story that was retold, adapted, interpreted and marketed to great effect. A similar thing happened ten years before that with what became Web 1.0 the moment Web 2.0 was promolgated. Perhaps there is value in the attempt to congeal vast fields of social and economic activity under a rubric, to ascertain the meta-trends, promises, dreams and bugs. How could we do that today?</p>
 
-      <p>This article is attempt to establish a continuation of the narrative that Tim O'Reilly began around 2004 with his articulation of Web 2.0.</p>
+      <p>This article is an attempt to establish a continuation of the narrative that Tim O'Reilly began around 2004 with his articulation of Web 2.0.</p>
 
-      <p>Web 2.0 mainly defined itself in relation to Web 1.0, and I'd like to define a 'Web 2016' along a similar trajectory, extending the path laid out by Tim O'Reilly in his essay <a href='http://www.oreilly.com/pub/a/web2/archive/what-is-web-20.html'>What Is Web 2.0</a>. (The idea behind calling this new rubric 'Web 2016' rather than traditional version-naming is both reflective of a new trend in software version naming and useful in that represents a change in the path but not a disjunction.) Below, I've added a third column to a table that appeared in that essay: </p>
+      <p>Web 2.0 mainly defined itself in relation to Web 1.0, and I'd like to define a 'Web 2016' along a similar trajectory, extending the path laid out by Tim O'Reilly in his essay <a href='http://www.oreilly.com/pub/a/web2/archive/what-is-web-20.html'>What Is Web 2.0</a>. (The idea behind calling this new rubric 'Web 2016' rather than traditional version-naming is both reflective of a new trend in software version naming and useful in that it represents a change in the path but not a disjunction.) Below, I've added a third column to a table that appeared in that essay: </p>
 
       <Table striped bordered condensed hover>
         <thead>
@@ -115,7 +115,7 @@ class IntroToExpect extends React.Component {
         <li><b>Mass Participation</b> - Universal web access leads to differentiation of concerns from the traditional internet user base</li>
       </ol>
 
-      <p>Then these key features of Web 2016 become:</p>
+      <p>Then the key features of Web 2016 become:</p>
 
       <ol>
         <li>Folksonomy becomes a <b>third-party editorial algorithm</b>. Professional editorship never went away. We're still tuning into Fox News, ESPN, and Chelsea Handler and reading them online, even if they are now using information technology to assist in the editorial process. Facebook uses algorithmic filters to provide a better experience than would be provided by the raw undifferentiated stream.</li>
