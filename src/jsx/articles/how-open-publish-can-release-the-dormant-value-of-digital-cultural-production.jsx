@@ -15,9 +15,7 @@ class HowOpenPublishCanReleaseTheDormantValueOfDigitalCulturalProduction extends
 
       <p>In his essay <a href='http://www.imf.org/external/pubs/ft/fandd/2001/03/desoto.htm'>The Mystery of Capital</a>, economist Hernando de Soto lays out how the "formal property systems of the West produce six effects that allow their citizens to generate capital."</p>
 
-      <p><Label bsStyle='warning'>Already Bored? Scroll down to the Fun Stuff!!</Label></p>
-
-      <p>In this essay I'd like to show how Open Publish adheres to the same formal property systems described by de Soto, but with specific reference to digital media. Open Publish inherits these formal properties from the Bitcoin blockchain.</p>
+      <p>In this article I'd like to show how Open Publish adheres to the same formal property systems described by de Soto, but with specific reference to digital media. I'll be showing how Open Publish inherits these formal properties by building on top of the Bitcoin blockchain.</p>
 
       <p><i>(1) Fixing the economic potential of assets.</i> "Capital is born by representing in writing" and likewise <b>using Open Publish begins with the registration process</b>. Open Publish registration data is stored within Bitcoin transactions. What's important is the useful qualities <i>about</i> the digital media that is being registered, not the digital media itself. The name, the file size, and most importantly, the digital fingerprint that represents the data that constitutes the digital media is stored within Bitcoin transactions and permanetly embedded in the blockchain. By focusing on the formal representation rather than the media itself, we have entered "into the conceptual universe where capital lives."</p>
 
@@ -33,13 +31,43 @@ class HowOpenPublishCanReleaseTheDormantValueOfDigitalCulturalProduction extends
 
       <hr />
 
-      <h3><Label bsStyle='warning'>The Fun Stuff!!</Label></h3>
+      <p>In 1848 there was a man named Stephen Foster who wrote a song called <i>Oh! Susanna</i>.</p>
 
-      <a name='fun-stuff' />
+      <img src='http://1.bp.blogspot.com/-R07dthxXtBs/URhWbOTXAjI/AAAAAAAAa1o/_kHTMX4sph4/s1600/Oh+Susanna.png' />
 
-      <p>Imagine there's a man named Stephen Foster who wrote a song called Camptown Races.</p>
+      <p>He had with the help of a publisher managed to secure a copyright registration with the Library of Congress and submitted to them a copy of his printed song.</p>
+
+      <p>He also agreed to a business deal with the same publisher, a flat fee of $50 for the right to all profits from future sales of the printed copies. The publisher and author were bound by private contract and public copyright. The publisher held the full rights to make copies and no other publisher could legally have sold copies.</p>
+
+      <p>It turned out that <i>Oh! Susanna</i> was a smashing success, yet poor Stephen Foster never shared in the thousands of dollars that the publisher made.</p>
+
+      <p>In 1850 he wrote another song called <i>Camptown Races</i>.</p>
 
       <img src='http://4.bp.blogspot.com/-rDRyWh6YX0A/UL6IEw2h87I/AAAAAAAAQ64/EtZWIbIucXI/s1600/Camptown+Races+D.png' />
+
+      <p>This time he reached an agreement with another publisher, for the rate of 2 cents per copy of every sale of their sheet music prints of <i>Camptown Races</i>. The publisher and author were again bound by private contract and public copyright. The publisher held the full rights to make copies and no other publisher could legally have sold copies.</p>
+
+      <p>The song was also a huge success and both Stephen Foster and his publisher made a good deal of profits together.</p>
+
+      <p>Years went by, and under existing Copyright law, Stephen Foster's first term of copyright expired and full ownership of <i>Oh! Susanna</i> was returned solely to his estate, which then negotiated another deal with a different publisher for a mutually beneficial arrangement of revenue sharing.</p>
+
+      <p>People continued to purchase sheet music copies and Stephen Foster's estate continued to get a share of the profits until in 1890, 42 years after he wrote <i>Oh! Susanna</i>, when the full terms of copyright expired and his songs entered into the public domain.</p>
+
+      <p>After this, any and all publishers began to legally sell copies. As you can imagine, the publishers who had recently been enjoying the monopoly on profits, saw their margins shrink, and immediately began to pressure Congress to extend the time length of the terms for copyrighted works. The public of course saw the immediate benefits. </p>
+
+      <p>After his death in 1864, previously written but unpublished songs like <i>Beautiful Dreamer </i>were published, but claimed by the publishers to be written just before his death, guarenteeing for them and the estate of the deceased Stephen Foster a full 42 years monopoly that extended in to the 20th century.</p>
+
+      <p><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Beautiful_Dreamer_music.jpg/440px-Beautiful_Dreamer_music.jpg' /></p>
+
+      <hr />
+
+      <p>The same kind of formal property system described by de Soto and implemented by Open Publish was expressed in the interaction between Stephen Foster, his publisher, the government and a public eager to buy sheetmusic for songs like <i>Camptown Races</i> and <i>Beautiful Dreamer</i>.</p>
+
+      <p>Stephen Foster <b>fixed the economic potential</b> of his song by registering the copyright and then writing a formal contract with a publisher related to the potential earnings of future sales. These contracts and copyrights were <b>integrated in to one legal system</b> by the fact that all public courts that dealt with any contract disputes conformed to a unified copyright registery. All <b>parties were held accountable</b> because they formally agreed to terms and had realistic options for independently auditing the validity of sheetmusic sales.</p>
+
+      <p>His song was a <b>fungible asset</b> because Stephen Foster sold part of the royalty rights to his publisher. Because all of these contracts were valid and involved well defined and fungible assets, they could be used to interact with other forms of property like real estate, allowing for Stephen Foster to take out a loan against future earnings from his songs, meaning his intellectual property assets were part of a <b>vast formal network</b> of financial assets. All of these contracts and the very notion of copyright were <b>underwritten and secured</b> by the US government at the local, state and federal levels.</p>
+
+      <p>Open Publish gives us the chance to utilize the public platform of the Bitcoin blockchain to handle the consensus record keeping while securing the validity of transactions without relying on outside financial, legal or governmental infrastructure. At the same time it remains fully compatible with existing infrastructure related to infringements and government regulation while offering the chance to rebuild our copyright systems for the digital age without the technological baggage of player piano rolls, plastics discs and terrestrial radio.</p>
 
     </Article>
   }
