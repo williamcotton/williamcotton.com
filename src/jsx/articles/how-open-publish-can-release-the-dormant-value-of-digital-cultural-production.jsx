@@ -15,7 +15,7 @@ class HowOpenPublishCanReleaseTheDormantValueOfDigitalCulturalProduction extends
 
       <p>In his essay <a href='http://www.imf.org/external/pubs/ft/fandd/2001/03/desoto.htm'>The Mystery of Capital</a>, economist Hernando de Soto lays out how the "formal property systems of the West produce six effects that allow their citizens to generate capital."</p>
 
-      <p>In this article I'd like to show how Open Publish adheres to the same formal property systems described by de Soto, but with specific reference to digital media. I'll be showing how Open Publish inherits these formal properties by building on top of the Bitcoin blockchain.</p>
+      <p>In this article I'd like to show how <a href='https://github.com/blockai/openpublish'>Open Publish</a> adheres to the same formal property systems described by de Soto, but with specific reference to digital media. I'll be showing how Open Publish inherits these formal properties by building on top of the Bitcoin blockchain.</p>
 
       <p><i>(1) Fixing the economic potential of assets.</i> "Capital is born by representing in writing" and likewise <b>using Open Publish begins with the registration process</b>. Open Publish registration data is stored within Bitcoin transactions. What's important is the useful qualities <i>about</i> the digital media that is being registered, not the digital media itself. The name, the file size, and most importantly, the digital fingerprint that represents the data that constitutes the digital media is stored within Bitcoin transactions and permanetly embedded in the blockchain. By focusing on the formal representation rather than the media itself, we have entered "into the conceptual universe where capital lives."</p>
 
