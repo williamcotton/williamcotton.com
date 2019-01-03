@@ -11,7 +11,6 @@ const contentfulClient = contentful.createClient({
   accessToken: contentfulAccessToken
 });
 
-
 const universalServerApp = require('./app')({ defaultTitle, contentfulClient });
 
 universalServerApp.listen(port, () => {

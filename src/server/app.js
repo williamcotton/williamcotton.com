@@ -1,6 +1,8 @@
 const express = require('express');
 const compression = require('compression');
 const { renderToString } = require('react-dom/server');
+const h = require('react-hyperscript');
+const { documentToHtmlString } = require('@contentful/rich-text-html-renderer');
 const path = require('path');
 const publicDir = path.join(__dirname, '/../../public');
 const universalApp = require('../universal-app');
@@ -19,9 +21,10 @@ const htmlTemplate = ({ renderedContent, title }) => `
   </html>
 `;
 
-const reactServerMiddleware = ({ title }) => (req, res, next) => {
-  res.renderApp = (content, options) => {
+const reactServerMiddleware = ({ defaultTitle }) => (req, res, next) => {
+  res.renderApp = (content, options = {}) => {
     const renderedContent = renderToString(content);
+    const title = options.title || defaultTitle;
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(htmlTemplate({ renderedContent, title }));
   };
@@ -34,6 +37,17 @@ const reactServerMiddleware = ({ title }) => (req, res, next) => {
 
 const contentfulMiddleware = ({ contentfulClient }) => (req, res, next) => {
   req.contentfulClient = contentfulClient;
+  res.renderEntry = async entryId => {
+    const entry = await contentfulClient.getEntry(entryId);
+    const { title, body } = entry.fields;
+    res.renderApp(
+      h('div', [
+        h('h2', title),
+        h('p', { dangerouslySetInnerHTML: { __html: documentToHtmlString(body) }})
+      ]),
+      { title }
+    );
+  };
   next(); 
 };
 
@@ -42,7 +56,7 @@ module.exports = ({ defaultTitle, contentfulClient }) => {
   app.disable('x-powered-by');
   app.use(compression());
   app.use(express.static(publicDir));
-  app.use(reactServerMiddleware({ title: defaultTitle }));
+  app.use(reactServerMiddleware({ defaultTitle }));
   app.use(contentfulMiddleware({ contentfulClient }));
   return universalApp({ app });
 };
