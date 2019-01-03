@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^12.1.2",
+    "@contentful/rich-text-types": "^12.1.2",
     "compression": "^1.7.3",
     "contentful": "^7.0.5",
     "express": "^4.16.4",

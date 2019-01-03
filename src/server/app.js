@@ -3,6 +3,7 @@ const compression = require('compression');
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
 const { documentToHtmlString } = require('@contentful/rich-text-html-renderer');
+const { BLOCKS } = require('@contentful/rich-text-types');
 const path = require('path');
 const publicDir = path.join(__dirname, '/../../public');
 const universalApp = require('../universal-app');
@@ -16,7 +17,9 @@ const htmlTemplate = ({ renderedContent, title }) => `
   </head>
   
   <body>
-    <div id="app">${renderedContent}</div>
+    <div id="app">
+      ${renderedContent}
+    </div>
   </body>
   </html>
 `;
@@ -35,6 +38,15 @@ const reactServerMiddleware = ({ defaultTitle }) => (req, res, next) => {
   next();
 };
 
+const renderImage = ({ url, title }) => `<img src="${url}" title="${title}" />`
+
+const contentfulRenderOptions = {
+  renderNode: {
+    [BLOCKS.EMBEDDED_ASSET]: ({ data: { target: { fields: { title, file: { contentType, url } } } } }) =>
+      contentType.includes('image') ? renderImage({ url, title }) : ''
+  }
+};
+
 const contentfulMiddleware = ({ contentfulClient }) => (req, res, next) => {
   req.contentfulClient = contentfulClient;
   res.renderEntry = async entryId => {
@@ -43,7 +55,7 @@ const contentfulMiddleware = ({ contentfulClient }) => (req, res, next) => {
     res.renderApp(
       h('div', [
         h('h2', title),
-        h('p', { dangerouslySetInnerHTML: { __html: documentToHtmlString(body) }})
+        h('p', { dangerouslySetInnerHTML: { __html: documentToHtmlString(body, contentfulRenderOptions) } } )
       ]),
       { title }
     );
