@@ -77,6 +77,8 @@ nodeToReact = (node, index, { renderNode, renderMark }) => {
   return renderNode[node.nodeType](node, nextNode, index);
 };
 
+// https://github.com/contentful/rich-text/issues/46#issuecomment-447496155
+
 const documentToReact = (richTextDocument, options = {}) =>
   nodeListToReact(richTextDocument.content, {
     renderNode: {

@@ -8,6 +8,8 @@ const universalApp = require('../universal-app');
 
 const emailAddress = figlet.textSync('williamcotton@gmail.com', { font: 'small' });
 
+console.log(emailAddress);
+
 const publicDir = path.join(__dirname, '/../../public');
 
 module.exports = ({ defaultTitle, contentfulClient, disableJS }) => {
