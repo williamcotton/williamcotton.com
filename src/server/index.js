@@ -11,7 +11,9 @@ const contentfulClient = contentful.createClient({
   accessToken: contentfulAccessToken
 });
 
-const universalServerApp = require('./app')({ defaultTitle, contentfulClient });
+const disableJS = false;
+
+const universalServerApp = require('./app')({ defaultTitle, contentfulClient, disableJS });
 
 universalServerApp.listen(port, () => {
   console.log('universalServerApp is running in %s mode on port %s', nodeEnv, port);

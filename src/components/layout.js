@@ -1,7 +1,4 @@
 const h = require('react-hyperscript');
-const figlet = require('figlet');
-
-const emailAddress = figlet.textSync('williamcotton@gmail.com', { font: 'small' });
 
 module.exports = ({ content }) =>
   // prettier-ignore
@@ -15,6 +12,6 @@ module.exports = ({ content }) =>
       content,
     ]), 
     h('footer', [
-      h('pre', [emailAddress])
+      h('pre', [])
     ]),
   ]);

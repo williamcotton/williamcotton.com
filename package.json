@@ -6,6 +6,7 @@
   "scripts": {
     "build": "make",
     "build-css-dev": "nodemon -w ./src --ext css,scss --exec make -- build_debug_css",
+    "build-dev": "watchify src/browser/index.js -o public/build.js -v -d",
     "start-dev": "NODE_ENV=development heroku local -f Procfile_dev",
     "lint": "eslint ./src ./test ./migrations",
     "postinstall": "make"
@@ -19,10 +20,13 @@
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^12.1.2",
     "@contentful/rich-text-types": "^12.1.2",
+    "body-parser": "^1.18.3",
+    "browserify": "^16.2.3",
     "compression": "^1.7.3",
     "contentful": "^7.0.5",
     "express": "^4.16.4",
     "figlet": "^1.2.1",
+    "nighthawk": "^2.2.0",
     "node-sass": "^4.11.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
@@ -37,6 +41,7 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.3",
     "nodemon": "^1.18.9",
-    "prettier": "^1.15.3"
+    "prettier": "^1.15.3",
+    "watchify": "^3.11.0"
   }
 }
