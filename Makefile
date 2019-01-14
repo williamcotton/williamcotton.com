@@ -9,12 +9,6 @@ build: public/build.js public/build.css .env
 
 build_css: clean_css public/build.css
 
-build_debug_css: clean_css
-	"node-sass" src/index.scss public/build.css --source-map public/build.css.map
-
-build_debug_js: clean_js
-	browserify src/browser/index.js -d -o public/build.js
-
 clean: clean_css clean_js
 
 clean_css:
@@ -30,4 +24,4 @@ public/build.css:
 
 public/build.js:
 	mkdir -p public
-	browserify src/browser/index.js -o $@
+	webpack src/browser/index.js -o $@
