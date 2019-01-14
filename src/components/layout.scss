@@ -1,0 +1,33 @@
+.sitewrapper {
+  min-height: 100%;
+  padding: 10px 40px;
+  margin: 0 auto;
+  max-width: 1000px;
+  background-color: white;
+}
+
+header {
+  margin-bottom: 10px;
+
+  h1 {
+    font-size: 30px;
+    margin: 0;
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  }
+}
+
+.content {
+  height: 100%;
+  min-height: calc(100vh - 165px);
+}
+
+footer {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  pre {
+    font-family: monospace;
+  }
+}

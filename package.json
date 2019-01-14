@@ -3,6 +3,13 @@
   "version": "2.0.0",
   "description": "williamcotton.com",
   "main": "src/server/index.js",
+  "scripts": {
+    "build": "make",
+    "build-css-dev": "nodemon -w ./src --ext css,scss --exec make -- build_debug_css",
+    "start-dev": "NODE_ENV=development heroku local -f Procfile_dev",
+    "lint": "eslint ./src ./test ./migrations",
+    "postinstall": "make"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/williamcotton/williamcotton.com.git"
@@ -15,6 +22,8 @@
     "compression": "^1.7.3",
     "contentful": "^7.0.5",
     "express": "^4.16.4",
+    "figlet": "^1.2.1",
+    "node-sass": "^4.11.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-hyperscript": "^3.2.0"
@@ -27,6 +36,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.3",
+    "nodemon": "^1.18.9",
     "prettier": "^1.15.3"
   }
 }

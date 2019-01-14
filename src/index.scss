@@ -1,0 +1,14 @@
+@import 'vendor/reset';
+@import 'components/layout';
+@import 'components/article';
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: lightgray;
+}
