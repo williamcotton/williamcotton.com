@@ -24,7 +24,6 @@
     "compression": "^1.7.3",
     "contentful": "^7.0.5",
     "express": "^4.16.4",
-    "figlet": "^1.2.1",
     "nighthawk": "^2.2.0",
     "node-sass": "^4.11.0",
     "react": "^16.7.0",

@@ -20,6 +20,7 @@ clean_css:
 
 clean_js:
 	rm -f public/build.js
+	rm -f public/build.js.map
 
 public/build.css:
 	mkdir -p public

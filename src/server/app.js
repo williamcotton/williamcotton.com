@@ -1,12 +1,12 @@
 const express = require('express');
+const fs = require('fs');
 const compression = require('compression');
 const path = require('path');
-const figlet = require('figlet');
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const contentfulMiddleware = require('./middleware/contentful');
 const universalApp = require('../universal-app');
 
-const emailAddress = figlet.textSync('williamcotton@gmail.com', { font: 'small' });
+const emailAddress = fs.readFileSync(path.join(__dirname, '/../email-address.txt'), 'utf8');
 
 console.log(emailAddress);
 
