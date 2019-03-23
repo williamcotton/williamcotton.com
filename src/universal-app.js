@@ -3,7 +3,11 @@ const Article = require('./components/article');
 
 module.exports = ({ app }) => {
   app.get('/', (req, { renderApp }) =>
-    renderApp(h('div', 'Hello World'), { title: 'Hello World' })
+    renderApp(
+      h('div.construction', [
+        h('img', { src: 'http://www.animatedgif.net/underconstruction/const_e0.gif' })
+      ])
+    )
   );
 
   app.get(
