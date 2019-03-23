@@ -10,6 +10,12 @@ article {
     line-height: 20px;
     font-size: 16px;
   }
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-weight: bold;
+  }
   h2 {
     font-size: 22px;
   }
@@ -22,5 +28,8 @@ article {
   blockquote {
     border-left: 5px solid lightgray;
     padding-left: 20px;
+  }
+  b {
+    font-weight: bold;
   }
 }

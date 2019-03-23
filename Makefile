@@ -9,6 +9,9 @@ build: public/build.js public/build.css .env
 
 build_css: clean_css public/build.css
 
+build_debug_css: clean_css
+	"node-sass" src/index.scss public/build.css --source-map public/build.css.map
+
 clean: clean_css clean_js
 
 clean_css:

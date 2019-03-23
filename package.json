@@ -6,7 +6,7 @@
   "scripts": {
     "build": "make",
     "build-css-dev": "nodemon -w ./src --ext css,scss --exec make -- build_debug_css",
-    "build-dev": "webpack src/browser/index.js -o public/build.js --devtool eval-source-map --watch",
+    "build-dev": "webpack src/browser/index.js -o public/build.js --devtool source-map --watch",
     "start-dev": "NODE_ENV=development heroku local -f Procfile_dev",
     "lint": "eslint ./src ./test ./migrations",
     "postinstall": "make"
