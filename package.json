@@ -10,6 +10,7 @@
     "start-dev": "NODE_ENV=development heroku local -f Procfile_dev",
     "lint": "eslint ./src ./test ./migrations",
     "update-packages": "ncu -u",
+    "deploy": "git push heroku master",
     "postinstall": "make"
   },
   "repository": {

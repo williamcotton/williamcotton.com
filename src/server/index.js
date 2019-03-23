@@ -11,7 +11,7 @@ const contentfulClient = contentful.createClient({
   accessToken: contentfulAccessToken
 });
 
-const disableJS = false;
+const disableJS = true;
 
 const universalServerApp = require('./app')({ defaultTitle, contentfulClient, disableJS });
 

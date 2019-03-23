@@ -17,7 +17,7 @@ module.exports = ({ defaultTitle, contentfulClient, disableJS }) => {
   app.disable('x-powered-by');
   app.use(compression());
   app.use(express.static(publicDir));
-  app.use(reactRendererMiddleware({ defaultTitle, disableJS }));
+  app.use(reactRendererMiddleware({ defaultTitle, disableJS, emailAddress }));
   app.use(contentfulMiddleware({ app, contentfulClient }));
   return universalApp({ app });
 };

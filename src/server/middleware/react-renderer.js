@@ -5,9 +5,12 @@ const appLayout = require('../../components/layout');
 const styleTag = '<link rel="stylesheet" href="/build.css" />';
 const scriptTag = '<script src="/build.js" type="text/javascript" charset="utf-8"></script>';
 
-const htmlTemplate = ({ renderedContent, title, disableJS }) => `
+const htmlTemplate = ({ renderedContent, title, disableJS, emailAddress }) => `
 <!DOCTYPE html>
 <html>
+<!--
+${emailAddress}
+-->
 <head>
   <meta charset="utf-8">
   <title>${title}</title>
@@ -19,13 +22,13 @@ const htmlTemplate = ({ renderedContent, title, disableJS }) => `
 </html>
 `;
 
-module.exports = ({ defaultTitle, disableJS }) => (req, res, next) => {
+module.exports = ({ defaultTitle, disableJS, emailAddress }) => (req, res, next) => {
   res.renderApp = (content, options = {}) => {
-    const renderedContent = renderToString(h(appLayout, { content }));
+    const renderedContent = renderToString(h(appLayout, { content, emailAddress }));
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
-    res.end(htmlTemplate({ renderedContent, title, disableJS }));
+    res.end(htmlTemplate({ renderedContent, title, disableJS, emailAddress }));
   };
   res.renderJSON = json => {
     res.writeHead(200, { 'Content-Type': 'application/json' });

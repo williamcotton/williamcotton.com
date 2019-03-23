@@ -91,4 +91,4 @@ const documentToReact = (richTextDocument, options = {}) =>
     }
   });
 
-module.exports = ({ richText }) => documentToReact(richText);
+module.exports = ({ richText, options }) => documentToReact(richText, options);

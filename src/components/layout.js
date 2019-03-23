@@ -1,6 +1,6 @@
 const h = require('react-hyperscript');
 
-module.exports = ({ content }) =>
+module.exports = ({ content, emailAddress }) =>
   // prettier-ignore
   h('div.sitewrapper', [
     h('header', [
@@ -12,6 +12,6 @@ module.exports = ({ content }) =>
       content,
     ]), 
     h('footer', [
-      h('pre', [])
+      h('pre', emailAddress)
     ]),
   ]);
