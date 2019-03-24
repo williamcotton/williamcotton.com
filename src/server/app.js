@@ -1,7 +1,7 @@
 const express = require('express');
 const compression = require('compression');
 const reactRendererMiddleware = require('./middleware/react-renderer');
-const contentfulMiddleware = require('./middleware/contentful');
+const articlesMiddleware = require('./middleware/articles');
 const universalApp = require('../universal-app');
 
 module.exports = ({ defaultTitle, contentfulClient, disableJS, buildDir }) => {
@@ -10,6 +10,6 @@ module.exports = ({ defaultTitle, contentfulClient, disableJS, buildDir }) => {
   app.use(compression());
   app.use(express.static(buildDir));
   app.use(reactRendererMiddleware({ defaultTitle, disableJS }));
-  app.use(contentfulMiddleware({ app, contentfulClient }));
+  app.use(articlesMiddleware({ app, contentfulClient }));
   return universalApp({ app });
 };

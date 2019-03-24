@@ -1,19 +1,12 @@
-/* global window */
 const reactRendererMiddleware = require('./middleware/react-renderer');
+const articlesMiddleware = require('./middleware/articles');
 const universalApp = require('../universal-app');
 const express = require('../vendor/browser-express');
 
-module.exports = () => {
+module.exports = ({ fetch }) => {
   const app = express();
   app.use(reactRendererMiddleware());
-  app.use((req, res, next) => {
-    req.getArticle = async ({ slug }) => {
-      const response = await window.fetch(`/article/${slug}.json`);
-      const articleEntry = response.json();
-      return articleEntry;
-    };
-    next();
-  });
+  app.use(articlesMiddleware({ fetch }));
   const universalBrowserApp = universalApp({ app });
   return universalBrowserApp;
 };

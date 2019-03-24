@@ -1,6 +1,8 @@
 /* global window */
 
-const universalBrowserApp = require('./app')();
+const { fetch } = window;
+
+const universalBrowserApp = require('./app')({ fetch });
 
 universalBrowserApp.listen({}, () => {
   console.log(
