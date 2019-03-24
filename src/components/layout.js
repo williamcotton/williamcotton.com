@@ -1,11 +1,11 @@
 const h = require('react-hyperscript');
 
-module.exports = ({ content }) =>
+module.exports = ({ content, Link }) =>
   // prettier-ignore
   h('div.sitewrapper', [
     h('header', [
       h('h1', [
-        h('a', { href: '/'}, 'williamcotton.com'),
+        h(Link, { href: '/' }, 'williamcotton.com'),
       ]),
     ]),
     h('div.content', [

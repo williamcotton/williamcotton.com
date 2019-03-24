@@ -16,7 +16,10 @@ module.exports = ({ app }) => (req, res, next) => {
   };
   res.renderApp = content => {
     const contentWithProps = React.cloneElement(content, { Link });
-    ReactDOM.hydrate(h(appLayout, { content: contentWithProps }), document.getElementById('app'));
+    ReactDOM.hydrate(
+      h(appLayout, { content: contentWithProps, Link }),
+      document.getElementById('app')
+    );
     res.send();
   };
   next();

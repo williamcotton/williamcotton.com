@@ -21,9 +21,9 @@ const renderNode = ({ Link }) => ({
   }
 });
 
-module.exports = ({ title, body, slug, Link }) =>
+module.exports = ({ title, body, slug: key, Link }) =>
   // prettier-ignore
-  h('article', { key: slug }, [
-    h('h2', { key: slug }, title), 
-    h(RichText, { key: slug, richText: body, options: { renderNode: renderNode({ Link }) } }),
+  h('article', { key }, [
+    h('h2', { key }, title),
+    h(RichText, { key, richText: body, options: { renderNode: renderNode({ Link }) } }),
   ]);

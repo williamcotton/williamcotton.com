@@ -27,7 +27,7 @@ const Link = props => {
 module.exports = ({ defaultTitle, disableJS }) => (req, res, next) => {
   res.renderApp = (content, options = {}) => {
     const contentWithProps = React.cloneElement(content, { Link });
-    const renderedContent = renderToString(h(appLayout, { content: contentWithProps }));
+    const renderedContent = renderToString(h(appLayout, { content: contentWithProps, Link }));
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
