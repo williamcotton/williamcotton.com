@@ -28,8 +28,8 @@ build/Release
 node_modules
 
 # Public build directory
-public/
-public/*.*
+build/
+build/*.*
 
 # Environmental Variables
 .env

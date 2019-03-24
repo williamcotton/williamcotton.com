@@ -1,10 +1,10 @@
 /* global window */
-const Nighthawk = require('nighthawk');
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const universalApp = require('../universal-app');
+const express = require('../vendor/browser-express');
 
 module.exports = () => {
-  const app = Nighthawk();
+  const app = express();
   app.use(reactRendererMiddleware());
   app.use((req, res, next) => {
     req.getArticle = async ({ slug }) => {

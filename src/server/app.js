@@ -4,11 +4,11 @@ const reactRendererMiddleware = require('./middleware/react-renderer');
 const contentfulMiddleware = require('./middleware/contentful');
 const universalApp = require('../universal-app');
 
-module.exports = ({ defaultTitle, contentfulClient, disableJS, publicDir }) => {
+module.exports = ({ defaultTitle, contentfulClient, disableJS, buildDir }) => {
   const app = express();
   app.disable('x-powered-by');
   app.use(compression());
-  app.use(express.static(publicDir));
+  app.use(express.static(buildDir));
   app.use(reactRendererMiddleware({ defaultTitle, disableJS }));
   app.use(contentfulMiddleware({ app, contentfulClient }));
   return universalApp({ app });

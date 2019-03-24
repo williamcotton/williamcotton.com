@@ -2,8 +2,8 @@ const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
 const appLayout = require('../../components/layout');
 
-const styleTag = '<link rel="stylesheet" href="/build.css" />';
-const scriptTag = '<script src="/build.js" type="text/javascript" charset="utf-8"></script>';
+const styleTag = '<link rel="stylesheet" href="/app.css" />';
+const scriptTag = '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
 
 const htmlTemplate = ({ renderedContent, title, disableJS }) => `
 <!DOCTYPE html>

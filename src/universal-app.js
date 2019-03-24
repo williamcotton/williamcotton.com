@@ -17,6 +17,7 @@ module.exports = ({ app }) => {
   );
 
   app.get('/articles/:slug', async ({ getArticle, params: { slug } }, { renderApp }) => {
+    console.log(`/articles/${slug}`);
     try {
       const article = await getArticle({ slug });
       const { title, body } = article;

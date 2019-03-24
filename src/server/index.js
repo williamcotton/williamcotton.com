@@ -12,7 +12,7 @@ const contentfulClient = contentful.createClient({
   accessToken: contentfulAccessToken
 });
 
-const publicDir = path.join(__dirname, '/../../public');
+const buildDir = path.join(__dirname, '/../../build');
 
 const disableJS = false;
 
@@ -20,7 +20,7 @@ const universalServerApp = require('./app')({
   defaultTitle,
   contentfulClient,
   disableJS,
-  publicDir
+  buildDir
 });
 
 universalServerApp.listen(port, () => {
