@@ -1,4 +1,5 @@
 /* global window */
+
 const universalBrowserApp = require('./app')();
 
 console.log(
