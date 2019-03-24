@@ -23,7 +23,9 @@ const defaultNodeRenderers = {
   [INLINES.ASSET_HYPERLINK]: (node, next, index) =>
     defaultInline(INLINES.ASSET_HYPERLINK, node, index),
   [INLINES.ENTRY_HYPERLINK]: (node, next, index) =>
-    defaultInline(INLINES.ENTRY_HYPERLINK, node, index)
+    defaultInline(INLINES.ENTRY_HYPERLINK, node, index),
+  [INLINES.HYPERLINK]: (node, next, index) =>
+    h('a', { href: node.data.uri, key: `a-${index}` }, next(node.content))
 };
 
 const defaultMarkRenderers = {
