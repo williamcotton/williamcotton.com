@@ -23,6 +23,9 @@ function Router(options) {
   // Keep the currently matched location
   this.currentLocation = null;
 
+  // local call stack
+  this.stack = [];
+
   // Local variables
   this.locals = Object.create(null);
 
@@ -90,7 +93,7 @@ Router.prototype.onPopstate = function onPopstate(e) {
   );
 };
 
-Router.prototype.changeRoute = function changeRoute(path) {
+Router.prototype.navigate = function navigate(path) {
   this.processRequest(url.parse(path), false);
 };
 
@@ -138,14 +141,12 @@ Router.prototype.processRequest = function processRequest(originalUrl, replace) 
   const res = new Response();
   res.app = this;
 
-  // Push the state
-  if (supported) {
-    window.history[replace ? 'replaceState' : 'pushState'](modifiedUrl, null, req.originalUrl);
-  }
+  this.stack.push([modifiedUrl, null, req.originalUrl, replace]);
 
   // Run the route matching
   const that = this;
-  this(req, res, function push(e) {
+  this(req, res, function done(e) {
+    // this is called if no match is found for the route
     if (e) {
       throw e;
     }

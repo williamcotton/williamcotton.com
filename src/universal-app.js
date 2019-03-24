@@ -20,7 +20,7 @@ module.exports = ({ app }) => {
     try {
       const article = await getArticle({ slug });
       const { title, body } = article;
-      renderApp(h(Article, { title, body }), { title });
+      renderApp(h(Article, { title, body, slug }), { title });
     } catch (error) {
       let errorMessage = error.message;
       if (error.message === 'ArticleNotFound') {

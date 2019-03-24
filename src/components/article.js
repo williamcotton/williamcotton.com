@@ -2,7 +2,7 @@ const h = require('react-hyperscript');
 const { INLINES } = require('@contentful/rich-text-types');
 const RichText = require('../vendor/contentful-rich-text');
 
-const renderNode = {
+const renderNode = ({ Link }) => ({
   [INLINES.ENTRY_HYPERLINK]: (
     {
       data: {
@@ -17,13 +17,13 @@ const renderNode = {
   ) => {
     const url = `/articles/${slug}`;
     const { value: text } = content[0];
-    return h('a', { href: url, title, key: `a-${index}` }, text);
+    return h(Link, { href: url, title, key: `a-${index}` }, text);
   }
-};
+});
 
-module.exports = ({ title, body }) =>
+module.exports = ({ title, body, slug, Link }) =>
   // prettier-ignore
-  h('article', [
-    h('h2', title), 
-    h(RichText, { richText: body, options: { renderNode } }),
+  h('article', { key: slug }, [
+    h('h2', { key: slug }, title), 
+    h(RichText, { key: slug, richText: body, options: { renderNode: renderNode({ Link }) } }),
   ]);

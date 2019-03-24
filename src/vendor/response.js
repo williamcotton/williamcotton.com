@@ -1,6 +1,10 @@
+/* global window, document */
+
 const EventEmitter = require('events');
 const inherits = require('inherits');
 const url = require('url');
+
+const supported = require('./supports-push-state');
 
 const noop = function noop() {};
 
@@ -30,18 +34,7 @@ Response.prototype.redirect = function redirect(arg1, arg2) {
 
   this.status(status);
 
-  // In a timeout because page.js did it, but I believe it is better
-  // to let the current route handler finish its stuff before starting
-  // another round of routing, otherwise we could get some weird behavior.
-  //  -- Response.send is what should trigger the pushState
-  setTimeout(
-    function redirectTimeout() {
-      // Convert the url string into an object
-      // before passing it along to the router
-      this.app.processRequest(url.parse(path), true);
-    }.bind(this),
-    0
-  );
+  this.app.processRequest(url.parse(path), true);
 };
 
 Response.prototype.status = function status(code) {
@@ -49,8 +42,18 @@ Response.prototype.status = function status(code) {
   return this;
 };
 
+Response.prototype.send = function send(content) {
+  if (content) {
+    document.body.innerHTML = content;
+  }
+  if (supported) {
+    const [stateObject, title, URL, replace] = this.app.stack.pop();
+    window.history[replace ? 'replaceState' : 'pushState'](stateObject, title, URL, replace);
+    if (!replace) window.scrollTo(0, 0);
+  }
+};
+
 Response.prototype.links = noop;
-Response.prototype.send = noop;
 Response.prototype.json = noop;
 Response.prototype.jsonp = noop;
 Response.prototype.sendStatus = noop;

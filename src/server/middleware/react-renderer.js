@@ -1,3 +1,4 @@
+const React = require('react');
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
 const appLayout = require('../../components/layout');
@@ -19,9 +20,14 @@ const htmlTemplate = ({ renderedContent, title, disableJS }) => `
 </html>
 `;
 
+const Link = props => {
+  return h('a', props);
+};
+
 module.exports = ({ defaultTitle, disableJS }) => (req, res, next) => {
   res.renderApp = (content, options = {}) => {
-    const renderedContent = renderToString(h(appLayout, { content }));
+    const contentWithProps = React.cloneElement(content, { Link });
+    const renderedContent = renderToString(h(appLayout, { content: contentWithProps }));
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });

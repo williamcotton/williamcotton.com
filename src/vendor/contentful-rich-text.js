@@ -23,25 +23,7 @@ const defaultNodeRenderers = {
   [INLINES.ASSET_HYPERLINK]: (node, next, index) =>
     defaultInline(INLINES.ASSET_HYPERLINK, node, index),
   [INLINES.ENTRY_HYPERLINK]: (node, next, index) =>
-    defaultInline(INLINES.ENTRY_HYPERLINK, node, index),
-  [INLINES.ENTRY_HYPERLINK]: (
-    {
-      data: {
-        target: {
-          fields: { title, slug }
-        }
-      },
-      content
-    },
-    next,
-    index
-  ) => {
-    const url = `/articles/${slug}`;
-    const { value: text } = content[0];
-    return h('a', { href: url, title, key: `a-${index}` }, text);
-  },
-  [INLINES.HYPERLINK]: (node, next, index) =>
-    h('a', { href: node.data.uri, key: `a-${index}` }, next(node.content))
+    defaultInline(INLINES.ENTRY_HYPERLINK, node, index)
 };
 
 const defaultMarkRenderers = {
