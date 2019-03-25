@@ -1,14 +1,25 @@
 const h = require('react-hyperscript');
 const Article = require('./components/article');
 
+// const construction = h('div.construction', [
+//   h('img', { src: 'http://www.animatedgif.net/underconstruction/const_e0.gif' })
+// ]);
+
 module.exports = ({ app }) => {
-  app.get('/', (req, { renderApp }) =>
-    renderApp(
-      h('div.construction', [
-        h('img', { src: 'http://www.animatedgif.net/underconstruction/const_e0.gif' })
-      ])
-    )
-  );
+  app.get('/', async ({ getAllArticles }, { renderApp }) => {
+    try {
+      const articles = await getAllArticles();
+      renderApp(
+        h('div', [articles.map(({ title, body, slug }) => h(Article, { title, body, slug }))])
+      );
+    } catch (error) {
+      let errorMessage = error.message;
+      if (error.message === 'ArticleNotFound') {
+        errorMessage = "This page isn't here!";
+      }
+      renderApp(h('div', errorMessage), { statusCode: 404 });
+    }
+  });
 
   app.get(
     '/raw-entries/:entryId',

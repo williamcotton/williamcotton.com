@@ -20,9 +20,7 @@ const htmlTemplate = ({ renderedContent, title, disableJS }) => `
 </html>
 `;
 
-const Link = props => {
-  return h('a', props);
-};
+const Link = props => h('a', props);
 
 module.exports = ({ defaultTitle, disableJS }) => (req, res, next) => {
   res.renderApp = (content, options = {}) => {
@@ -33,6 +31,7 @@ module.exports = ({ defaultTitle, disableJS }) => (req, res, next) => {
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
     res.end(htmlTemplate({ renderedContent, title, disableJS }));
   };
+  res.Link = Link;
   res.renderJSON = json => {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(json, null, 2));

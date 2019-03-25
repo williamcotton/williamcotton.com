@@ -4,5 +4,10 @@ module.exports = ({ fetch }) => (req, res, next) => {
     const articleEntry = response.json();
     return articleEntry;
   };
+  req.getAllArticles = async () => {
+    const response = await fetch(`/articles.json`);
+    const articleEntries = response.json();
+    return articleEntries;
+  };
   next();
 };

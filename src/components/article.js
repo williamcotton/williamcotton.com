@@ -2,6 +2,8 @@ const h = require('react-hyperscript');
 const { INLINES } = require('@contentful/rich-text-types');
 const RichText = require('../vendor/contentful-rich-text');
 
+const articleUrl = slug => `/articles/${slug}`;
+
 const renderNode = ({ Link }) => ({
   [INLINES.ENTRY_HYPERLINK]: (
     {
@@ -15,7 +17,7 @@ const renderNode = ({ Link }) => ({
     next,
     index
   ) => {
-    const url = `/articles/${slug}`;
+    const url = articleUrl(slug);
     const { value: text } = content[0];
     return h(Link, { href: url, title, key: `a-${index}` }, text);
   }
@@ -24,6 +26,6 @@ const renderNode = ({ Link }) => ({
 module.exports = ({ title, body, slug: key, Link }) =>
   // prettier-ignore
   h('article', { key }, [
-    h('h2', { key }, title),
+    h('h2', { key }, h('a', { href: articleUrl(key) }, title)),
     h(RichText, { key, richText: body, options: { renderNode: renderNode({ Link }) } }),
   ]);

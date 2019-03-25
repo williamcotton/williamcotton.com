@@ -14,6 +14,7 @@ module.exports = ({ app }) => (req, res, next) => {
     const mergedProps = Object.assign({ onClick }, props);
     return h('a', mergedProps);
   };
+  res.Link = Link;
   res.renderApp = content => {
     const contentWithProps = React.cloneElement(content, { Link });
     ReactDOM.hydrate(
