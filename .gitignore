@@ -31,9 +31,11 @@ node_modules
 build/
 build/*.*
 
+# Test artifacts
+test/screenshots/
+
 # Environmental Variables
 .env
 
 # Private Keys
-
 *.pem

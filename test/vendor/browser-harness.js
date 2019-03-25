@@ -8,6 +8,10 @@ module.exports = () => {
     const { close: closeServer, baseUrl } = await serverHarness.start();
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+    await page.setViewport({
+      width: 1200,
+      height: 1080
+    });
 
     const close = async () => {
       await closeServer();
@@ -21,7 +25,17 @@ module.exports = () => {
       const $text = async selector =>
         page.evaluate(_selector => document.querySelector(_selector).innerText, selector);
 
-      return { $text };
+      const currentRoute = () => page.url().split(baseUrl)[1];
+
+      const findByText = async text => page.$x(`//*[contains(., '${text}')]/@*`);
+
+      const getAttr = async handle => {
+        const propertyHandle = await handle.getProperty('value');
+        const attr = await propertyHandle.jsonValue();
+        return attr;
+      };
+
+      return { $text, currentRoute, page, findByText, getAttr };
     };
 
     return { close, get$ };
