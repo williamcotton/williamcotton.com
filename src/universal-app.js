@@ -1,23 +1,16 @@
 const h = require('react-hyperscript');
-const Article = require('./components/article');
 
-// const construction = h('div.construction', [
-//   h('img', { src: 'http://www.animatedgif.net/underconstruction/const_e0.gif' })
-// ]);
+const FrontPage = require('./components/front-page');
+const Article = require('./components/article');
 
 module.exports = ({ app }) => {
   app.get('/', async ({ getAllArticles }, { renderApp }) => {
     try {
       const articles = await getAllArticles();
-      renderApp(
-        h('div', [articles.map(({ title, body, slug }) => h(Article, { title, body, slug }))])
-      );
+      renderApp(h(FrontPage, { articles }));
     } catch (error) {
-      let errorMessage = error.message;
-      if (error.message === 'ArticleNotFound') {
-        errorMessage = "This page isn't here!";
-      }
-      renderApp(h('div', errorMessage), { statusCode: 404 });
+      console.error(error, error.message);
+      renderApp(h('div', 'Sorry, there was an error!'), { statusCode: 404 });
     }
   });
 
@@ -31,7 +24,7 @@ module.exports = ({ app }) => {
     try {
       const article = await getArticle({ slug });
       const { title, body } = article;
-      renderApp(h(Article, { title, body, slug }), { title });
+      renderApp(h(Article, { article }), { title });
     } catch (error) {
       let errorMessage = error.message;
       if (error.message === 'ArticleNotFound') {

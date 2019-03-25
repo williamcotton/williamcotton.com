@@ -1,11 +1,10 @@
-/* global document */
 const React = require('react');
 const ReactDOM = require('react-dom');
 const h = require('react-hyperscript');
 
 const appLayout = require('../../components/layout');
 
-module.exports = ({ app }) => (req, res, next) => {
+module.exports = ({ app, document }) => (req, res, next) => {
   const Link = props => {
     const onClick = e => {
       e.preventDefault();

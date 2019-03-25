@@ -1,6 +1,7 @@
 @import 'vendor/reset';
 @import 'components/layout';
 @import 'components/article';
+@import 'components/front-page';
 
 html,
 body,
@@ -11,11 +12,4 @@ body,
 body {
   font-family: sans-serif;
   background-color: lightgray;
-}
-
-.construction {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
 }

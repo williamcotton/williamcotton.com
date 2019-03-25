@@ -1,7 +1,9 @@
 const express = require('express');
 const compression = require('compression');
+
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const articlesMiddleware = require('./middleware/articles');
+
 const universalApp = require('../universal-app');
 
 module.exports = ({ defaultTitle, contentfulClient, disableJS, buildDir }) => {
