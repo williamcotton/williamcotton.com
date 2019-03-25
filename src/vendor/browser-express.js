@@ -80,6 +80,10 @@ Router.prototype.listen = function listen(options, callback) {
   }
 
   callback();
+
+  return {
+    close: this.close
+  };
 };
 
 Router.prototype.onPopstate = function onPopstate(e) {
@@ -161,7 +165,7 @@ Router.prototype.processRequest = function processRequest(originalUrl, replace) 
   });
 };
 
-Router.prototype.destroy = function destroy() {
+Router.prototype.close = function close() {
   window.removeEventListener('popstate', this.onPopstate, false);
 };
 

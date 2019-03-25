@@ -4,6 +4,7 @@
   "description": "williamcotton.com",
   "main": "src/server/index.js",
   "scripts": {
+    "test": "jest",
     "build": "make",
     "build-css-dev": "nodemon -w ./src --ext css,scss --exec make -- build_debug_css",
     "build-dev": "make build_debug_js",
@@ -38,6 +39,8 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "dotenv": "^7.0.0",
     "eslint": "^5.15.3",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^4.1.0",
@@ -45,8 +48,11 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "jest": "^24.5.0",
+    "node-fetch": "^2.3.0",
     "nodemon": "^1.18.10",
     "prettier": "^1.16.4",
+    "puppeteer": "^1.13.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   }
