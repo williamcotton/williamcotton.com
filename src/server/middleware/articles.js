@@ -1,3 +1,9 @@
+const trimBody = fields => {
+  const updatedFields = Object.assign({}, fields);
+  updatedFields.body.content = fields.body.content.slice(0, 3);
+  return updatedFields;
+};
+
 module.exports = ({ app, contentfulClient }) => {
   const getArticleFromContentful = async slug => {
     const entries = await contentfulClient.getEntries({
@@ -15,7 +21,7 @@ module.exports = ({ app, contentfulClient }) => {
     const entries = await contentfulClient.getEntries({
       content_type: 'blogPost'
     });
-    return entries.items.map(e => e.fields);
+    return entries.items.map(e => trimBody(e.fields));
   };
 
   app.get('/article/:slug.json', async (req, res) => {
