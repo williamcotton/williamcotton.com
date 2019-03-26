@@ -1,8 +1,10 @@
 /* global window, document */
 
-const { fetch } = window;
+const { fetch, fetchCache } = window;
 
-const universalBrowserApp = require('./app')({ fetch, document });
+const getElementById = id => document.getElementById(id);
+
+const universalBrowserApp = require('./app')({ fetch, fetchCache, getElementById });
 
 universalBrowserApp.listen({}, () => {
   console.log(

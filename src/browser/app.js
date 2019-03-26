@@ -5,10 +5,10 @@ const articlesMiddleware = require('./middleware/articles');
 
 const universalApp = require('../universal-app');
 
-module.exports = ({ fetch, document }) => {
+module.exports = ({ fetch, fetchCache, getElementById }) => {
   const app = express();
-  app.use(reactRendererMiddleware({ app, document }));
-  app.use(articlesMiddleware({ fetch }));
+  app.use(reactRendererMiddleware({ app, getElementById, fetch, fetchCache }));
+  app.use(articlesMiddleware());
   const universalBrowserApp = universalApp({ app });
   return universalBrowserApp;
 };

@@ -1,17 +1,17 @@
-module.exports = ({ fetch }) => (req, res, next) => {
+module.exports = () => (req, res, next) => {
   req.getArticle = async ({ slug }) => {
-    const response = await fetch(`/article/${slug}.json`);
-    const articleEntry = await response.json();
+    const articleEntry = await req.fetch(`/article/${slug}.json`);
     if (articleEntry.error) {
       throw new Error(articleEntry.error);
     } else {
       return articleEntry;
     }
   };
+
   req.getAllArticles = async () => {
-    const response = await fetch(`/articles.json`);
-    const articleEntries = response.json();
+    const articleEntries = await req.fetch(`/articles.json`);
     return articleEntries;
   };
+
   next();
 };
