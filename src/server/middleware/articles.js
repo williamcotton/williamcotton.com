@@ -11,7 +11,12 @@ module.exports = ({ app, contentfulClient }) => (req, res, next) => {
     return firstEntry.fields;
   };
   app.get('/article/:slug.json', async (_req, _res) => {
-    const articleEntry = await getArticleFromContentful(_req.params.slug);
+    let articleEntry;
+    try {
+      articleEntry = await getArticleFromContentful(_req.params.slug);
+    } catch (error) {
+      articleEntry = { error: 'ArticleNotFound' };
+    }
     _res.send(articleEntry);
   });
   req.contentfulClient = contentfulClient;

@@ -21,17 +21,16 @@ const universalAppTest = ({ harness }) => {
 
   test('/', async () => {
     const route = '/';
+
     const { $text, page, currentRoute, getAttr } = await get$(route);
 
-    const headerText = await $text('h1');
-    expect(headerText).toBe('williamcotton.com');
+    expect(await $text('h1')).toBe('williamcotton.com');
 
     if (page) {
       await page.screenshot({ path: `${screenshotsPath}/front-page.png`, fullPage: true });
 
       const [readMoreLink] = await page.$x(".//*[contains(., 'Read More')]/@href");
-      const readMoreHref = await getAttr(readMoreLink);
-      expect(readMoreHref).toMatch('/articles/the-tyranny-of-the-anonymous');
+      expect(await getAttr(readMoreLink)).toMatch('/articles/the-tyranny-of-the-anonymous');
 
       await page.click('h2 a');
       await page.waitForNavigation();
@@ -41,16 +40,30 @@ const universalAppTest = ({ harness }) => {
 
   test('/articles/the-tyranny-of-the-anonymous', async () => {
     const route = '/articles/the-tyranny-of-the-anonymous';
+
     const { $text, page, currentRoute } = await get$(route);
 
-    const articleHeaderText = await $text('h2');
-    expect(articleHeaderText).toBe('The Tyranny of the Anonymous');
-
-    const publishedDateText = await $text('.published-date');
-    expect(publishedDateText).toBe('March 25th, 2019');
+    expect(await $text('h2')).toBe('The Tyranny of the Anonymous');
+    expect(await $text('.published-date')).toBe('March 25th, 2019');
 
     if (page) {
       await page.screenshot({ path: `${screenshotsPath}/article.png`, fullPage: true });
+
+      await page.click('h1 a');
+      await page.waitForNavigation();
+      expect(currentRoute()).toBe('/');
+    }
+  });
+
+  test('/articles/bad-slug', async () => {
+    const route = '/articles/bad-slug';
+
+    const { $text, page, currentRoute } = await get$(route);
+
+    expect(await $text('div.error')).toBe("This page isn't here!");
+
+    if (page) {
+      await page.screenshot({ path: `${screenshotsPath}/article-error.png`, fullPage: true });
 
       await page.click('h1 a');
       await page.waitForNavigation();

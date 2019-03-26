@@ -10,7 +10,7 @@ module.exports = ({ app }) => {
       renderApp(h(FrontPage, { articles }));
     } catch (error) {
       console.error(error, error.message);
-      renderApp(h('div', 'Sorry, there was an error!'), { statusCode: 404 });
+      renderApp(h('div.error', 'Sorry, there was an error!'), { statusCode: 404 });
     }
   });
 
@@ -23,14 +23,14 @@ module.exports = ({ app }) => {
   app.get('/articles/:slug', async ({ getArticle, params: { slug } }, { renderApp }) => {
     try {
       const article = await getArticle({ slug });
-      const { title, body } = article;
+      const { title } = article;
       renderApp(h(Article, { article }), { title });
     } catch (error) {
       let errorMessage = error.message;
       if (error.message === 'ArticleNotFound') {
         errorMessage = "This page isn't here!";
       }
-      renderApp(h('div', errorMessage), { statusCode: 404 });
+      renderApp(h('div.error', errorMessage), { statusCode: 404 });
     }
   });
 

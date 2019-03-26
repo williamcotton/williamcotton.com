@@ -1,21 +1,24 @@
 /* global document */
 
 const puppeteer = require('puppeteer');
+
 const serverHarness = require('./server-harness')();
 
 module.exports = () => {
   const start = async () => {
     const { close: closeServer, baseUrl } = await serverHarness.start();
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+
     await page.setViewport({
       width: 1200,
       height: 1080
     });
 
     const close = async () => {
-      await closeServer();
       await browser.close();
+      await closeServer();
     };
 
     const get$ = async path => {
@@ -23,7 +26,14 @@ module.exports = () => {
       await page.goto(url, { waitUntil: 'networkidle0' });
 
       const $text = async selector =>
-        page.evaluate(_selector => document.querySelector(_selector).innerText, selector);
+        page.evaluate(
+          /* istanbul ignore next */
+          _selector => {
+            const element = document.querySelector(_selector);
+            return element ? element.innerText : false;
+          },
+          selector
+        );
 
       const currentRoute = () => page.url().split(baseUrl)[1];
 
