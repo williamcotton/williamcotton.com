@@ -21,6 +21,12 @@ const get$ = async _path => {
   return { $text };
 };
 
+// TODO: use a development version of contentful so we don't break tests when
+// publishing new content.
+// That development article should contain every rich text element so we get full code
+// coverage:
+// contentful-rich-text.js |    48.94 |    54.55 |    28.57 |    45.45 |... 47,48,49,51,59
+// also, we should investigate a way to throw an error from contentfulClient.getEntries()
 const contentfulSpace = process.env.CONTENTFUL_SPACE;
 const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
@@ -30,7 +36,6 @@ const contentfulClient = contentful.createClient({
 });
 
 const buildDir = path.join(__dirname, '/../../build');
-const disableJS = false;
 
 const graphqlSchema = require('../../src/server/graphql-schema')({ contentfulClient });
 
@@ -38,7 +43,6 @@ module.exports = () => {
   const app = serverApp({
     defaultTitle,
     graphqlSchema,
-    disableJS,
     buildDir
   });
 

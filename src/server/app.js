@@ -7,12 +7,12 @@ const graphqlClientMiddleware = require('./middleware/graphql-client');
 
 const universalApp = require('../universal-app');
 
-module.exports = ({ defaultTitle, graphqlSchema, disableJS, buildDir }) => {
+module.exports = ({ defaultTitle, graphqlSchema, buildDir }) => {
   const app = express();
   app.disable('x-powered-by');
   app.use(compression());
   app.use(express.static(buildDir));
-  app.use(reactRendererMiddleware({ defaultTitle, disableJS }));
+  app.use(reactRendererMiddleware({ defaultTitle }));
   app.use('/graphql', graphqlHTTP(graphqlSchema));
   app.use(graphqlClientMiddleware(graphqlSchema));
   return universalApp({ app });

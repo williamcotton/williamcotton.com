@@ -16,12 +16,9 @@ const graphqlSchema = require('./graphql-schema')({ contentfulClient });
 
 const buildDir = path.join(__dirname, '/../../build');
 
-const disableJS = false;
-
 const universalServerApp = require('./app')({
   defaultTitle,
   graphqlSchema,
-  disableJS,
   buildDir
 });
 
