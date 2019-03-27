@@ -1,11 +1,13 @@
 const localQueryCache = {};
 
+const { route: graphqlRoute, cacheKey: graphqlCacheKey } = require('../../common/graphql');
+
 module.exports = ({ fetch, queryCache }) => (req, res, next) => {
   req.q = async (query, variables) => {
-    const cacheKey = `${query}-(${variables ? JSON.stringify(variables) : ''})`;
+    const cacheKey = graphqlCacheKey(query, variables);
     const cachedResponse = Object.assign(queryCache, localQueryCache)[cacheKey];
     const fetchResponse = async () => {
-      const response = await fetch('/graphql', {
+      const response = await fetch(graphqlRoute, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

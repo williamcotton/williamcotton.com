@@ -1,8 +1,10 @@
 const { graphql } = require('graphql');
 
+const { cacheKey: graphqlCacheKey } = require('../../common/graphql');
+
 module.exports = ({ schema, rootValue }) => (req, res, next) => {
   req.q = async (query, variables) => {
-    const cacheKey = `${query}-(${variables ? JSON.stringify(variables) : ''})`;
+    const cacheKey = graphqlCacheKey(query, variables);
     const response = await graphql(schema, query, rootValue, null, variables);
     res.cacheQuery(cacheKey, response);
     const { data, errors } = response;
