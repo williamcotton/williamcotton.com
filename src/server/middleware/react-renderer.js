@@ -6,7 +6,7 @@ const appLayout = require('../../components/layout');
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
 const scriptTag = '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
 
-const htmlTemplate = ({ renderedContent, title, disableJS, fetchCache }) => `
+const htmlTemplate = ({ renderedContent, title, disableJS, queryCache }) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +14,7 @@ const htmlTemplate = ({ renderedContent, title, disableJS, fetchCache }) => `
   <title>${title}</title>
   ${styleTag}
   <script type="text/javascript" charset="utf-8">
-    window.fetchCache = ${JSON.stringify(fetchCache)};
+    window.queryCache = ${JSON.stringify(queryCache)};
   </script>
 </head>
 <body>
@@ -26,20 +26,20 @@ const htmlTemplate = ({ renderedContent, title, disableJS, fetchCache }) => `
 const Link = props => h('a', props);
 
 module.exports = ({ defaultTitle, disableJS }) => (req, res, next) => {
-  res.fetchCache = {};
+  res.queryCache = {};
 
   res.renderApp = (content, options = {}) => {
     const contentWithProps = React.cloneElement(content, { Link });
     const renderedContent = renderToString(h(appLayout, { content: contentWithProps, Link }));
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
-    const { fetchCache } = res;
+    const { queryCache } = res;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
-    res.end(htmlTemplate({ renderedContent, title, disableJS, fetchCache }));
+    res.end(htmlTemplate({ renderedContent, title, disableJS, queryCache }));
   };
 
-  res.cacheFetch = (route, data) => {
-    res.fetchCache[route] = data;
+  res.cacheQuery = (route, data) => {
+    res.queryCache[route] = data;
   };
 
   res.renderJSON = json => {

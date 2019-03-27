@@ -1,14 +1,14 @@
 const express = require('../vendor/browser-express');
 
 const reactRendererMiddleware = require('./middleware/react-renderer');
-const articlesMiddleware = require('./middleware/articles');
+const graphqlClientMiddleware = require('./middleware/graphql-client');
 
 const universalApp = require('../universal-app');
 
-module.exports = ({ fetch, fetchCache, getElementById }) => {
+module.exports = ({ fetch, queryCache, getElementById }) => {
   const app = express();
-  app.use(reactRendererMiddleware({ app, getElementById, fetch, fetchCache }));
-  app.use(articlesMiddleware());
+  app.use(reactRendererMiddleware({ app, getElementById }));
+  app.use(graphqlClientMiddleware({ fetch, queryCache }));
   const universalBrowserApp = universalApp({ app });
   return universalBrowserApp;
 };

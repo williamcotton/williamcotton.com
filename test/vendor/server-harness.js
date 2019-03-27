@@ -32,10 +32,12 @@ const contentfulClient = contentful.createClient({
 const buildDir = path.join(__dirname, '/../../build');
 const disableJS = false;
 
+const graphqlSchema = require('../../src/server/graphql-schema')({ contentfulClient });
+
 module.exports = () => {
   const app = serverApp({
     defaultTitle,
-    contentfulClient,
+    graphqlSchema,
     disableJS,
     buildDir
   });

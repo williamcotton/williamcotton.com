@@ -4,10 +4,10 @@ const FrontPage = require('./components/front-page');
 const Article = require('./components/article');
 
 module.exports = ({ app }) => {
-  app.get('/', async ({ getAllArticles }, { renderApp }) => {
+  app.get('/', async ({ q }, { renderApp }) => {
     try {
-      const articles = await getAllArticles();
-      renderApp(h(FrontPage, { articles }));
+      const { allArticles } = await q('{ allArticles { title, slug, publishedDate, body } }');
+      renderApp(h(FrontPage, { allArticles }));
     } catch (error) {
       console.error(error, error.message);
       renderApp(h('div.error', 'Sorry, there was an error!'), { statusCode: 404 });
@@ -20,9 +20,13 @@ module.exports = ({ app }) => {
       renderJSON(await contentfulClient.getEntry(entryId))
   );
 
-  app.get('/articles/:slug', async ({ getArticle, params: { slug } }, { renderApp }) => {
+  app.get('/articles/:slug', async ({ q, params: { slug } }, { renderApp }) => {
     try {
-      const article = await getArticle({ slug });
+      // const article = await getArticle({ slug });
+      const { article } = await q(
+        'query Article($slug: String!) { article(slug: $slug) { title, slug, publishedDate, body } }',
+        { slug }
+      );
       const { title } = article;
       renderApp(h(Article, { article }), { title });
     } catch (error) {

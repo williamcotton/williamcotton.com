@@ -4,9 +4,9 @@ const { articleUrl, PublishedDate, Header, Body } = require('./article');
 
 // TODO: average reading speed of an adult (roughly 265 WPM)
 
-module.exports = ({ articles, Link }) =>
+module.exports = ({ allArticles, Link }) =>
   h('div.articles', [
-    articles.map(({ title, body, slug, publishedDate }) => {
+    allArticles.map(({ title, body, slug, publishedDate }) => {
       const href = articleUrl(slug);
       return h('article.article-preview', { key: slug }, [
         h(Header, { title, slug, Link }),

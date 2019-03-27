@@ -12,13 +12,15 @@ const contentfulClient = contentful.createClient({
   accessToken: contentfulAccessToken
 });
 
+const graphqlSchema = require('./graphql-schema')({ contentfulClient });
+
 const buildDir = path.join(__dirname, '/../../build');
 
 const disableJS = false;
 
 const universalServerApp = require('./app')({
   defaultTitle,
-  contentfulClient,
+  graphqlSchema,
   disableJS,
   buildDir
 });
