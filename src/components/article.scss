@@ -1,14 +1,14 @@
 article {
-  margin-top: 20px;
+  padding: 1em 0 1em 0;
   h2,
   h3,
   h4,
   h5,
   img,
   p {
-    margin-bottom: 20px;
-    line-height: 20px;
-    font-size: 16px;
+    margin-bottom: 1em;
+    line-height: 1.618;
+    font-size: 1em;
   }
   h2,
   h3,
@@ -17,26 +17,32 @@ article {
     font-weight: bold;
   }
   h2 {
-    font-size: 22px;
+    font-size: 1.33em;
+    line-height: 1.25;
+    margin-bottom: 0.1em;
     a {
       text-decoration: none;
       color: black;
     }
   }
+  h3 {
+    font-size: 1.25em;
+  }
   h4 {
-    font-size: 20px;
+    font-size: 1.125em;
   }
   h5 {
-    font-size: 18px;
+    font-size: 1.05em;
   }
   blockquote {
-    border-left: 5px solid lightgray;
-    padding-left: 20px;
+    color: dimgrey;
+    border-left: 0.1em solid lightgray;
+    padding-left: 1em;
   }
   b {
     font-weight: bold;
   }
   p.published-date {
-    font-size: 14px;
+    font-size: 0.9em;
   }
 }

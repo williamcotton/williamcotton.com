@@ -1,17 +1,28 @@
+@import '../variables';
+
+$responsive-margin: 1em;
+$desktop-margin: 3em;
+
 .sitewrapper {
-  min-height: 100%;
-  padding: 10px 40px;
-  margin: 0 auto;
-  max-width: 1000px;
   background-color: white;
+
+  @media (min-width: $desktop-width) {
+    margin: 0 auto;
+    max-width: $desktop-width;
+    min-height: 100%;
+  }
 }
 
 header {
-  margin-bottom: 10px;
+  margin: 0 $responsive-margin;
 
+  @media (min-width: $desktop-width) {
+    margin: 0 $desktop-margin;
+  }
   h1 {
+    padding-top: 1em;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 1.6em;
     margin: 0;
     a {
       text-decoration: none;
@@ -21,13 +32,19 @@ header {
 }
 
 .content {
-  height: 100%;
-  min-height: calc(100vh - 165px);
+  margin: 0 $responsive-margin;
+
+  @media (min-width: $desktop-width) {
+    margin: 0 $desktop-margin;
+    height: 100%;
+    min-height: calc(100vh - 3em);
+  }
 }
 
 footer {
-  margin-top: 20px;
-  margin-bottom: 40px;
+  background-color: black;
+  height: 3em;
+  margin-top: 1em;
   pre {
     font-family: monospace;
   }

@@ -1,15 +1,20 @@
+@import 'variables';
+
 @import 'vendor/reset';
 @import 'components/layout';
 @import 'components/article';
 @import 'components/front-page';
 
-html,
-body,
-#app {
-  height: 100%;
+@media (min-width: $desktop-width) {
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
 }
 
 body {
-  font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   background-color: lightgray;
 }

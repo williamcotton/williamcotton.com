@@ -5,12 +5,15 @@ const appLayout = require('../../components/layout');
 
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
 const scriptTag = '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
+const metaViewportTag =
+  '<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>';
 
 const htmlTemplate = ({ renderedContent, title, queryCache }) => `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
+  ${metaViewportTag}
   <title>${title}</title>
   ${styleTag}
   <script type="text/javascript" charset="utf-8">
