@@ -3,6 +3,7 @@ const e = require('./vendor/async-error');
 
 const FrontPage = require('./components/front-page');
 const Article = require('./components/article');
+const Page = require('./components/page');
 
 module.exports = ({ app }) => {
   app.get(
@@ -25,10 +26,22 @@ module.exports = ({ app }) => {
     })
   );
 
+  app.get(
+    '/:slug',
+    e(async ({ q, params: { slug } }, { renderApp }) => {
+      const { page } = await q(
+        'query Page($slug: String!) { page(slug: $slug) { title, slug, body } }',
+        { slug }
+      );
+      const { title } = page;
+      renderApp(h(Page, { page }), { title });
+    })
+  );
+
   app.use((error, req, { renderApp }, next) => {
     let errorMessage = error.message;
     let statusCode = 500;
-    if (error.message === 'ArticleNotFound') {
+    if (error.message === 'NotFound') {
       errorMessage = "This page isn't here!";
       statusCode = 404;
     }

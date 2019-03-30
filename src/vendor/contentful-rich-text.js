@@ -14,6 +14,13 @@ const defaultNodeRenderers = {
   [BLOCKS.HEADING_6]: (node, next, index) => h('h6', { key: `h6-${index}` }, next(node.content)),
   [BLOCKS.EMBEDDED_ENTRY]: (node, next, index) =>
     h('div', { key: `div-${index}` }, next(node.content)),
+  [BLOCKS.EMBEDDED_ASSET]: (node, next, index) => {
+    const {
+      title,
+      file: { url }
+    } = node.data.target.fields;
+    return h('img', { src: url, alt: title, key: `img-${index}` }, next(node.content));
+  },
   [BLOCKS.UL_LIST]: (node, next, index) => h('ul', { key: `ul-${index}` }, next(node.content)),
   [BLOCKS.OL_LIST]: (node, next, index) => h('ol', { key: `ol-${index}` }, next(node.content)),
   [BLOCKS.LIST_ITEM]: (node, next, index) => h('li', { key: `li-${index}` }, next(node.content)),
@@ -21,7 +28,7 @@ const defaultNodeRenderers = {
     h('blockquote', { key: `blockquote-${index}` }, next(node.content)),
   [BLOCKS.HR]: () => h('hr'),
   [INLINES.ASSET_HYPERLINK]: (node, next, index) =>
-    defaultInline(INLINES.ASSET_HYPERLINK, node, index),
+    defaultInline(INLINES.ENTRY_HYPERLINK, node, index),
   [INLINES.ENTRY_HYPERLINK]: (node, next, index) =>
     defaultInline(INLINES.ENTRY_HYPERLINK, node, index),
   [INLINES.HYPERLINK]: (node, next, index) =>

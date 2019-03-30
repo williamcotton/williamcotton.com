@@ -3,14 +3,13 @@
 @import 'vendor/reset';
 @import 'components/layout';
 @import 'components/article';
+@import 'components/page';
 @import 'components/front-page';
 
-@media (min-width: $desktop-width) {
-  html,
-  body,
-  #app {
-    height: 100%;
-  }
+html,
+body,
+#app {
+  height: 100%;
 }
 
 body {

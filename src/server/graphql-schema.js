@@ -15,9 +15,16 @@ const schemaString = `
     body: JSON
   }
 
+  type Page {
+    title: String
+    slug: String
+    body: JSON
+  }
+
   type Query {
     allArticles: [Article]
     article(slug: String!): Article
+    page(slug: String!): Page
   }
 `;
 
@@ -44,7 +51,19 @@ module.exports = ({ contentfulClient }) => {
       });
       const firstEntry = entries.items[0];
       if (!firstEntry) {
-        throw new Error('ArticleNotFound');
+        throw new Error('NotFound');
+      }
+      return firstEntry.fields;
+    },
+
+    page: async ({ slug }) => {
+      const entries = await contentfulClient.getEntries({
+        content_type: 'page',
+        'fields.slug[in]': slug
+      });
+      const firstEntry = entries.items[0];
+      if (!firstEntry) {
+        throw new Error('NotFound');
       }
       return firstEntry.fields;
     }
