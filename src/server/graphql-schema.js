@@ -28,7 +28,7 @@ module.exports = ({ contentfulClient }) => {
     allArticles: async () => {
       const trimBody = fields => {
         const updatedFields = Object.assign({}, fields);
-        updatedFields.body.content = fields.body.content.slice(0, 3);
+        updatedFields.body.content = fields.body.content.slice(0, 4);
         return updatedFields;
       };
       const entries = await contentfulClient.getEntries({
