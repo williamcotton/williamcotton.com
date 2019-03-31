@@ -1,6 +1,7 @@
 const React = require('react');
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
+
 const appLayout = require('../../components/layout');
 
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
@@ -33,11 +34,8 @@ module.exports = ({ defaultTitle }) => (req, res, next) => {
   res.queryCache = {};
 
   res.renderApp = (content, options = {}) => {
-    // TODO: only add Link if it is a React component not a just a DOM element
-    // Warning: React does not recognize the `Link` prop on a DOM element. If you intentionally want it to
-    // appear in the DOM as a custom attribute, spell it as lowercase `link` instead. If you accidentally
-    // passed it from a parent component, remove it from the DOM element.
-    const contentWithProps = React.cloneElement(content, { Link });
+    const contentWithProps =
+      typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
     const renderedContent = renderToString(h(appLayout, { content: contentWithProps, Link }));
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
