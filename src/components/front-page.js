@@ -1,6 +1,7 @@
 const h = require('react-hyperscript');
 
-const { articleUrl, PublishedDate, Header, Body } = require('./article');
+const { PublishedDate, Header, Body } = require('./article');
+const { articleUrl } = require('../common/url');
 
 // TODO: average reading speed of an adult (roughly 265 WPM)
 

@@ -1,28 +1,10 @@
 const h = require('react-hyperscript');
 const { parse, format } = require('date-fns');
-const { INLINES } = require('@contentful/rich-text-types');
+
 const RichText = require('../vendor/contentful-rich-text');
+const renderNode = require('../common/render-node');
 
-const articleUrl = slug => `/articles/${slug}`;
-
-const renderNode = ({ Link }) => ({
-  [INLINES.ENTRY_HYPERLINK]: (
-    {
-      data: {
-        target: {
-          fields: { title, slug }
-        }
-      },
-      content
-    },
-    next,
-    index
-  ) => {
-    const url = articleUrl(slug);
-    const { value: text } = content[0];
-    return h(Link, { href: url, title, key: `a-${index}` }, text);
-  }
-});
+const { articleUrl } = require('../common/url');
 
 const PublishedDate = ({ publishedDate }) =>
   h('p.published-date', format(parse(publishedDate), 'MMMM Do, YYYY'));
@@ -40,7 +22,6 @@ const Article = ({ article: { title, body, slug, publishedDate }, Link }) =>
     h(Body, { slug, body, Link })
   ]);
 
-Article.articleUrl = articleUrl;
 Article.renderNode = renderNode;
 Article.PublishedDate = PublishedDate;
 Article.Header = Header;
