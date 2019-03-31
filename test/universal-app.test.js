@@ -30,11 +30,12 @@ const universalAppTest = ({ harness }) => {
       await page.screenshot({ path: `${screenshotsPath}/front-page.png`, fullPage: true });
 
       const [readMoreLink] = await page.$x(".//*[contains(., 'Read More')]/@href");
-      expect(await getAttr(readMoreLink)).toMatch('/articles/the-tyranny-of-the-anonymous');
+      const readMoreUrl = await getAttr(readMoreLink);
+      expect(readMoreUrl).toMatch('/articles/');
 
       await page.click('h2 a');
       await page.waitForNavigation();
-      expect(currentRoute()).toBe('/articles/the-tyranny-of-the-anonymous');
+      expect(currentRoute()).toBe(readMoreUrl);
     }
   });
 
@@ -64,6 +65,22 @@ const universalAppTest = ({ harness }) => {
 
     if (page) {
       await page.screenshot({ path: `${screenshotsPath}/article-error.png`, fullPage: true });
+
+      await page.click('h1 a');
+      await page.waitForNavigation();
+      expect(currentRoute()).toBe('/');
+    }
+  });
+
+  test('/about', async () => {
+    const route = '/about';
+
+    const { $text, page, currentRoute } = await get$(route);
+
+    expect(await $text('h2')).toBe('About');
+
+    if (page) {
+      await page.screenshot({ path: `${screenshotsPath}/about.png`, fullPage: true });
 
       await page.click('h1 a');
       await page.waitForNavigation();
