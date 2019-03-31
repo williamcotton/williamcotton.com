@@ -39,7 +39,8 @@ module.exports = ({ contentfulClient }) => {
         return updatedFields;
       };
       const entries = await contentfulClient.getEntries({
-        content_type: 'blogPost'
+        content_type: 'blogPost',
+        order: '-fields.publishedDate'
       });
       return entries.items.map(e => trimBody(e.fields));
     },
