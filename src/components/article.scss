@@ -9,6 +9,9 @@ article {
     margin-bottom: 1em;
     line-height: 1.618;
     font-size: 1em;
+    @media (min-width: $desktop-width) {
+      font-size: 1.1em;
+    }
   }
   h2,
   h3,
@@ -20,6 +23,9 @@ article {
     font-size: 1.33em;
     line-height: 1.25;
     margin-bottom: 0.1em;
+    @media (min-width: $desktop-width) {
+      font-size: 1.8em;
+    }
     a {
       text-decoration: none;
       color: black;
