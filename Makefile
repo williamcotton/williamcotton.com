@@ -31,4 +31,4 @@ build/app.css:
 
 build/app.js:
 	mkdir -p build
-	webpack src/browser/index.js -o $@
+	webpack src/browser/index.js --mode=production -o $@
