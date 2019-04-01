@@ -19,7 +19,8 @@ const buildDir = path.join(__dirname, '/../../build');
 const universalServerApp = require('./app')({
   defaultTitle,
   graphqlSchema,
-  buildDir
+  buildDir,
+  nodeEnv
 });
 
 universalServerApp.listen(port, () => {
