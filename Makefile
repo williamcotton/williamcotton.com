@@ -13,7 +13,7 @@ build_debug_css: clean_css
 	"node-sass" src/index.scss build/app.css --source-map build/app.css.map
 
 build_debug_js: clean_js
-	webpack src/browser/index.js -o build/app.js --devtool source-map --watch
+	webpack src/browser/index.js -o build/app.js --devtool source-map --watch --output-chunk-filename build/[name].bundle.js
 
 clean: clean_css clean_js
 
