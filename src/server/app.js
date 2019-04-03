@@ -1,5 +1,6 @@
 const express = require('express');
 const compression = require('compression');
+const bodyParser = require('body-parser');
 const graphqlHTTP = require('express-graphql');
 const enforce = require('express-sslify');
 
@@ -15,6 +16,8 @@ module.exports = ({ defaultTitle, graphqlSchema, buildDir, nodeEnv }) => {
   if (nodeEnv === 'production') app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(compression());
   app.use(express.static(buildDir));
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
   app.use(reactRendererMiddleware({ defaultTitle }));
   app.use(graphqlRoute, graphqlHTTP(graphqlSchema));
   app.use(graphqlClientMiddleware(graphqlSchema));

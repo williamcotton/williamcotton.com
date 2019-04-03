@@ -5,6 +5,8 @@ const FrontPage = require('./components/front-page');
 const Article = require('./components/article');
 const Page = require('./components/page');
 
+const contact = require('./pages/contact');
+
 module.exports = ({ app }) => {
   app.get(
     '/',
@@ -25,6 +27,8 @@ module.exports = ({ app }) => {
       renderApp(h(Article, { article }), { title });
     })
   );
+
+  app.use('/contact', contact);
 
   app.get(
     '/:slug',

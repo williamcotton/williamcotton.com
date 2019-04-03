@@ -30,6 +30,8 @@ const htmlTemplate = ({ renderedContent, title, queryCache }) => `
 
 const Link = props => h('a', props);
 
+const Form = props => h('form', props);
+
 module.exports = ({ defaultTitle }) => (req, res, next) => {
   res.queryCache = {};
 
@@ -48,7 +50,9 @@ module.exports = ({ defaultTitle }) => (req, res, next) => {
     res.queryCache[route] = data;
   };
 
-  res.Link = Link;
+  req.Link = Link;
+
+  req.Form = Form;
 
   next();
 };
