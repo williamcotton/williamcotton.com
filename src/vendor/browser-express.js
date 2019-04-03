@@ -24,7 +24,7 @@ function Router(options) {
   this.currentLocation = null;
 
   // local call stack
-  this.stack = [];
+  this.historyStack = [];
 
   // Local variables
   this.locals = Object.create(null);
@@ -162,7 +162,7 @@ Router.prototype.processRequest = function processRequest(
   res.app = this;
 
   // TODO: don't call this modifiedUrl, call this stateObject.. or locationState?
-  this.stack.push([modifiedUrl, null, req.originalUrl, replace]);
+  this.historyStack.push([modifiedUrl, null, req.originalUrl, replace]);
 
   // Run the route matching
   const that = this;
