@@ -1,11 +1,11 @@
 const router = require('router')();
 const h = require('react-hyperscript');
 
-router.get('/', ({ Form }, { renderApp }) => {
+router.get('/', ({ Form, baseUrl }, { renderApp }) => {
   renderApp(
     h('div', [
       h('h2', 'Contact'),
-      h(Form, { action: '/contact/submit-message', method: 'post' }, [
+      h(Form, { action: `${baseUrl}/submit-message`, method: 'post' }, [
         h('input', { type: 'text', name: 'replyTo' })
       ])
     ])
