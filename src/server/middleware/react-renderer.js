@@ -2,14 +2,14 @@ const React = require('react');
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
 
-const appLayout = require('../../components/layout');
+const appLayout = require('../../views/layout');
 
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
 const scriptTag = '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
 const metaViewportTag =
   '<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>';
 
-const htmlTemplate = ({ renderedContent, title, queryCache }) => `
+const htmlTemplate = ({ renderedContent, defaultTitle, title, queryCache }) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +19,7 @@ const htmlTemplate = ({ renderedContent, title, queryCache }) => `
   ${styleTag}
   <script type="text/javascript" charset="utf-8">
     window.queryCache = ${JSON.stringify(queryCache)};
+    window.defaultTitle = '${defaultTitle}';
   </script>
 </head>
 <body>
@@ -43,7 +44,7 @@ module.exports = ({ defaultTitle }) => (req, res, next) => {
     const statusCode = options.statusCode || 200;
     const { queryCache } = res;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
-    res.end(htmlTemplate({ renderedContent, title, queryCache }));
+    res.end(htmlTemplate({ renderedContent, defaultTitle, title, queryCache }));
   };
 
   res.cacheQuery = (route, data) => {

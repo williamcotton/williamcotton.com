@@ -3,9 +3,9 @@ const ReactDOM = require('react-dom');
 const h = require('react-hyperscript');
 const serialize = require('form-serialize');
 
-const appLayout = require('../../components/layout');
+const appLayout = require('../../views/layout');
 
-module.exports = ({ app, getElementById }) => (req, res, next) => {
+module.exports = ({ app, querySelector, defaultTitle }) => (req, res, next) => {
   const Link = props => {
     const onClick = e => {
       e.preventDefault();
@@ -31,12 +31,11 @@ module.exports = ({ app, getElementById }) => (req, res, next) => {
   req.Form = Form;
 
   res.renderApp = (content, options = {}) => {
-    const defaultTitle = document.title; // TODO: get defaultTitle from window state in index.js;
     const title = options.title || defaultTitle;
-    document.title = title; // TODO: wrap this as a method and pass in from index.js
+    querySelector('title').innerText = title; // eslint-disable-line no-param-reassign
     const contentWithProps =
       typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
-    ReactDOM.hydrate(h(appLayout, { content: contentWithProps, Link }), getElementById('app'));
+    ReactDOM.hydrate(h(appLayout, { content: contentWithProps, Link }), querySelector('#app'));
     res.send();
   };
 

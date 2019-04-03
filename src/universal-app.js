@@ -1,11 +1,11 @@
 const h = require('react-hyperscript');
 const e = require('./vendor/async-error');
 
-const FrontPage = require('./components/front-page');
-const Article = require('./components/article');
-const Page = require('./components/page');
+const FrontPage = require('./views/front-page');
+const Article = require('./views/article');
+const Page = require('./views/page');
 
-const contact = require('./pages/contact');
+const contact = require('./controllers/contact');
 
 module.exports = ({ app }) => {
   app.get(
@@ -43,6 +43,7 @@ module.exports = ({ app }) => {
   );
 
   app.use((error, req, { renderApp }, next) => {
+    console.log(error);
     let errorMessage = error.message;
     let statusCode = 500;
     if (error.message === 'NotFound') {

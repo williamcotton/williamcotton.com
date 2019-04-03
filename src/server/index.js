@@ -1,3 +1,5 @@
+require('require-ensure');
+
 const contentful = require('contentful');
 const path = require('path');
 
