@@ -48,7 +48,7 @@ Response.prototype.send = function send(content) {
   }
   if (supported) {
     const [stateObject, title, URL, replace] = this.app.stack.pop();
-    window.history[replace ? 'replaceState' : 'pushState'](stateObject, title, URL, replace);
+    window.history[replace ? 'replaceState' : 'pushState'](stateObject, title, URL);
     // TODO: https://developers.google.com/web/updates/2015/09/history-api-scroll-restoration
     if (!replace) window.scrollTo(0, 0);
   }

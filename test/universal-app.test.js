@@ -45,7 +45,7 @@ const universalAppTest = ({ harness }) => {
     const { $text, page, currentRoute } = await get$(route);
 
     expect(await $text('h2')).toBe('The Tyranny of the Anonymous');
-    expect(await $text('.published-date')).toBe('March 25th, 2019');
+    expect(await $text('.published-date')).toBe('January 15th, 2019');
 
     if (page) {
       await page.screenshot({ path: `${screenshotsPath}/article.png`, fullPage: true });
