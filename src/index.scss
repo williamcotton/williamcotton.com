@@ -1,10 +1,10 @@
-@import 'variables';
+@import 'styles/variables';
 
 @import 'vendor/reset';
-@import 'views/layout';
-@import 'views/article';
-@import 'views/page';
-@import 'views/front-page';
+@import 'styles/layout';
+@import 'styles/article';
+@import 'styles/page';
+@import 'styles/front-page';
 
 html,
 body,

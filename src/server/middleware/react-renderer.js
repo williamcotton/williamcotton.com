@@ -2,8 +2,6 @@ const React = require('react');
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
 
-const appLayout = require('../../views/layout');
-
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
 const scriptTag = '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
 const metaViewportTag =
@@ -33,7 +31,7 @@ const Link = props => h('a', props);
 
 const Form = props => h('form', props);
 
-module.exports = ({ defaultTitle }) => (req, res, next) => {
+module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   res.queryCache = {};
 
   res.renderApp = (content, options = {}) => {

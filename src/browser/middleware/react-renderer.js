@@ -3,9 +3,7 @@ const ReactDOM = require('react-dom');
 const h = require('react-hyperscript');
 const serialize = require('form-serialize');
 
-const appLayout = require('../../views/layout');
-
-module.exports = ({ app, querySelector, defaultTitle }) => (req, res, next) => {
+module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res, next) => {
   const Link = props => {
     const onClick = e => {
       e.preventDefault();

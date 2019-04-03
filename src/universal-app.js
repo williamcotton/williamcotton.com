@@ -43,7 +43,6 @@ module.exports = ({ app }) => {
   );
 
   app.use((error, req, { renderApp }, next) => {
-    console.log(error);
     let errorMessage = error.message;
     let statusCode = 500;
     if (error.message === 'NotFound') {
