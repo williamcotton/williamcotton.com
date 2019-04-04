@@ -87,7 +87,6 @@ Router.prototype.listen = function listen(options, callback) {
 };
 
 Router.prototype.onPopstate = function onPopstate(e) {
-  // TODO: handle different methods (POST, DELETE, etc)
   this.processRequest(
     e.state || {
       pathname: window.location.pathname,
@@ -103,66 +102,60 @@ Router.prototype.navigate = function navigate(path) {
 };
 
 Router.prototype.submit = function submit(action, method, body) {
-  this.processRequest(url.parse(action), false, method, body);
+  const locationState = url.parse(action);
+  locationState.method = method;
+  locationState.body = body;
+  this.processRequest(locationState, false);
 };
 
-// TODO: don't call this originalUrl? remove method and body and add to "state"
-Router.prototype.processRequest = function processRequest(
-  originalUrl,
-  replace,
-  method = 'GET',
-  body
-) {
+Router.prototype.processRequest = function processRequest(locationState, replace) {
   // Normalize the url object
-  const modifiedUrl = Object.assign({}, originalUrl);
-  modifiedUrl.search = originalUrl.search || '';
-  modifiedUrl.hash = originalUrl.hash || '';
-  // TODO: modifiedUrl should be called "state", state.method = method, state.body = body
+  const nextLocationState = Object.assign({}, locationState);
+  nextLocationState.search = locationState.search || '';
+  nextLocationState.hash = locationState.hash || '';
+  nextLocationState.method = locationState.method || 'GET';
+  nextLocationState.body = locationState.body;
 
   // Strip the base off before routing
-  let path = modifiedUrl.pathname;
+  let path = nextLocationState.pathname;
   if (this.base) {
     path = path.replace(this.base, '');
   }
 
   // Build next url
-  const nextLocation = (path === '' ? '/' : path) + modifiedUrl.search;
+  const nextLocation = (path === '' ? '/' : path) + nextLocationState.search;
 
   // If processing to the same url and it's a GET method, just return
-  // TODO: check the locationState instead of currentLocation
-  if (this.currentLocation === nextLocation && method === 'GET') {
+  if (this.currentLocation === nextLocation && nextLocationState.method === 'GET') {
     return;
   }
 
   // Keep previous location for if we dont match
   let prevLocation;
-  let prevState;
+  let prevLocationState;
   if (supported) {
     prevLocation = this.currentLocation;
-    prevState = window.history.state;
+    prevLocationState = window.history.state;
   }
 
   // Update current location value
-  // TODO: maybe don't use currentLocation and instead use the entire locationState object?
   this.currentLocation = nextLocation;
 
   // Create the request object
   const req = new Request();
   req.app = this;
-  req.method = method;
-  req.originalUrl = modifiedUrl.pathname + modifiedUrl.search + modifiedUrl.hash;
+  req.method = nextLocationState.method;
+  req.originalUrl = nextLocationState.pathname + nextLocationState.search + nextLocationState.hash;
   req.baseUrl = this.base;
   req.path = path;
-  req.url = this.currentLocation + modifiedUrl.hash;
-
-  if (body) req.body = body;
+  req.url = this.currentLocation + nextLocationState.hash;
+  if (nextLocationState.body) req.body = nextLocationState.body;
 
   // Create the response object
   const res = new Response();
   res.app = this;
 
-  // TODO: don't call this modifiedUrl, call this stateObject.. or locationState?
-  this.historyStack.push([modifiedUrl, null, req.originalUrl, replace]);
+  this.historyStack.push([nextLocationState, null, req.originalUrl, replace]);
 
   // Run the route matching
   const that = this;
@@ -175,7 +168,7 @@ Router.prototype.processRequest = function processRequest(
       // Replace the state that we had just pushed to maintain the
       // proper back button behavior, then reload the location
       if (supported) {
-        window.history.replaceState(prevState, null, prevLocation);
+        window.history.replaceState(prevLocationState, null, prevLocation);
       }
       window.location = req.originalUrl;
     }
