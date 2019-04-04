@@ -6,14 +6,14 @@ router.get('/', ({ Form, baseUrl }, { renderApp }) => {
     h('div', [
       h('h2', 'Contact'),
       h(Form, { action: `${baseUrl}/submit-message`, method: 'post' }, [
-        h('input', { type: 'text', name: 'replyTo' })
+        h('input', { type: 'text', name: 'replyTo', id: 'replyTo' })
       ])
     ])
   );
 });
 
 router.post('/submit-message', ({ body: { replyTo } }, { renderApp }) => {
-  renderApp(h('div', replyTo));
+  renderApp(h('div.message', replyTo));
 });
 
 module.exports = router;

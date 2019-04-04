@@ -87,6 +87,31 @@ const universalAppTest = ({ harness }) => {
       expect(currentRoute()).toBe('/');
     }
   });
+
+  test('/contact', async () => {
+    const route = '/contact';
+
+    const { $text, page, currentRoute } = await get$(route);
+
+    expect(await $text('h2')).toBe('Contact');
+
+    if (page) {
+      const testMessage = 'Test';
+      await page.screenshot({ path: `${screenshotsPath}/contact.png`, fullPage: true });
+
+      await page.focus('#replyTo');
+      await page.keyboard.type(testMessage);
+      page.keyboard.press('Enter');
+
+      await page.waitForNavigation();
+      await page.screenshot({
+        path: `${screenshotsPath}/contact-submit-message.png`,
+        fullPage: true
+      });
+      expect(await $text('div.message')).toBe(testMessage);
+      expect(currentRoute()).toBe('/contact/submit-message');
+    }
+  });
 };
 
 describe('universalApp', () => {
