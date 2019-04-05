@@ -2,6 +2,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const h = require('react-hyperscript');
 const serialize = require('form-serialize');
+const qs = require('qs');
 
 module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res, next) => {
   const Link = props => {
@@ -16,6 +17,7 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res,
   req.Link = Link;
 
   // TODO: add csrf support to form via hidden input
+  // TODO: figure out a way to repopulate the form when browsing back, like how browsers work
   const Form = props => {
     const onSubmit = e => {
       e.preventDefault();
@@ -35,6 +37,11 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res,
       typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
     ReactDOM.hydrate(h(appLayout, { content: contentWithProps, Link }), querySelector('#app'));
     res.send();
+  };
+
+  res.navigate = (path, query) => {
+    const pathname = query ? `${path}?${qs.stringify(query)}` : path;
+    res.redirect(pathname);
   };
 
   next();

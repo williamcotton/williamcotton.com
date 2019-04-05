@@ -1,6 +1,7 @@
 const React = require('react');
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
+const qs = require('qs');
 
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
 const scriptTag = '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
@@ -47,6 +48,11 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
 
   res.cacheQuery = (route, data) => {
     res.queryCache[route] = data;
+  };
+
+  res.navigate = (path, query) => {
+    const pathname = query ? `${path}?${qs.stringify(query)}` : path;
+    res.redirect(pathname);
   };
 
   req.Link = Link;
