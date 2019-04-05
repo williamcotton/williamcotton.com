@@ -1,10 +1,11 @@
 /* global document */
 
 const puppeteer = require('puppeteer');
+const serverHarnessBuilder = require('./server-harness');
 
-const serverHarness = require('./server-harness')();
+module.exports = app => {
+  const serverHarness = serverHarnessBuilder(app);
 
-module.exports = () => {
   const start = async () => {
     const { close: closeServer, baseUrl } = await serverHarness.start();
 

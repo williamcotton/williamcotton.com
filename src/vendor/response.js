@@ -34,7 +34,7 @@ Response.prototype.redirect = function redirect(arg1, arg2) {
 
   this.status(status);
 
-  this.app.processRequest(url.parse(path), true);
+  this.app.processRequest(url.parse(path), false);
 };
 
 Response.prototype.status = function status(code) {

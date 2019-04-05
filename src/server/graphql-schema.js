@@ -1,5 +1,6 @@
 const GraphQLJSON = require('graphql-type-json');
 const { makeExecutableSchema } = require('graphql-tools');
+const helper = require('sendgrid').mail;
 
 const resolveFunctions = {
   JSON: GraphQLJSON
@@ -21,16 +22,31 @@ const schemaString = `
     body: JSON
   }
 
+  input EmailMessage {
+    name: String
+    replyToAddress: String
+    subject: String
+    body: String
+  }
+
+  type EmailResponse {
+    success: Boolean
+  }
+
   type Query {
     allArticles: [Article]
     article(slug: String!): Article
     page(slug: String!): Page
   }
+
+  type Mutation {
+    sendEmail(input: EmailMessage): EmailResponse
+  }
 `;
 
 const schema = makeExecutableSchema({ typeDefs: schemaString, resolvers: resolveFunctions });
 
-module.exports = ({ contentfulClient }) => {
+module.exports = ({ contentfulClient, sendgridClient }) => {
   const rootValue = {
     allArticles: async () => {
       const trimBody = fields => {
@@ -67,6 +83,30 @@ module.exports = ({ contentfulClient }) => {
         throw new Error('NotFound');
       }
       return firstEntry.fields;
+    },
+
+    sendEmail: async ({ input }) => {
+      const { name, replyToAddress, subject, body } = input;
+
+      const fromEmail = new helper.Email(replyToAddress, name);
+      const toEmail = new helper.Email('williamcotton@gmail.com');
+      const content = new helper.Content('text/plain', body);
+      const mail = new helper.Mail(fromEmail, subject, toEmail, content);
+
+      const request = sendgridClient.emptyRequest({
+        method: 'POST',
+        path: '/v3/mail/send',
+        body: mail.toJSON()
+      });
+
+      try {
+        const response = await sendgridClient.API(request);
+        const { statusCode } = response;
+        const success = statusCode >= 200 && statusCode < 300;
+        return { success };
+      } catch (e) {
+        return { success: false };
+      }
     }
   };
 
