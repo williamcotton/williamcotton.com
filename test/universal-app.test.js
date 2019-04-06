@@ -153,7 +153,6 @@ const universalAppTest = ({ harness: { start } }) => {
         fullPage: true
       });
 
-      expect(await $text('div.message-confirmation')).toBe('Success!');
       expect(currentRoute()).toBe('/contact/message-confirmation?success=true');
       expect(sendgridClient.API).toBeCalledWith({
         body: {
