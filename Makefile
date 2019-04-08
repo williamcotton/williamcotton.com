@@ -1,8 +1,8 @@
 export PATH := node_modules/.bin:$(PATH)
 
-all: build
+all: build .env test/screenshots
 
-build: build/app.js build/app.css .env
+build: build/app.js build/app.css
 
 .env:
 	cp default.env $@
@@ -35,3 +35,6 @@ build/app.css:
 build/app.js:
 	mkdir -p build
 	webpack src/browser/index.js --mode=production -o $@
+
+test/screenshots:
+	mkdir -p test/screenshots
