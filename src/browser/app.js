@@ -1,4 +1,4 @@
-const express = require('../vendor/browser-express');
+const express = require('browser-express');
 
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
