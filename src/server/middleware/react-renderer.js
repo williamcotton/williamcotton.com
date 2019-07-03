@@ -33,12 +33,17 @@ const Link = props => h('a', props);
 const Form = props => h('form', props);
 
 module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
+  req.globalState = {};
+
   res.queryCache = {};
 
   res.renderApp = (content, options = {}) => {
+    const { globalState } = req;
     const contentWithProps =
       typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
-    const renderedContent = renderToString(h(appLayout, { content: contentWithProps, Link }));
+    const renderedContent = renderToString(
+      h(appLayout, { content: contentWithProps, Link, globalState })
+    );
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     const { queryCache } = res;
@@ -46,8 +51,8 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
     res.end(htmlTemplate({ renderedContent, defaultTitle, title, queryCache }));
   };
 
-  res.cacheQuery = (route, data) => {
-    res.queryCache[route] = data;
+  res.cacheQuery = (key, data) => {
+    res.queryCache[key] = data;
   };
 
   res.navigate = (path, query) => {

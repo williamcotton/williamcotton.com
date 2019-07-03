@@ -5,6 +5,8 @@ const serialize = require('form-serialize');
 const qs = require('qs');
 
 module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res, next) => {
+  req.globalState = {};
+
   const Link = props => {
     const onClick = e => {
       e.preventDefault();
@@ -31,11 +33,15 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res,
   req.Form = Form;
 
   res.renderApp = (content, options = {}) => {
+    const { globalState } = req;
     const title = options.title || defaultTitle;
     querySelector('title').innerText = title; // eslint-disable-line no-param-reassign
     const contentWithProps =
       typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
-    ReactDOM.hydrate(h(appLayout, { content: contentWithProps, Link }), querySelector('#app'));
+    ReactDOM.hydrate(
+      h(appLayout, { content: contentWithProps, Link, globalState }),
+      querySelector('#app')
+    );
     res.send();
   };
 
