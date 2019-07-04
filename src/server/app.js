@@ -6,10 +6,12 @@ const enforce = require('express-sslify');
 
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
+const analyticsMiddleware = require('./middleware/analytics');
 
 const universalApp = require('../universal-app');
 const appLayout = require('../views/layout');
 const { route, cacheKey } = require('../common/graphql');
+const { analyticsRouter } = require('../common/analytics-events');
 
 module.exports = ({
   defaultTitle,
@@ -27,5 +29,6 @@ module.exports = ({
   app.use(reactRendererMiddleware({ defaultTitle, appLayout }));
   app.use(route, graphqlHTTP({ schema, rootValue, graphiql }));
   app.use(graphqlClientMiddleware({ schema, rootValue, cacheKey }));
+  app.use(analyticsMiddleware({ analyticsRouter, app }));
   return universalApp({ app });
 };

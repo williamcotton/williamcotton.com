@@ -22,7 +22,12 @@ module.exports = ({ fetch, queryCache, route, cacheKey }) => (req, res, next) =>
     if (errors) {
       throw new Error(errors[0].message);
     }
-    req.data = data;
+    req.dataQuery = {
+      data,
+      errors,
+      query,
+      variables
+    };
     return data;
   };
 

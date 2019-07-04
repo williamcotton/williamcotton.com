@@ -27,7 +27,7 @@
     "@contentful/rich-text-html-renderer": "^13.1.0",
     "@contentful/rich-text-types": "^13.1.0",
     "body-parser": "^1.19.0",
-    "browser-express": "^4.1.1",
+    "browser-express": "^4.2.1",
     "compression": "^1.7.4",
     "contentful": "^7.8.1",
     "date-fns": "^1.30.1",
