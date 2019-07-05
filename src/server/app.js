@@ -11,7 +11,7 @@ const analyticsMiddleware = require('./middleware/analytics');
 const universalApp = require('../universal-app');
 const appLayout = require('../views/layout');
 const { route, cacheKey } = require('../common/graphql');
-const { analyticsRouter } = require('../common/analytics-events');
+const { analyticsRouter } = require('../analytics-events');
 
 module.exports = ({
   defaultTitle,

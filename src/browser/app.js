@@ -4,7 +4,7 @@ const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
 
-const { analyticsRouter } = require('../common/analytics-events');
+const { analyticsRouter } = require('../analytics-events');
 
 const universalApp = require('../universal-app');
 const { route, cacheKey } = require('../common/graphql');
