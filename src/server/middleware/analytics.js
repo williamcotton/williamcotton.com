@@ -6,7 +6,7 @@ module.exports = ({ analyticsRouter, app }) => {
     console.log('event', title, payload);
   };
 
-  app.post('/analytics', req => {
+  app.post('/analytics', (req, res) => {
     const { type, ...params } = req.body;
     switch (type) {
       case 'pageview':
@@ -17,6 +17,7 @@ module.exports = ({ analyticsRouter, app }) => {
         break;
       default:
     }
+    res.json({ success: true });
   });
 
   return (req, res, next) => {
