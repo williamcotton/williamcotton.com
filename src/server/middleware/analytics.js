@@ -1,19 +1,22 @@
 module.exports = ({ analyticsRouter, app }) => {
-  const analyticsPageview = ({ title }) => {
-    console.log('pageview', title);
+  const analyticsPageview = ({ url, headers, ip, title }) => {
+    console.log('pageview', { url, headers, ip, title });
   };
-  const analyticsEvent = ({ title, payload }) => {
-    console.log('event', title, payload);
+  const analyticsEvent = ({ url, headers, ip, title, payload }) => {
+    console.log('event', { url, headers, ip, title, payload });
   };
 
   app.post('/analytics', (req, res) => {
-    const { type, ...params } = req.body;
+    const { headers, body, ip } = req;
+    const { type, ...params } = body;
+    headers.referer = headers['override-referer'];
+    delete headers['override-referer'];
     switch (type) {
       case 'pageview':
-        analyticsPageview(params);
+        analyticsPageview({ headers, ip, ...params });
         break;
       case 'event':
-        analyticsEvent(params);
+        analyticsEvent({ headers, ip, ...params });
         break;
       default:
     }
@@ -23,8 +26,9 @@ module.exports = ({ analyticsRouter, app }) => {
   return (req, res, next) => {
     res.on('finish', () => {
       req.url = req.originalUrl;
-      res.pageview = params => analyticsPageview(params);
-      res.event = params => analyticsEvent(params);
+      const { url, headers, ip } = req;
+      res.pageview = params => analyticsPageview({ url, headers, ip, ...params });
+      res.event = params => analyticsEvent({ url, headers, ip, ...params });
       analyticsRouter(req, res, () => {});
     });
     next();
