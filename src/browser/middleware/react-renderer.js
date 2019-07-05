@@ -40,9 +40,9 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res,
       typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
     ReactDOM.hydrate(
       h(appLayout, { content: contentWithProps, Link, globalState }),
-      querySelector('#app')
+      querySelector('#app'),
+      res.send()
     );
-    res.send();
   };
 
   res.navigate = (path, query) => {
