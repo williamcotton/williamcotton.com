@@ -35,13 +35,17 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res,
   res.renderApp = (content, options = {}) => {
     const { globalState } = req;
     const title = options.title || defaultTitle;
+    const statusCode = options.statusCode || 200;
     querySelector('title').innerText = title; // eslint-disable-line no-param-reassign
     const contentWithProps =
       typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
     ReactDOM.hydrate(
       h(appLayout, { content: contentWithProps, Link, globalState }),
       querySelector('#app'),
-      res.send()
+      () => {
+        res.status(statusCode);
+        res.send();
+      }
     );
   };
 
