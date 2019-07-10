@@ -4,7 +4,11 @@ const h = require('react-hyperscript');
 const serialize = require('form-serialize');
 const qs = require('qs');
 
-module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res, next) => {
+module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (
+  req,
+  res,
+  next
+) => {
   req.globalState = {};
 
   const Link = props => {
@@ -33,12 +37,14 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res,
   req.Form = Form;
 
   res.renderApp = (content, options = {}) => {
-    const { globalState } = req;
+    const { globalState, baseUrl } = req;
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     querySelector('title').innerText = title; // eslint-disable-line no-param-reassign
     const contentWithProps =
-      typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
+      typeof content.type === 'string'
+        ? content
+        : React.cloneElement(content, { Link, Form, baseUrl });
     ReactDOM.hydrate(
       h(appLayout, { content: contentWithProps, Link, globalState }),
       querySelector('#app'),

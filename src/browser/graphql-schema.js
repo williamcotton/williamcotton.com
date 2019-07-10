@@ -18,6 +18,7 @@ const schemaString = `
   }
 
   type Review {
+    id: Int
     title: String
     body: String
     likedByUser: Boolean
@@ -25,6 +26,7 @@ const schemaString = `
 
   type Query {
     review(id: Int!): Review
+    allReviews: [Review]
   }
 
   type Mutation {
@@ -32,26 +34,29 @@ const schemaString = `
   }
 `;
 
-const reviews = {
-  1: {
-    likedByUser: false,
-    title: 'A great product!',
-    body: 'I bought it last week. Tried it out the same day. Works great!'
-  }
-};
+const reviews = {};
 
-const schema = makeExecutableSchema({ typeDefs: schemaString, resolvers: resolveFunctions });
+const schema = makeExecutableSchema({
+  typeDefs: schemaString,
+  resolvers: resolveFunctions
+});
 
-module.exports = ({ localStorage }) => {
+module.exports = () => {
   const rootValue = {
     review: async ({ id }) => {
-      return reviews[id];
+      return Object.assign({}, reviews[id]);
+    },
+
+    allReviews: async () => {
+      return Object.values(Object.assign({}, reviews));
     },
 
     likeReview: async ({ input }) => {
       const { reviewId, liked } = input;
 
-      reviews[reviewId].likedByUser = liked;
+      const review = reviews[reviewId] || { id: reviewId };
+      review.likedByUser = liked;
+      reviews[reviewId] = review;
 
       return { success: true };
     }

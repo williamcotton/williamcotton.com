@@ -13,7 +13,11 @@ const Header = ({ title, slug, Link }) =>
   h('h2', { key: slug }, h(Link, { href: articleUrl(slug) }, title));
 
 const Body = ({ slug, body, Link }) =>
-  h(RichText, { key: slug, richText: body, options: { renderNode: renderNode({ Link }) } });
+  h(RichText, {
+    key: slug,
+    richText: body,
+    options: { renderNode: renderNode({ Link }) }
+  });
 
 const Article = ({ article: { title, body, slug, publishedDate }, Link }) =>
   h('article', { key: slug }, [

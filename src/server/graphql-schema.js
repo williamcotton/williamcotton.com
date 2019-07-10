@@ -39,6 +39,7 @@ const schemaString = `
   }
 
   type Review {
+    id: Int
     title: String
     body: String
     likedByUser: Boolean
@@ -49,6 +50,7 @@ const schemaString = `
     article(slug: String!): Article
     page(slug: String!): Page
     review(id: Int!): Review
+    allReviews: [Review]
   }
 
   type Mutation {
@@ -59,13 +61,24 @@ const schemaString = `
 
 const reviews = {
   1: {
-    likedByUser: false,
+    id: 1,
+    likedByUser: true,
     title: 'A great product!',
     body: 'I bought it last week. Tried it out the same day. Works great!'
+  },
+
+  2: {
+    id: 2,
+    likedByUser: false,
+    title: 'A bad product!',
+    body: 'Works bad, I hate it!'
   }
 };
 
-const schema = makeExecutableSchema({ typeDefs: schemaString, resolvers: resolveFunctions });
+const schema = makeExecutableSchema({
+  typeDefs: schemaString,
+  resolvers: resolveFunctions
+});
 
 module.exports = ({ contentfulClient, sendgridClient }) => {
   const rootValue = {
@@ -131,7 +144,11 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
     },
 
     review: async ({ id }) => {
-      return reviews[id];
+      return Object.assign({}, reviews[id]);
+    },
+
+    allReviews: async () => {
+      return Object.values(Object.assign({}, reviews));
     },
 
     likeReview: async ({ input }) => {

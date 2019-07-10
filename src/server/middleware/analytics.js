@@ -48,7 +48,8 @@ module.exports = ({ analyticsRouter, app }) => {
       req.url = req.originalUrl;
       const { url, headers, ip } = req;
       commonLogFormat(req, res);
-      res.pageview = params => analyticsPageview({ url, headers, ip, ...params });
+      res.pageview = params =>
+        analyticsPageview({ url, headers, ip, ...params });
       res.event = params => analyticsEvent({ url, headers, ip, ...params });
       analyticsRouter(req, res, () => {});
     });

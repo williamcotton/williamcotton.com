@@ -21,7 +21,8 @@ module.exports = ({
 }) => {
   const app = express();
   app.disable('x-powered-by');
-  if (nodeEnv === 'production') app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  if (nodeEnv === 'production')
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(compression());
   app.use(express.static(buildDir));
   app.use(bodyParser.urlencoded({ extended: false }));

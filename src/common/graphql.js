@@ -1,4 +1,5 @@
-const cacheKey = (query, variables) => `${query}-(${variables ? JSON.stringify(variables) : ''})`;
+const cacheKey = (query, variables) =>
+  `${query}-(${variables ? JSON.stringify(variables) : ''})`;
 const route = '/graphql';
 
 module.exports = {

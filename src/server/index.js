@@ -18,7 +18,10 @@ const contentfulClient = contentful.createClient({
 
 const sendgridClient = sendgrid(sendgridApiKey);
 
-const graphqlSchema = require('./graphql-schema')({ contentfulClient, sendgridClient });
+const graphqlSchema = require('./graphql-schema')({
+  contentfulClient,
+  sendgridClient
+});
 
 const buildDir = path.join(__dirname, '/../../build');
 
@@ -30,5 +33,9 @@ const universalServerApp = require('./app')({
 });
 
 universalServerApp.listen(port, () => {
-  console.log('universalServerApp is running in %s mode on port %s', nodeEnv, port);
+  console.log(
+    'universalServerApp is running in %s mode on port %s',
+    nodeEnv,
+    port
+  );
 });

@@ -4,7 +4,8 @@ const h = require('react-hyperscript');
 const qs = require('qs');
 
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
-const scriptTag = '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
+const scriptTag =
+  '<script src="/app.js" type="text/javascript" charset="utf-8"></script>';
 const metaViewportTag =
   '<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>';
 
@@ -38,9 +39,11 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   res.queryCache = {};
 
   res.renderApp = (content, options = {}) => {
-    const { globalState } = req;
+    const { globalState, baseUrl } = req;
     const contentWithProps =
-      typeof content.type === 'string' ? content : React.cloneElement(content, { Link });
+      typeof content.type === 'string'
+        ? content
+        : React.cloneElement(content, { Link, Form, baseUrl });
     const renderedContent = renderToString(
       h(appLayout, { content: contentWithProps, Link, globalState })
     );
