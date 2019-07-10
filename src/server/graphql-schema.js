@@ -29,20 +29,41 @@ const schemaString = `
     body: String
   }
 
-  type EmailResponse {
+  input LikedReview {
+    reviewId: Int
+    liked: Boolean
+  }
+
+  type SuccessResponse {
     success: Boolean
+  }
+
+  type Review {
+    title: String
+    body: String
+    likedByUser: Boolean
   }
 
   type Query {
     allArticles: [Article]
     article(slug: String!): Article
     page(slug: String!): Page
+    review(id: Int!): Review
   }
 
   type Mutation {
-    sendEmail(input: EmailMessage): EmailResponse
+    sendEmail(input: EmailMessage): SuccessResponse
+    likeReview(input: LikedReview): SuccessResponse
   }
 `;
+
+const reviews = {
+  1: {
+    likedByUser: false,
+    title: 'A great product!',
+    body: 'I bought it last week. Tried it out the same day. Works great!'
+  }
+};
 
 const schema = makeExecutableSchema({ typeDefs: schemaString, resolvers: resolveFunctions });
 
@@ -107,6 +128,18 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
       } catch (e) {
         return { success: false };
       }
+    },
+
+    review: async ({ id }) => {
+      return reviews[id];
+    },
+
+    likeReview: async ({ input }) => {
+      const { reviewId, liked } = input;
+
+      reviews[reviewId].likedByUser = liked;
+
+      return { success: true };
     }
   };
 

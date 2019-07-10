@@ -18,7 +18,7 @@ const contentfulClient = contentful.createClient({
 
 const sendgridClient = sendgrid(sendgridApiKey);
 
-const graphqlSchema = require('../graphql-schema')({ contentfulClient, sendgridClient });
+const graphqlSchema = require('./graphql-schema')({ contentfulClient, sendgridClient });
 
 const buildDir = path.join(__dirname, '/../../build');
 
