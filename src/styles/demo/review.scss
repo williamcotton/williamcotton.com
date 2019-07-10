@@ -4,7 +4,20 @@
   box-shadow: 1px 1px 3px 1px lightgray;
   padding: 1em;
 
-  h4 {
+  a {
     color: rgb(75, 72, 110);
+  }
+
+  .body {
+    margin-top: 1em;
+    p {
+      font-size: 0.8em;
+    }
+  }
+}
+
+ol.reviews {
+  li {
+    margin-bottom: 1em;
   }
 }

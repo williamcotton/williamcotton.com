@@ -1,9 +1,9 @@
 const router = require('router')();
 const h = require('react-hyperscript');
 
-const Review = ({ title, body, likedByUser, id, Form, baseUrl }) =>
+const Review = ({ title, body, likedByUser, id, Form, Link, baseUrl }) =>
   h('.review', [
-    h('.header', [h('h4', title)]),
+    h('.header', [h(Link, { href: `${baseUrl}/${id}` }, title)]),
     h('.body', [h('p', body)]),
     h('.footer', [
       h('div.form-container', [
@@ -20,7 +20,7 @@ const Review = ({ title, body, likedByUser, id, Form, baseUrl }) =>
     ])
   ]);
 
-router.get('/', async ({ q, Form, baseUrl }, { renderApp }) => {
+router.get('/', async ({ q, Form, Link, baseUrl }, { renderApp }) => {
   const { allReviews } = await q(
     'query { allReviews { title, body, likedByUser, id } }'
   );
@@ -29,7 +29,7 @@ router.get('/', async ({ q, Form, baseUrl }, { renderApp }) => {
     h('ol.reviews', [
       allReviews.map(review =>
         h('li', { key: review.id }, [
-          h(Review, Object.assign(review, { Form, baseUrl }))
+          h(Review, Object.assign(review, { Form, Link, baseUrl }))
         ])
       )
     ])
