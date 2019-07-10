@@ -60,6 +60,8 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
     res.redirect(pathname);
   };
 
+  res.redirect = res.redirect.bind(res);
+
   req.Link = Link;
 
   req.Form = Form;

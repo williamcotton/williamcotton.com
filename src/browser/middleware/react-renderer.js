@@ -54,5 +54,7 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (req, res,
     res.redirect(pathname);
   };
 
+  res.redirect = res.redirect.bind(res);
+
   next();
 };
