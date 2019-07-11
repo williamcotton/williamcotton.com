@@ -1,13 +1,6 @@
-const GraphQLJSON = require('graphql-type-json');
-const { makeExecutableSchema } = require('graphql-tools');
-
-const resolveFunctions = {
-  JSON: GraphQLJSON
-};
+const { buildSchema } = require('graphql/utilities/buildASTSchema');
 
 const schemaString = `
-  scalar JSON
-
   input LikedReview {
     reviewId: Int
     liked: Boolean
@@ -34,12 +27,9 @@ const schemaString = `
   }
 `;
 
-const reviews = {};
+const schema = buildSchema(schemaString);
 
-const schema = makeExecutableSchema({
-  typeDefs: schemaString,
-  resolvers: resolveFunctions
-});
+const reviews = {};
 
 module.exports = () => {
   const rootValue = {

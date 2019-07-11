@@ -1,4 +1,6 @@
-const { graphql } = require('graphql');
+const { parse } = require('graphql/language/parser');
+const { execute } = require('graphql/execution/execute');
+const { validate } = require('graphql/validation/validate');
 const deepmerge = require('deepmerge');
 const cleanDeep = require('clean-deep');
 
@@ -32,19 +34,17 @@ module.exports = ({
     const isMutation = /^mutation/.test(query);
     const key = cacheKey(query, variables);
 
-    // a local query against our browser schema
-    const rawLocalQueryResponse = await graphql(
-      schema,
-      query,
-      rootValue,
-      req,
-      variables
-    );
+    const document = parse(query);
 
-    // clean up our local query response, or ignore queries/mutations not defined in the browser schema
-    const localQueryResponse = rawLocalQueryResponse.errors
+    // ignore queries/mutations not defined in the browser schema
+    const validationErrors = validate(schema, document);
+
+    // a local query against our browser schema
+    const localQueryResponse = validationErrors.length
       ? false
-      : cleanDeep(rawLocalQueryResponse, { emptyArrays: false });
+      : cleanDeep(await execute(schema, document, rootValue, req, variables), {
+          emptyArrays: false
+        });
 
     // if it's the initial page request or we're caching the query after further requests, check the server side query cache and the local query cache
     const cachedResponse =
