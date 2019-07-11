@@ -1,4 +1,3 @@
-const React = require('react');
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
 const qs = require('qs');
@@ -40,12 +39,11 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
 
   res.renderApp = (content, options = {}) => {
     const { globalState, baseUrl } = req;
-    const contentWithProps =
-      typeof content.type === 'string'
-        ? content
-        : React.cloneElement(content, { Link, Form, baseUrl });
+    globalState.Link = Link;
+    globalState.Form = Form;
+    globalState.baseUrl = baseUrl;
     const renderedContent = renderToString(
-      h(appLayout, { content: contentWithProps, Link, globalState })
+      h(appLayout, { content, globalState })
     );
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;

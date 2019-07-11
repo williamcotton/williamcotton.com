@@ -1,8 +1,12 @@
 const router = require('router')();
 const h = require('react-hyperscript');
+const { useContext } = require('react');
 
-const Review = ({ title, body, likedByUser, id, Form, Link, baseUrl }) =>
-  h('.review', [
+const { GlobalContext } = require('../../contexts');
+
+const Review = ({ title, body, likedByUser, id }) => {
+  const { Link, Form, baseUrl } = useContext(GlobalContext);
+  return h('.review', [
     h('.header', [h(Link, { href: `${baseUrl}/${id}` }, title)]),
     h('.body', [h('p', body)]),
     h('.footer', [
@@ -19,19 +23,16 @@ const Review = ({ title, body, likedByUser, id, Form, Link, baseUrl }) =>
       ])
     ])
   ]);
+};
 
-router.get('/', async ({ q, Form, Link, baseUrl }, { renderApp }) => {
+router.get('/', async ({ q }, { renderApp }) => {
   const { allReviews } = await q(
     'query { allReviews { title, body, likedByUser, id } }'
   );
 
   renderApp(
     h('ol.reviews', [
-      allReviews.map(review =>
-        h('li', { key: review.id }, [
-          h(Review, Object.assign(review, { Form, Link, baseUrl }))
-        ])
-      )
+      allReviews.map(review => h('li', { key: review.id }, [h(Review, review)]))
     ])
   );
 });

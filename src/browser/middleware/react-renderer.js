@@ -1,4 +1,3 @@
-const React = require('react');
 const ReactDOM = require('react-dom');
 const h = require('react-hyperscript');
 const serialize = require('form-serialize');
@@ -41,12 +40,11 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     querySelector('title').innerText = title; // eslint-disable-line no-param-reassign
-    const contentWithProps =
-      typeof content.type === 'string'
-        ? content
-        : React.cloneElement(content, { Link, Form, baseUrl });
+    globalState.Link = Link;
+    globalState.Form = Form;
+    globalState.baseUrl = baseUrl;
     ReactDOM.hydrate(
-      h(appLayout, { content: contentWithProps, Link, globalState }),
+      h(appLayout, { content, globalState }),
       querySelector('#app'),
       () => {
         res.status(statusCode);
