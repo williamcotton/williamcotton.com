@@ -4,7 +4,7 @@ module.exports = ({ schema, rootValue, cacheKey }) => (req, res, next) => {
   req.q = async (query, variables) => {
     const isMutation = /^mutation/.test(query);
     const key = cacheKey(query, variables);
-    const response = await graphql(schema, query, rootValue, null, variables);
+    const response = await graphql(schema, query, rootValue, req, variables);
     if (!isMutation) res.cacheQuery(key, response);
     const { data, errors } = response;
     if (errors) {

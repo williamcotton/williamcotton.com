@@ -44,11 +44,11 @@ const schema = makeExecutableSchema({
 module.exports = () => {
   const rootValue = {
     review: async ({ id }) => {
-      return Object.assign({}, reviews[id]);
+      return reviews[id];
     },
 
     allReviews: async () => {
-      return Object.values(Object.assign({}, reviews));
+      return Object.values(reviews);
     },
 
     likeReview: async ({ input }) => {
