@@ -18,8 +18,19 @@ module.exports = ({
   graphqlSchema: { schema, rootValue }
 }) => {
   const app = express();
-  app.use(reactRendererMiddleware({ app, querySelector, defaultTitle, appLayout }));
-  app.use(graphqlClientMiddleware({ schema, rootValue, fetch, queryCache, route, cacheKey }));
+  app.use(
+    reactRendererMiddleware({ app, querySelector, defaultTitle, appLayout })
+  );
+  app.use(
+    graphqlClientMiddleware({
+      schema,
+      rootValue,
+      fetch,
+      queryCache,
+      route,
+      cacheKey
+    })
+  );
   app.use(analyticsMiddleware({ analyticsRouter, fetch }));
   const universalBrowserApp = universalApp({ app });
   return universalBrowserApp;
