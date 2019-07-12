@@ -15,11 +15,18 @@ module.exports = ({
   queryCache,
   querySelector,
   defaultTitle,
-  graphqlSchema: { schema, rootValue }
+  graphqlSchema: { schema, rootValue },
+  clientRequest
 }) => {
   const app = express();
   app.use(
-    reactRendererMiddleware({ app, querySelector, defaultTitle, appLayout })
+    reactRendererMiddleware({
+      app,
+      querySelector,
+      defaultTitle,
+      appLayout,
+      clientRequest
+    })
   );
   app.use(
     graphqlClientMiddleware({

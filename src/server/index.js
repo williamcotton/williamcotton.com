@@ -10,6 +10,7 @@ const port = process.env.PORT || 5000;
 const contentfulSpace = process.env.CONTENTFUL_SPACE;
 const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 const sendgridApiKey = process.env.SENDGRID_API_KEY;
+const sessionSecret = process.env.SESSION_SECRET;
 
 const contentfulClient = contentful.createClient({
   space: contentfulSpace,
@@ -29,7 +30,8 @@ const universalServerApp = require('./app')({
   defaultTitle,
   graphqlSchema,
   buildDir,
-  nodeEnv
+  nodeEnv,
+  sessionSecret
 });
 
 universalServerApp.listen(port, () => {

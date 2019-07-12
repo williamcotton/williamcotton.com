@@ -39,7 +39,9 @@ const defaultTitle = 'app-test';
 const app = serverApp({
   defaultTitle,
   graphqlSchema,
-  buildDir
+  buildDir,
+  sessionSecret: 'test',
+  nodeEnv: 'test'
 });
 
 const universalAppTest = ({ harness: { start } }) => {

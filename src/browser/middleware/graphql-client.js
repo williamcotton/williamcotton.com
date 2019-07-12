@@ -64,7 +64,8 @@ module.exports = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json'
+          Accept: 'application/json',
+          'X-CSRF-Token': req.csrf
         },
         body: JSON.stringify({ query, variables })
       });

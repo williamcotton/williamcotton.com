@@ -1,6 +1,6 @@
 /* global window, document */
 
-const { fetch, queryCache, defaultTitle, localStorage } = window;
+const { fetch, queryCache, defaultTitle, localStorage, clientRequest } = window;
 
 const querySelector = selectors => document.querySelector(selectors);
 
@@ -11,7 +11,8 @@ const universalBrowserApp = require('./app')({
   queryCache,
   querySelector,
   defaultTitle,
-  graphqlSchema
+  graphqlSchema,
+  clientRequest
 });
 
 universalBrowserApp.listen({}, () => {

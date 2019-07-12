@@ -13,6 +13,7 @@ module.exports = ({ analyticsRouter, fetch }) => {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        'X-CSRF-Token': req.csrf,
         'Override-Referer': referer
       },
       body: JSON.stringify({ type, url, statusCode, method, ...params })

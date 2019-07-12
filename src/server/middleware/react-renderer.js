@@ -8,7 +8,13 @@ const scriptTag =
 const metaViewportTag =
   '<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>';
 
-const htmlTemplate = ({ renderedContent, defaultTitle, title, queryCache }) => `
+const htmlTemplate = ({
+  renderedContent,
+  defaultTitle,
+  title,
+  queryCache,
+  clientRequest
+}) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +24,7 @@ const htmlTemplate = ({ renderedContent, defaultTitle, title, queryCache }) => `
   ${styleTag}
   <script type="text/javascript" charset="utf-8">
     window.queryCache = ${JSON.stringify(queryCache)};
+    window.clientRequest = ${JSON.stringify(clientRequest)};
     window.defaultTitle = '${defaultTitle}';
   </script>
 </head>
@@ -30,10 +37,29 @@ const htmlTemplate = ({ renderedContent, defaultTitle, title, queryCache }) => `
 
 const Link = props => h('a', props);
 
-const Form = props => h('form', props);
-
 module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   req.globalState = {};
+
+  req.csrf = req.csrfToken();
+
+  res.clientRequest = {
+    csrf: req.csrf
+  };
+
+  req.Link = Link;
+
+  const Form = props => {
+    const mergedProps = Object.assign({}, props);
+    const { children } = mergedProps;
+    delete mergedProps.children;
+    const formElements = [].concat(children);
+    formElements.push(
+      h('input', { type: 'hidden', name: '_csrf', value: req.csrf })
+    );
+    return h('form', mergedProps, formElements);
+  };
+
+  req.Form = Form;
 
   res.queryCache = {};
 
@@ -47,9 +73,17 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
     );
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
-    const { queryCache } = res;
+    const { queryCache, clientRequest } = res;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
-    res.end(htmlTemplate({ renderedContent, defaultTitle, title, queryCache }));
+    res.end(
+      htmlTemplate({
+        renderedContent,
+        defaultTitle,
+        title,
+        queryCache,
+        clientRequest
+      })
+    );
   };
 
   res.cacheQuery = (key, data) => {
@@ -62,10 +96,6 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   };
 
   res.redirect = res.redirect.bind(res);
-
-  req.Link = Link;
-
-  req.Form = Form;
 
   next();
 };

@@ -37,9 +37,10 @@ router.get('/', ({ Form, baseUrl }, { renderApp }) =>
 router.post(
   '/send-email',
   async ({ q, body: emailMessage, baseUrl }, { navigate }) => {
+    const { name, replyToAddress, subject, body } = emailMessage;
     const response = await q(
       'mutation sendEmail($input: EmailMessage) { sendEmail(input: $input) { success } }',
-      { input: emailMessage }
+      { input: { name, replyToAddress, subject, body } }
     );
     const {
       sendEmail: { success }

@@ -3,12 +3,16 @@ const h = require('react-hyperscript');
 const serialize = require('form-serialize');
 const qs = require('qs');
 
-module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (
-  req,
-  res,
-  next
-) => {
+module.exports = ({
+  app,
+  querySelector,
+  defaultTitle,
+  appLayout,
+  clientRequest
+}) => (req, res, next) => {
   req.globalState = {};
+
+  Object.keys(clientRequest).forEach(key => (req[key] = clientRequest[key])); // eslint-disable-line no-return-assign
 
   const Link = props => {
     const onClick = e => {
@@ -21,7 +25,6 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (
 
   req.Link = Link;
 
-  // TODO: add csrf support to form via hidden input
   // TODO: figure out a way to repopulate the form when browsing back, like how browsers work
   const Form = props => {
     const onSubmit = e => {
@@ -30,7 +33,13 @@ module.exports = ({ app, querySelector, defaultTitle, appLayout }) => (
       app.submit(e.target.action, e.target.method, body);
     };
     const mergedProps = Object.assign({ onSubmit }, props);
-    return h('form', mergedProps);
+    const { children } = mergedProps;
+    delete mergedProps.children;
+    const formElements = [].concat(children);
+    formElements.push(
+      h('input', { type: 'hidden', name: '_csrf', value: req.csrf })
+    );
+    return h('form', mergedProps, formElements);
   };
 
   req.Form = Form;
