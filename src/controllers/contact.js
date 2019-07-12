@@ -1,5 +1,6 @@
 const router = require('router')();
 const h = require('react-hyperscript');
+const e = require('../vendor/async-error');
 
 const required = true;
 
@@ -36,7 +37,7 @@ router.get('/', ({ Form, baseUrl }, { renderApp }) =>
 
 router.post(
   '/send-email',
-  async ({ q, body: emailMessage, baseUrl }, { navigate }) => {
+  e(async ({ q, body: emailMessage, baseUrl }, { navigate }) => {
     const { name, replyToAddress, subject, body } = emailMessage;
     const response = await q(
       'mutation sendEmail($input: EmailMessage) { sendEmail(input: $input) { success } }',
@@ -46,7 +47,7 @@ router.post(
       sendEmail: { success }
     } = response;
     navigate(`${baseUrl}/message-confirmation`, { success });
-  }
+  })
 );
 
 router.get('/message-confirmation', ({ query, Link }, { renderApp }) => {
