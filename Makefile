@@ -13,7 +13,7 @@ build_debug_css: clean_css
 	nodemon -w ./src --ext scss --exec "node-sass" -- src/index.scss build/app.css --source-map build/app.css.map
 
 build_debug_js: clean_js
-	webpack src/browser/index.js -o build/app.js --devtool source-map --watch --output-chunk-filename build/[name].bundle.js --mode=development
+	watchify src/browser/index.js -o build/app.js -v -d
 
 start_dev:
 	nodemon src/server/index.js -w src/ --ext js
@@ -34,7 +34,7 @@ build/app.css:
 
 build/app.js:
 	mkdir -p build
-	webpack src/browser/index.js --mode=production -o $@
+	browserify src/browser/index.js -o $@
 
 test/screenshots:
 	mkdir -p test/screenshots

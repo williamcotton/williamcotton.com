@@ -15,9 +15,7 @@
     "lint": "eslint ./src ./test",
     "update-packages": "ncu -u",
     "deploy": "git push heroku master",
-    "postinstall": "make",
-    "webpack-profile": "webpack src/browser/index.js -o build/app.js --profile --json > build/stats.json",
-    "bundle-analyze": "webpack-bundle-analyzer build/stats.json"
+    "postinstall": "make"
   },
   "repository": {
     "type": "git",
@@ -54,6 +52,7 @@
     "sendgrid": "^5.2.3"
   },
   "devDependencies": {
+    "browserify": "^16.3.0",
     "cheerio": "^1.0.0-rc.2",
     "dotenv": "^8.0.0",
     "eslint": "^6.0.1",
@@ -69,8 +68,6 @@
     "npm-check-updates": "^3.1.18",
     "prettier": "^1.18.2",
     "puppeteer": "^1.18.1",
-    "webpack": "^4.35.3",
-    "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "^3.3.5"
+    "watchify": "^3.11.1"
   }
 }
