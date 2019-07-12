@@ -28,7 +28,10 @@ const contentfulClient = contentful.createClient({
 
 const sendgridClient = sendgrid('BOGUS');
 
-const graphqlSchema = require('../src/server/graphql-schema')({ contentfulClient, sendgridClient });
+const graphqlSchema = require('../src/server/graphql-schema')({
+  contentfulClient,
+  sendgridClient
+});
 
 const buildDir = path.join(__dirname, '/../build');
 const defaultTitle = 'app-test';
@@ -59,9 +62,14 @@ const universalAppTest = ({ harness: { start } }) => {
     expect(await $text('h1')).toBe('williamcotton.com');
 
     if (page) {
-      await page.screenshot({ path: `${screenshotsPath}/front-page.png`, fullPage: true });
+      await page.screenshot({
+        path: `${screenshotsPath}/front-page.png`,
+        fullPage: true
+      });
 
-      const [readMoreLink] = await page.$x(".//*[contains(., 'Read More')]/@href");
+      const [readMoreLink] = await page.$x(
+        ".//*[contains(., 'Read More')]/@href"
+      );
       const readMoreUrl = await getAttr(readMoreLink);
       expect(readMoreUrl).toMatch('/articles/');
 
@@ -80,7 +88,10 @@ const universalAppTest = ({ harness: { start } }) => {
     expect(await $text('.published-date')).toBe('January 15th, 2019');
 
     if (page) {
-      await page.screenshot({ path: `${screenshotsPath}/article.png`, fullPage: true });
+      await page.screenshot({
+        path: `${screenshotsPath}/article.png`,
+        fullPage: true
+      });
 
       await page.click('h1 a');
       await page.waitForNavigation();
@@ -96,7 +107,10 @@ const universalAppTest = ({ harness: { start } }) => {
     expect(await $text('div.error')).toBe("This page isn't here!");
 
     if (page) {
-      await page.screenshot({ path: `${screenshotsPath}/article-error.png`, fullPage: true });
+      await page.screenshot({
+        path: `${screenshotsPath}/article-error.png`,
+        fullPage: true
+      });
 
       await page.click('h1 a');
       await page.waitForNavigation();
@@ -112,7 +126,10 @@ const universalAppTest = ({ harness: { start } }) => {
     expect(await $text('h2')).toBe('About');
 
     if (page) {
-      await page.screenshot({ path: `${screenshotsPath}/about.png`, fullPage: true });
+      await page.screenshot({
+        path: `${screenshotsPath}/about.png`,
+        fullPage: true
+      });
 
       await page.click('h1 a');
       await page.waitForNavigation();
@@ -128,14 +145,19 @@ const universalAppTest = ({ harness: { start } }) => {
     expect(await $text('h2')).toBe('Contact');
 
     if (page) {
-      sendgridClient.API = jest.fn().mockReturnValue(Promise.resolve({ statusCode: 202 }));
+      sendgridClient.API = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({ statusCode: 202 }));
 
       const name = 'Tester';
       const replyToAddress = 'test@test.com';
       const subject = 'Test Subject';
       const body = 'Test Body';
 
-      await page.screenshot({ path: `${screenshotsPath}/contact.png`, fullPage: true });
+      await page.screenshot({
+        path: `${screenshotsPath}/contact.png`,
+        fullPage: true
+      });
 
       await page.focus('#name');
       await page.keyboard.type(name);
