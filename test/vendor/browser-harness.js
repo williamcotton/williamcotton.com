@@ -38,7 +38,8 @@ module.exports = app => {
 
       const currentRoute = () => page.url().split(baseUrl)[1];
 
-      const findByText = async text => page.$x(`//*[contains(., '${text}')]/@*`);
+      const findByText = async text =>
+        page.$x(`//*[contains(., '${text}')]/@*`);
 
       const getAttr = async handle => {
         const propertyHandle = await handle.getProperty('value');
@@ -46,7 +47,7 @@ module.exports = app => {
         return attr;
       };
 
-      return { $text, currentRoute, page, findByText, getAttr };
+      return { $text, currentRoute, page, findByText, getAttr, baseUrl };
     };
 
     return { close, get$ };

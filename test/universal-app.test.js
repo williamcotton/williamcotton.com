@@ -195,6 +195,47 @@ const universalAppTest = ({ harness: { start } }) => {
       });
     }
   });
+
+  test('/demo/reviews', async () => {
+    const route = '/demo/reviews';
+
+    const { $text, page, currentRoute, baseUrl } = await get$(route);
+
+    if (page) {
+      await page.screenshot({
+        path: `${screenshotsPath}/demo-reviews.png`,
+        fullPage: true
+      });
+
+      const likeButtonSelector =
+        'form[action="/demo/reviews/1/like-review"] button.submit';
+
+      expect(await $text(likeButtonSelector)).toBe('Unlike');
+      await page.click(likeButtonSelector);
+      await page.waitForResponse(`${baseUrl}/graphql`);
+      expect(await $text(likeButtonSelector)).toBe('Like');
+
+      await page.click('a[href="/demo/reviews/1"');
+      await page.waitForNavigation();
+      expect(currentRoute()).toBe('/demo/reviews/1');
+      await page.screenshot({
+        path: `${screenshotsPath}/demo-reviews-1.png`,
+        fullPage: true
+      });
+      expect(await $text(likeButtonSelector)).toBe('Like');
+      await page.click(likeButtonSelector);
+      await page.waitForResponse(`${baseUrl}/graphql`);
+      expect(await $text(likeButtonSelector)).toBe('Unlike');
+
+      await page.goBack();
+      expect(currentRoute()).toBe('/demo/reviews');
+      expect(await $text(likeButtonSelector)).toBe('Unlike');
+
+      await page.click('h1 a');
+      await page.waitForNavigation();
+      expect(currentRoute()).toBe('/');
+    }
+  });
 };
 
 describe('universalApp', () => {
