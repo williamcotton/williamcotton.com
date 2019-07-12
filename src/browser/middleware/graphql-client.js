@@ -36,15 +36,16 @@ module.exports = ({
 
     const document = parse(query);
 
-    // ignore queries/mutations not defined in the browser schema
-    const validationErrors = validate(schema, document);
-
-    // a local query against our browser schema
-    const localQueryResponse = validationErrors.length
-      ? false
-      : cleanDeep(await execute(schema, document, rootValue, req, variables), {
-          emptyArrays: false
-        });
+    // a local query response from an optional browser schema, ignoring undefined queries/mutations
+    const localQueryResponse =
+      !schema || validate(schema, document).length
+        ? false
+        : cleanDeep(
+            await execute(schema, document, rootValue, req, variables),
+            {
+              emptyArrays: false
+            }
+          );
 
     // if it's the initial page request or we're caching the query after further requests, check the server side query cache and the local query cache
     const cachedResponse =
