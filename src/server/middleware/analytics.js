@@ -1,4 +1,4 @@
-const { format } = require('date-fns');
+const format = require('date-fns/format');
 
 module.exports = ({ analyticsRouter, app }) => {
   const analyticsPageview = ({ url, headers, ip, title }) => {};

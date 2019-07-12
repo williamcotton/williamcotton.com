@@ -1,5 +1,6 @@
 const h = require('react-hyperscript');
-const { parse, format } = require('date-fns');
+const format = require('date-fns/format');
+const parse = require('date-fns/parse');
 const { useContext } = require('react');
 
 const { GlobalContext } = require('../contexts');
