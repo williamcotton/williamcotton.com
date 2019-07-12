@@ -15,7 +15,9 @@
     "lint": "eslint ./src ./test",
     "update-packages": "ncu -u",
     "deploy": "git push heroku master",
-    "postinstall": "make"
+    "postinstall": "make",
+    "webpack-profile": "webpack src/browser/index.js -o build/app.js --profile --json > build/stats.json",
+    "bundle-analyze": "webpack-bundle-analyzer build/stats.json"
   },
   "repository": {
     "type": "git",
@@ -66,6 +68,7 @@
     "prettier": "^1.18.2",
     "puppeteer": "^1.18.1",
     "webpack": "^4.35.3",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.3.5"
   }
 }
