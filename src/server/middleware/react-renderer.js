@@ -40,10 +40,7 @@ const Link = props => h('a', props);
 module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   req.csrf = req.csrfToken();
 
-  res.clientRequest = {
-    csrf: req.csrf,
-    user: req.user
-  };
+  res.clientRequest.csrf = req.csrf;
 
   req.Link = Link;
 

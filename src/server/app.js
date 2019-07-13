@@ -10,6 +10,7 @@ const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
 const userAuthentication = require('./middleware/user-authentication');
+const clientRequestMiddleware = require('./middleware/client-request');
 
 const universalApp = require('../universal-app');
 const appLayout = require('../views/layout');
@@ -42,6 +43,7 @@ module.exports = ({
   app.use(express.static(buildDir));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
+  app.use(clientRequestMiddleware());
   app.use(cookieSession(cookieSessionOptions));
   app.use(userAuthentication({ githubClientId, githubSecret, app }));
   app.use(csurf());
