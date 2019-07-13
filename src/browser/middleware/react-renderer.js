@@ -10,8 +10,6 @@ module.exports = ({
   appLayout,
   clientRequest
 }) => (req, res, next) => {
-  req.globalState = {};
-
   Object.keys(clientRequest).forEach(key => (req[key] = clientRequest[key])); // eslint-disable-line no-return-assign
 
   const Link = props => {
@@ -45,15 +43,11 @@ module.exports = ({
   req.Form = Form;
 
   res.renderApp = (content, options = {}) => {
-    const { globalState, baseUrl } = req;
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     querySelector('title').innerText = title; // eslint-disable-line no-param-reassign
-    globalState.Link = Link;
-    globalState.Form = Form;
-    globalState.baseUrl = baseUrl;
     ReactDOM.hydrate(
-      h(appLayout, { content, globalState }),
+      h(appLayout, { content, req }),
       querySelector('#app'),
       () => {
         res.status(statusCode);

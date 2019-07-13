@@ -38,8 +38,6 @@ const htmlTemplate = ({
 const Link = props => h('a', props);
 
 module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
-  req.globalState = {};
-
   req.csrf = req.csrfToken();
 
   res.clientRequest = {
@@ -65,13 +63,7 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   res.queryCache = {};
 
   res.renderApp = (content, options = {}) => {
-    const { globalState, baseUrl } = req;
-    globalState.Link = Link;
-    globalState.Form = Form;
-    globalState.baseUrl = baseUrl;
-    const renderedContent = renderToString(
-      h(appLayout, { content, globalState })
-    );
+    const renderedContent = renderToString(h(appLayout, { content, req }));
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
     const { queryCache, clientRequest } = res;

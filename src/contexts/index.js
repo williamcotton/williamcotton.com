@@ -1,7 +1,7 @@
 const React = require('react');
 
-const GlobalContext = React.createContext();
+const RequestContext = React.createContext();
 
 module.exports = {
-  GlobalContext
+  RequestContext
 };

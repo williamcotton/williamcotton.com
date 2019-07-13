@@ -1,10 +1,10 @@
 const h = require('react-hyperscript');
 
-const { GlobalContext } = require('../contexts');
+const { RequestContext } = require('../contexts');
 
-const AppLayout = ({ content, globalState }) => {
-  const { Link } = globalState;
-  return h(GlobalContext.Provider, { value: globalState }, [
+const AppLayout = ({ content, req }) => {
+  const { Link } = req;
+  return h(RequestContext.Provider, { value: req }, [
     h('div.sitewrapper', [
       h('header', [
         h('h1', [h(Link, { href: '/' }, 'williamcotton.com')]),
@@ -19,7 +19,5 @@ const AppLayout = ({ content, globalState }) => {
     ])
   ]);
 };
-
-AppLayout.GlobalContext = GlobalContext;
 
 module.exports = AppLayout;

@@ -2,10 +2,10 @@ const router = require('router')();
 const h = require('react-hyperscript');
 const { useContext } = require('react');
 
-const { GlobalContext } = require('../../contexts');
+const { RequestContext } = require('../../contexts');
 
 const Review = ({ title, body, likedByUser, id }) => {
-  const { Link, Form, baseUrl } = useContext(GlobalContext);
+  const { Link, Form, baseUrl } = useContext(RequestContext);
   return h('.review', [
     h('.header', [h(Link, { href: `${baseUrl}/${id}` }, title)]),
     h('.body', [h('p', body)]),
@@ -25,8 +25,7 @@ const Review = ({ title, body, likedByUser, id }) => {
   ]);
 };
 
-router.get('/', async ({ q, user }, { renderApp }) => {
-  console.log(user);
+router.get('/', async ({ q }, { renderApp }) => {
   const { allReviews } = await q(
     'query { allReviews { title, body, likedByUser, id } }'
   );

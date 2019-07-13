@@ -1,7 +1,7 @@
 const h = require('react-hyperscript');
 const { useContext } = require('react');
 
-const { GlobalContext } = require('../contexts');
+const { RequestContext } = require('../contexts');
 
 const RichText = require('../vendor/contentful-rich-text');
 const renderNode = require('../common/render-node');
@@ -9,7 +9,7 @@ const renderNode = require('../common/render-node');
 const Header = ({ title, slug }) => h('h2', { key: slug }, title);
 
 const Body = ({ slug, body }) => {
-  const { Link } = useContext(GlobalContext);
+  const { Link } = useContext(RequestContext);
   return h(RichText, {
     key: slug,
     richText: body,

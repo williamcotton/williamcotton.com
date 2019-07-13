@@ -3,7 +3,7 @@ const format = require('date-fns/format');
 const parse = require('date-fns/parse');
 const { useContext } = require('react');
 
-const { GlobalContext } = require('../contexts');
+const { RequestContext } = require('../contexts');
 
 const RichText = require('../vendor/contentful-rich-text');
 const renderNode = require('../common/render-node');
@@ -14,12 +14,12 @@ const PublishedDate = ({ publishedDate }) =>
   h('p.published-date', format(parse(publishedDate), 'MMMM Do, YYYY'));
 
 const Header = ({ title, slug }) => {
-  const { Link } = useContext(GlobalContext);
+  const { Link } = useContext(RequestContext);
   return h('h2', { key: slug }, h(Link, { href: articleUrl(slug) }, title));
 };
 
 const Body = ({ slug, body }) => {
-  const { Link } = useContext(GlobalContext);
+  const { Link } = useContext(RequestContext);
   return h(RichText, {
     key: slug,
     richText: body,
