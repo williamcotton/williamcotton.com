@@ -43,7 +43,8 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   req.csrf = req.csrfToken();
 
   res.clientRequest = {
-    csrf: req.csrf
+    csrf: req.csrf,
+    user: req.user
   };
 
   req.Link = Link;

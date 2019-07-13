@@ -11,6 +11,8 @@ const contentfulSpace = process.env.CONTENTFUL_SPACE;
 const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 const sendgridApiKey = process.env.SENDGRID_API_KEY;
 const sessionSecret = process.env.SESSION_SECRET;
+const githubClientId = process.env.GITHUB_CLIENT_ID;
+const githubSecret = process.env.GITHUB_SECRET;
 
 const contentfulClient = contentful.createClient({
   space: contentfulSpace,
@@ -31,7 +33,9 @@ const universalServerApp = require('./app')({
   graphqlSchema,
   buildDir,
   nodeEnv,
-  sessionSecret
+  sessionSecret,
+  githubClientId,
+  githubSecret
 });
 
 universalServerApp.listen(port, () => {

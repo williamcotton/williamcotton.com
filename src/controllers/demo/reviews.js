@@ -25,7 +25,8 @@ const Review = ({ title, body, likedByUser, id }) => {
   ]);
 };
 
-router.get('/', async ({ q }, { renderApp }) => {
+router.get('/', async ({ q, user }, { renderApp }) => {
+  console.log(user);
   const { allReviews } = await q(
     'query { allReviews { title, body, likedByUser, id } }'
   );

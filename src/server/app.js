@@ -9,6 +9,7 @@ const csurf = require('csurf');
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
+const userAuthentication = require('./middleware/user-authentication');
 
 const universalApp = require('../universal-app');
 const appLayout = require('../views/layout');
@@ -25,7 +26,9 @@ module.exports = ({
   graphqlSchema: { schema, rootValue, graphiql },
   buildDir,
   nodeEnv,
-  sessionSecret
+  sessionSecret,
+  githubClientId,
+  githubSecret
 }) => {
   const app = express();
   app.disable('x-powered-by');
@@ -40,6 +43,7 @@ module.exports = ({
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(cookieSession(cookieSessionOptions));
+  app.use(userAuthentication({ githubClientId, githubSecret, app }));
   app.use(csurf());
   app.use(reactRendererMiddleware({ defaultTitle, appLayout }));
   app.use(route, graphqlHTTP({ schema, rootValue, graphiql }));
