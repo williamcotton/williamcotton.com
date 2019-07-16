@@ -2,6 +2,7 @@ const express = require('browser-express');
 
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
+// const localExecuteGraphqlClient = require('./middleware/local-execute-graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
 
 const { analyticsRouter } = require('../analytics-events');
@@ -15,7 +16,7 @@ module.exports = ({
   queryCache,
   querySelector,
   defaultTitle,
-  graphqlSchema: { schema, rootValue },
+  // graphqlSchema: { schema, rootValue },
   clientRequest
 }) => {
   const app = express();
@@ -30,14 +31,22 @@ module.exports = ({
   );
   app.use(
     graphqlClientMiddleware({
-      schema,
-      rootValue,
       fetch,
       queryCache,
       route,
       cacheKey
     })
   );
+  // app.use(
+  //   localExecuteGraphqlClient({
+  //     schema,
+  //     rootValue,
+  //     fetch,
+  //     queryCache,
+  //     route,
+  //     cacheKey
+  //   })
+  // );
   app.use(analyticsMiddleware({ analyticsRouter, fetch }));
   const universalBrowserApp = universalApp({ app });
   return universalBrowserApp;

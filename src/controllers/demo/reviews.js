@@ -27,7 +27,9 @@ const Review = ({ title, body, likedByUser, id }) => {
 
 router.get('/', async ({ q }, { renderApp }) => {
   const { allReviews } = await q(
-    'query { allReviews { title, body, likedByUser, id } }'
+    'query { allReviews { title, body, likedByUser, id } }',
+    {},
+    { cache: false }
   );
 
   renderApp(
@@ -40,7 +42,8 @@ router.get('/', async ({ q }, { renderApp }) => {
 router.get('/:id', async ({ q, params: { id } }, { renderApp }) => {
   const { review } = await q(
     'query Review($id: Int!) { review(id: $id) { title, body, likedByUser, id } }',
-    { id: parseInt(id, 10) }
+    { id: parseInt(id, 10) },
+    { cache: false }
   );
   renderApp(h(Review, review));
 });
