@@ -1,5 +1,8 @@
 export PATH := node_modules/.bin:$(PATH)
 
+browserify_production_flags = -g [ envify --NODE_ENV production ] -g uglifyify
+terser_command = terser --compress --mangle
+
 all: build .env test/screenshots
 
 build: build/app.js build/app.css
@@ -18,6 +21,9 @@ build_debug_js: clean_js
 start_dev:
 	nodemon src/server/index.js -w src/ --ext js
 
+analyze:
+	browserify src/browser/index.js --full-paths $(browserify_production_flags) | ${terser_command} | discify --open
+
 clean: clean_css clean_js
 
 clean_css:
@@ -34,7 +40,7 @@ build/app.css:
 
 build/app.js:
 	mkdir -p build
-	browserify src/browser/index.js -o $@
+	browserify src/browser/index.js $(browserify_production_flags) | ${terser_command} > $@
 
 test/screenshots:
 	mkdir -p test/screenshots

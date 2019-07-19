@@ -212,7 +212,8 @@ const universalAppTest = ({ harness: { start } }) => {
 
       expect(await $text(likeButtonSelector)).toBe('Unlike');
       await page.click(likeButtonSelector);
-      await page.waitForResponse(`${baseUrl}/graphql`);
+      await page.waitForResponse(`${baseUrl}/graphql`); // mutation
+      await page.waitForResponse(`${baseUrl}/graphql`); // query
       expect(await $text(likeButtonSelector)).toBe('Like');
 
       await page.click('a[href="/demo/reviews/1"');
@@ -224,16 +225,26 @@ const universalAppTest = ({ harness: { start } }) => {
       });
       expect(await $text(likeButtonSelector)).toBe('Like');
       await page.click(likeButtonSelector);
-      await page.waitForResponse(`${baseUrl}/graphql`);
+
+      const mutationResponse = await page.waitForResponse(`${baseUrl}/graphql`);
+      const postData = JSON.parse(mutationResponse.request().postData());
+      const { query, variables } = postData;
+      expect(query).toBe(
+        'mutation likeReview($input: LikedReview) { likeReview(input: $input) { success } }'
+      );
+      expect(variables.input.liked).toEqual(true);
+      expect(variables.input.reviewId).toEqual(1);
+
+      const queryResponse = await page.waitForResponse(`${baseUrl}/graphql`);
+      const queryData = await queryResponse.json();
+      expect(queryData.data.review.id).toEqual(1);
+      expect(queryData.data.review.likedByUser).toEqual(true);
+
       expect(await $text(likeButtonSelector)).toBe('Unlike');
 
       await page.goBack();
       expect(currentRoute()).toBe('/demo/reviews');
       expect(await $text(likeButtonSelector)).toBe('Unlike');
-
-      await page.click('h1 a');
-      await page.waitForNavigation();
-      expect(currentRoute()).toBe('/');
     }
   });
 };
