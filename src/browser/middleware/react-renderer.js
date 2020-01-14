@@ -3,14 +3,14 @@ const h = require('react-hyperscript');
 const serialize = require('form-serialize');
 const qs = require('qs');
 
-module.exports = ({
-  app,
-  querySelector,
-  defaultTitle,
-  appLayout,
-  clientRequest
-}) => (req, res, next) => {
+module.exports = ({ app, querySelector, appLayout, clientRequest }) => (
+  req,
+  res,
+  next
+) => {
   Object.keys(clientRequest).forEach(key => (req[key] = clientRequest[key])); // eslint-disable-line no-return-assign
+
+  const { defaultTitle } = clientRequest;
 
   const Link = props => {
     const onClick = e => {

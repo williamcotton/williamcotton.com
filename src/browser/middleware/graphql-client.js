@@ -1,11 +1,7 @@
 const localQueryCache = {};
 let initialRequest = true;
 
-module.exports = ({ fetch, queryCache, route, cacheKey }) => (
-  req,
-  res,
-  next
-) => {
+module.exports = ({ fetch, route, cacheKey }) => (req, res, next) => {
   req.q = async (query, variables, options = {}) => {
     const cache = 'cache' in options ? options.cache : true;
     const isMutation = /^mutation/.test(query);
@@ -14,7 +10,7 @@ module.exports = ({ fetch, queryCache, route, cacheKey }) => (
     // if it's the initial page request or we're caching the query after further requests, check the server side query cache and the local query cache
     const cachedResponse =
       initialRequest || (cache && !initialRequest)
-        ? Object.assign(queryCache, localQueryCache)[key]
+        ? Object.assign(req.queryCache, localQueryCache)[key]
         : false;
 
     const fetchResponse = async () => {

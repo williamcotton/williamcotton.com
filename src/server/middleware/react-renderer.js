@@ -8,13 +8,7 @@ const scriptTag =
 const metaViewportTag =
   '<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>';
 
-const htmlTemplate = ({
-  renderedContent,
-  defaultTitle,
-  title,
-  queryCache,
-  clientRequest
-}) => `
+const htmlTemplate = ({ renderedContent, title, clientRequest }) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,9 +17,7 @@ const htmlTemplate = ({
   <title>${title}</title>
   ${styleTag}
   <script type="text/javascript" charset="utf-8">
-    window.queryCache = ${JSON.stringify(queryCache)};
     window.clientRequest = ${JSON.stringify(clientRequest)};
-    window.defaultTitle = '${defaultTitle}';
   </script>
 </head>
 <body>
@@ -41,6 +33,8 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
   req.csrf = req.csrfToken();
 
   res.clientRequest.csrf = req.csrf;
+  res.clientRequest.queryCache = {};
+  res.clientRequest.defaultTitle = defaultTitle;
 
   req.Link = Link;
 
@@ -57,27 +51,23 @@ module.exports = ({ defaultTitle, appLayout }) => (req, res, next) => {
 
   req.Form = Form;
 
-  res.queryCache = {};
-
   res.renderApp = (content, options = {}) => {
     const renderedContent = renderToString(h(appLayout, { content, req }));
     const title = options.title || defaultTitle;
     const statusCode = options.statusCode || 200;
-    const { queryCache, clientRequest } = res;
+    const { clientRequest } = res;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
     res.end(
       htmlTemplate({
         renderedContent,
-        defaultTitle,
         title,
-        queryCache,
         clientRequest
       })
     );
   };
 
   res.cacheQuery = (key, data) => {
-    res.queryCache[key] = data;
+    res.clientRequest.queryCache[key] = data;
   };
 
   res.navigate = (path, query) => {

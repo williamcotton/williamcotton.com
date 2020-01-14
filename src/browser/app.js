@@ -13,9 +13,7 @@ const appLayout = require('../views/layout');
 
 module.exports = ({
   fetch,
-  queryCache,
   querySelector,
-  defaultTitle,
   // graphqlSchema: { schema, rootValue },
   clientRequest
 }) => {
@@ -24,7 +22,6 @@ module.exports = ({
     reactRendererMiddleware({
       app,
       querySelector,
-      defaultTitle,
       appLayout,
       clientRequest
     })
@@ -32,7 +29,6 @@ module.exports = ({
   app.use(
     graphqlClientMiddleware({
       fetch,
-      queryCache,
       route,
       cacheKey
     })
