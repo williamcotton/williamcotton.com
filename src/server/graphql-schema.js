@@ -90,6 +90,7 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
       };
       const entries = await contentfulClient.getEntries({
         content_type: 'blogPost',
+        'fields.hidden': false,
         order: '-fields.publishedDate'
       });
       return entries.items.map(e => trimBody(e.fields));
