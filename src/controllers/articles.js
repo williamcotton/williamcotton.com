@@ -1,19 +1,17 @@
-const router = require('router')();
 const h = require('react-hyperscript');
-const e = require('../vendor/async-error');
+const ApplicationController = require('./application-controller');
 
 const Article = require('../views/article');
 
-router.get(
-  '/:slug',
-  e(async ({ q, params: { slug } }, { renderComponent }) => {
-    const { article } = await q(
+module.exports = class ArticlesController extends ApplicationController {
+  async show(req, res) {
+    const { article } = await req.q(
       'query Article($slug: String!) { article(slug: $slug) { title, slug, publishedDate, body } }',
-      { slug }
+      { slug: req.params.id }
     );
-    const { title } = article;
-    renderComponent(h(Article, { article }), { title });
-  })
-);
 
-module.exports = router;
+    const { title } = article;
+
+    res.renderComponent(h(Article, { article }), { title });
+  }
+};

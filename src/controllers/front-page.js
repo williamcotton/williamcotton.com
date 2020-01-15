@@ -1,17 +1,14 @@
-const router = require('router')();
 const h = require('react-hyperscript');
-const e = require('../vendor/async-error');
+const ApplicationController = require('./application-controller');
 
 const FrontPage = require('../views/front-page');
 
-router.get(
-  '/',
-  e(async ({ q }, { renderComponent }) => {
-    const { allArticles } = await q(
+module.exports = class FrontPageController extends ApplicationController {
+  async index(req, res) {
+    const { allArticles } = await req.q(
       '{ allArticles { title, slug, publishedDate, body } }'
     );
-    renderComponent(h(FrontPage, { allArticles }));
-  })
-);
 
-module.exports = router;
+    res.renderComponent(h(FrontPage, { allArticles }));
+  }
+};
