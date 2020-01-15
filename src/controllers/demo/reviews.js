@@ -25,27 +25,27 @@ const Review = ({ title, body, likedByUser, id }) => {
   ]);
 };
 
-router.get('/', async ({ q }, { renderApp }) => {
+router.get('/', async ({ q }, { renderComponent }) => {
   const { allReviews } = await q(
     'query { allReviews { title, body, likedByUser, id } }',
     {},
     { cache: false }
   );
 
-  renderApp(
+  renderComponent(
     h('ol.reviews', [
       allReviews.map(review => h('li', { key: review.id }, [h(Review, review)]))
     ])
   );
 });
 
-router.get('/:id', async ({ q, params: { id } }, { renderApp }) => {
+router.get('/:id', async ({ q, params: { id } }, { renderComponent }) => {
   const { review } = await q(
     'query Review($id: Int!) { review(id: $id) { title, body, likedByUser, id } }',
     { id: parseInt(id, 10) },
     { cache: false }
   );
-  renderApp(h(Review, review));
+  renderComponent(h(Review, review));
 });
 
 router.post(

@@ -6,9 +6,11 @@ const FrontPage = require('../views/front-page');
 
 router.get(
   '/',
-  e(async ({ q }, { renderApp }) => {
-    const { allArticles } = await q('{ allArticles { title, slug, publishedDate, body } }');
-    renderApp(h(FrontPage, { allArticles }));
+  e(async ({ q }, { renderComponent }) => {
+    const { allArticles } = await q(
+      '{ allArticles { title, slug, publishedDate, body } }'
+    );
+    renderComponent(h(FrontPage, { allArticles }));
   })
 );
 

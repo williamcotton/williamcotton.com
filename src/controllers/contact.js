@@ -4,8 +4,8 @@ const e = require('../vendor/async-error');
 
 const required = true;
 
-router.get('/', ({ Form, baseUrl }, { renderApp }) =>
-  renderApp(
+router.get('/', ({ Form, baseUrl }, { renderComponent }) =>
+  renderComponent(
     h('div.contact', [
       h('h2', 'Contact'),
       h('div.form-container', [
@@ -50,13 +50,13 @@ router.post(
   })
 );
 
-router.get('/message-confirmation', ({ query, Link }, { renderApp }) => {
+router.get('/message-confirmation', ({ query, Link }, { renderComponent }) => {
   const { success } = query;
   const message =
     success === 'true'
       ? "Thanks for the message! I'll get back to you promptly."
       : 'Sorry, looks like something went wrong on our end and your email was not sent.';
-  renderApp(
+  renderComponent(
     h('div', [
       h('p.message', message),
       h('p', [h(Link, { href: '/' }, 'Back To Front Page')])

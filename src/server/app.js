@@ -9,6 +9,7 @@ const csurf = require('csurf');
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
+const expressLinkMiddleware = require('./middleware/express-link');
 const userAuthentication = require('./middleware/user-authentication');
 const clientRequestMiddleware = require('./middleware/client-request');
 
@@ -47,7 +48,8 @@ module.exports = ({
   app.use(cookieSession(cookieSessionOptions));
   app.use(userAuthentication({ githubClientId, githubSecret, app }));
   app.use(csurf());
-  app.use(reactRendererMiddleware({ defaultTitle, appLayout }));
+  app.use(expressLinkMiddleware({ defaultTitle }));
+  app.use(reactRendererMiddleware({ appLayout }));
   app.use(route, graphqlHTTP({ schema, rootValue, graphiql }));
   app.use(graphqlClientMiddleware({ schema, rootValue, cacheKey }));
   app.use(analyticsMiddleware({ analyticsRouter, app }));

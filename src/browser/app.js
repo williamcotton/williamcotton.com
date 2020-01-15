@@ -1,5 +1,6 @@
 const express = require('browser-express');
 
+const expressLinkMiddleware = require('./middleware/express-link');
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 // const localExecuteGraphqlClient = require('./middleware/local-execute-graphql-client');
@@ -12,18 +13,15 @@ const { route, cacheKey } = require('../common/graphql');
 const appLayout = require('../views/layout');
 
 module.exports = ({
-  fetch,
-  querySelector,
+  fetch
   // graphqlSchema: { schema, rootValue },
-  clientRequest
 }) => {
   const app = express();
+  app.use(expressLinkMiddleware());
   app.use(
     reactRendererMiddleware({
       app,
-      querySelector,
-      appLayout,
-      clientRequest
+      appLayout
     })
   );
   app.use(

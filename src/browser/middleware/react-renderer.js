@@ -1,17 +1,8 @@
 const ReactDOM = require('react-dom');
 const h = require('react-hyperscript');
 const serialize = require('form-serialize');
-const qs = require('qs');
 
-module.exports = ({ app, querySelector, appLayout, clientRequest }) => (
-  req,
-  res,
-  next
-) => {
-  Object.keys(clientRequest).forEach(key => (req[key] = clientRequest[key])); // eslint-disable-line no-return-assign
-
-  const { defaultTitle } = clientRequest;
-
+module.exports = ({ app, appLayout }) => (req, res, next) => {
   const Link = props => {
     const onClick = e => {
       e.preventDefault();
@@ -23,7 +14,6 @@ module.exports = ({ app, querySelector, appLayout, clientRequest }) => (
 
   req.Link = Link;
 
-  // TODO: figure out a way to repopulate the form when browsing back, like how browsers work
   const Form = props => {
     const onSubmit = e => {
       e.preventDefault();
@@ -42,26 +32,16 @@ module.exports = ({ app, querySelector, appLayout, clientRequest }) => (
 
   req.Form = Form;
 
-  res.renderApp = (content, options = {}) => {
-    const title = options.title || defaultTitle;
+  res.renderComponent = (content, options = {}) => {
+    const { title } = options;
     const statusCode = options.statusCode || 200;
-    querySelector('title').innerText = title; // eslint-disable-line no-param-reassign
-    ReactDOM.hydrate(
-      h(appLayout, { content, req }),
-      querySelector('#app'),
-      () => {
-        res.status(statusCode);
-        res.send();
-      }
-    );
+    const layout = options.layout || appLayout;
+    const { appContainer } = req.renderDocument({ title });
+    ReactDOM.hydrate(h(layout, { content, req }), appContainer, () => {
+      res.status(statusCode);
+      res.send();
+    });
   };
-
-  res.navigate = (path, query) => {
-    const pathname = query ? `${path}?${qs.stringify(query)}` : path;
-    res.redirect(pathname);
-  };
-
-  res.redirect = res.redirect.bind(res);
 
   next();
 };

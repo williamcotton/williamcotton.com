@@ -6,13 +6,13 @@ const Article = require('../views/article');
 
 router.get(
   '/:slug',
-  e(async ({ q, params: { slug } }, { renderApp }) => {
+  e(async ({ q, params: { slug } }, { renderComponent }) => {
     const { article } = await q(
       'query Article($slug: String!) { article(slug: $slug) { title, slug, publishedDate, body } }',
       { slug }
     );
     const { title } = article;
-    renderApp(h(Article, { article }), { title });
+    renderComponent(h(Article, { article }), { title });
   })
 );
 

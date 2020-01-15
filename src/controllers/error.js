@@ -1,6 +1,6 @@
 const h = require('react-hyperscript');
 
-module.exports = (error, req, { renderApp }, next) => {
+module.exports = (error, req, { renderComponent }, next) => {
   let errorMessage = 'Sorry, something went horribly wrong!';
   console.error(error);
   let statusCode = 500;
@@ -8,6 +8,6 @@ module.exports = (error, req, { renderApp }, next) => {
     errorMessage = "This page isn't here!";
     statusCode = 404;
   }
-  renderApp(h('div.error', errorMessage), { statusCode });
+  renderComponent(h('div.error', errorMessage), { statusCode });
   next();
 };
