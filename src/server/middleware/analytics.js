@@ -1,8 +1,8 @@
 const format = require('date-fns/format');
 
 module.exports = ({ analyticsRouter, app }) => {
-  const analyticsPageview = ({ url, headers, ip, title }) => {};
-  const analyticsEvent = ({ url, headers, ip, title, payload }) => {};
+  const analyticsPageview = () => {}; // ({ url, headers, ip, title }) => {};
+  const analyticsEvent = () => {}; // ({ url, headers, ip, title, payload }) => {};
   const commonLogFormat = (req, res) => {
     const {
       ip,
