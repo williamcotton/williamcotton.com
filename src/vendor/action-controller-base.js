@@ -37,25 +37,27 @@ const ACTIONS = [
   }
 ];
 
-function initControllerAction({ controller, action, method, path }) {
+function initControllerAction({ options, controller, action, method, path }) {
   const actionFunc = controller[action];
-  if (actionFunc) {
+  if (
+    actionFunc &&
+    (options && options.only ? options.only.includes(action) : true) &&
+    (options && options.action ? options.action === action : true)
+  ) {
     const handler = e(actionFunc.bind(controller));
     controller.router[method](path, handler);
   }
 }
 
-function initController({ controller }) {
+function initController({ controller, options }) {
   ACTIONS.forEach(({ action, method, path }) =>
-    initControllerAction({ controller, action, method, path })
+    initControllerAction({ controller, options, action, method, path })
   );
 }
 
-class ActionControllerBase {
-  constructor() {
+module.exports = class ActionControllerBase {
+  constructor(options) {
     this.router = routerFactory();
-    initController({ controller: this });
+    initController({ controller: this, options });
   }
-}
-
-module.exports = class ApplicationController extends ActionControllerBase {};
+};

@@ -21,7 +21,7 @@ analyticsRouter.get('/articles/:slug', (req, res) => {
   res.pageview({ title: `Article - ${title}` });
 });
 
-analyticsRouter.post('/contact/send-email', (req, res) => {
+analyticsRouter.post('/contact', (req, res) => {
   const payload = req.dataQuery.variables.input;
   res.event({ title: 'Send Email', payload });
 });

@@ -1,6 +1,14 @@
 const localQueryCache = {};
 let initialRequest = true;
 
+class HTTPError extends Error {
+  constructor(statusCode, ...params) {
+    super(...params);
+    this.name = 'HTTPError';
+    this.statusCode = statusCode;
+  }
+}
+
 module.exports = ({ fetch, route, cacheKey }) => (req, res, next) => {
   req.q = async (query, variables, options = {}) => {
     const cache = 'cache' in options ? options.cache : true;
@@ -37,7 +45,8 @@ module.exports = ({ fetch, route, cacheKey }) => (req, res, next) => {
     const { data, errors } = response;
 
     if (errors) {
-      throw new Error(errors[0].message);
+      const statusCode = errors[0].message === 'NotFound' ? 404 : 500;
+      throw new HTTPError(statusCode, errors[0].message);
     }
 
     // store the data, errors, query and variables on the request for other interested middleware, eg, event tracking for analytics

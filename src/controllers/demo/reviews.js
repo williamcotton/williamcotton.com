@@ -1,6 +1,6 @@
-const router = require('router')();
 const h = require('react-hyperscript');
 const { useContext } = require('react');
+const ApplicationController = require('../application');
 
 const { RequestContext } = require('../../contexts');
 
@@ -11,12 +11,18 @@ const Review = ({ title, body, likedByUser, id }) => {
     h('.body', [h('p', body)]),
     h('.footer', [
       h('div.form-container', [
-        h(Form, { action: `${baseUrl}/${id}/like-review`, method: 'post' }, [
+        h(Form, { action: `${baseUrl}/liked-reviews`, method: 'post' }, [
           h('input', {
             type: 'hidden',
             name: 'liked',
             id: 'liked',
             value: !likedByUser
+          }),
+          h('input', {
+            type: 'hidden',
+            name: 'reviewId',
+            id: 'reviewId',
+            value: id
           }),
           h('button.submit', likedByUser ? 'Unlike' : 'Like')
         ])
@@ -25,44 +31,29 @@ const Review = ({ title, body, likedByUser, id }) => {
   ]);
 };
 
-router.get('/', async ({ q }, { renderComponent }) => {
-  const { allReviews } = await q(
-    'query { allReviews { title, body, likedByUser, id } }',
-    {},
-    { cache: false }
-  );
-
-  renderComponent(
-    h('ol.reviews', [
-      allReviews.map(review => h('li', { key: review.id }, [h(Review, review)]))
-    ])
-  );
-});
-
-router.get('/:id', async ({ q, params: { id } }, { renderComponent }) => {
-  const { review } = await q(
-    'query Review($id: Int!) { review(id: $id) { title, body, likedByUser, id } }',
-    { id: parseInt(id, 10) },
-    { cache: false }
-  );
-  renderComponent(h(Review, review));
-});
-
-router.post(
-  '/:id/like-review',
-  async ({ q, body, params: { id } }, { redirect }) => {
-    const liked = body.liked === 'true';
-    await q(
-      'mutation likeReview($input: LikedReview) { likeReview(input: $input) { success } }',
-      {
-        input: {
-          liked,
-          reviewId: parseInt(id, 10)
-        }
-      }
+module.exports = class ReviewsController extends ApplicationController {
+  async index(req, res) {
+    const { allReviews } = await req.q(
+      'query { allReviews { title, body, likedByUser, id } }',
+      {},
+      { cache: false }
     );
-    redirect('back');
-  }
-);
 
-module.exports = router;
+    res.renderComponent(
+      h('ol.reviews', [
+        allReviews.map(review =>
+          h('li', { key: review.id }, [h(Review, review)])
+        )
+      ])
+    );
+  }
+
+  async show(req, res) {
+    const { review } = await req.q(
+      'query Review($id: Int!) { review(id: $id) { title, body, likedByUser, id } }',
+      { id: parseInt(req.params.id, 10) },
+      { cache: false }
+    );
+    res.renderComponent(h(Review, review));
+  }
+};

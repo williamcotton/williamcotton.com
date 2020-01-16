@@ -1,5 +1,5 @@
 const h = require('react-hyperscript');
-const ApplicationController = require('./application-controller');
+const ApplicationController = require('./application');
 
 const FrontPage = require('../views/front-page');
 

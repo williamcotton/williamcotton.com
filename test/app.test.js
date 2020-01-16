@@ -208,7 +208,7 @@ const universalAppTest = ({ harness: { start } }) => {
       });
 
       const likeButtonSelector =
-        'form[action="/demo/reviews/1/like-review"] button.submit';
+        'form[action="/demo/reviews/liked-reviews"] button.submit';
 
       expect(await $text(likeButtonSelector)).toBe('Unlike');
       await page.click(likeButtonSelector);
