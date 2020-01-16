@@ -9,14 +9,15 @@ const csurf = require('csurf');
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
+const controllerRouterMiddleware = require('../browser/middleware/controller-router');
 const expressLinkMiddleware = require('./middleware/express-link');
 const userAuthentication = require('./middleware/user-authentication');
 const clientRequestMiddleware = require('./middleware/client-request');
 
-const universalApp = require('../universal-app');
 const appLayout = require('../views/layout');
 const { route, cacheKey } = require('../common/graphql');
 const { analyticsRouter } = require('../analytics-events');
+const routes = require('../routes');
 
 const cookieSessionOptions = {
   name: 'session',
@@ -53,5 +54,7 @@ module.exports = ({
   app.use(route, graphqlHTTP({ schema, rootValue, graphiql }));
   app.use(graphqlClientMiddleware({ schema, rootValue, cacheKey }));
   app.use(analyticsMiddleware({ analyticsRouter, app }));
-  return universalApp({ app });
+  app.use(controllerRouterMiddleware({ app, routes }));
+
+  return app;
 };

@@ -1,5 +1,13 @@
 const { graphql } = require('graphql');
 
+class HTTPError extends Error {
+  constructor(statusCode, ...params) {
+    super(...params);
+    this.name = 'HTTPError';
+    this.statusCode = statusCode;
+  }
+}
+
 module.exports = ({ schema, rootValue, cacheKey }) => (req, res, next) => {
   req.q = async (query, variables) => {
     const isMutation = /^mutation/.test(query);
@@ -8,7 +16,8 @@ module.exports = ({ schema, rootValue, cacheKey }) => (req, res, next) => {
     if (!isMutation) res.cacheQuery(key, response);
     const { data, errors } = response;
     if (errors) {
-      throw new Error(errors[0].message);
+      const statusCode = errors[0].message === 'NotFound' ? 404 : 500;
+      throw new HTTPError(statusCode, errors[0].message);
     }
     req.dataQuery = {
       data,
