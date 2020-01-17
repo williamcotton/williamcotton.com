@@ -8,15 +8,17 @@ const metaViewportTag =
 
 const renderDocument = ({ defaultTitle, expressLink }) => ({
   renderedContent,
+  description,
   title
 }) => `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   ${metaViewportTag}
   <title>${title || defaultTitle}</title>
   ${styleTag}
+  <meta name="description" content="${description || title || defaultTitle}">
 </head>
 <body>
   <div id="app">${renderedContent}</div>
@@ -37,10 +39,11 @@ module.exports = ({ defaultTitle }) => (req, res, next) => {
     defaultTitle
   };
 
-  req.renderDocument = ({ renderedContent, title }) =>
+  req.renderDocument = ({ renderedContent, title, description }) =>
     renderDocument({ defaultTitle, expressLink: res.expressLink })({
       renderedContent,
-      title
+      title,
+      description
     });
 
   res.navigate = (path, query) => {

@@ -14,13 +14,11 @@ module.exports = ({ title, body, likedByUser, id }) => {
           h('input', {
             type: 'hidden',
             name: 'liked',
-            id: 'liked',
             value: !likedByUser
           }),
           h('input', {
             type: 'hidden',
             name: 'reviewId',
-            id: 'reviewId',
             value: id
           }),
           h('button.submit', likedByUser ? 'Unlike' : 'Like')

@@ -22,13 +22,14 @@ module.exports = ({ appLayout }) => (req, res, next) => {
   res.renderComponent = (content, options = {}) => {
     const layout = options.layout || appLayout;
     const renderedContent = renderToString(h(layout, { content, req }));
-    const { title } = options;
+    const { title, description } = options;
     const statusCode = options.statusCode || 200;
     res.writeHead(statusCode, { 'Content-Type': 'text/html' });
     res.end(
       req.renderDocument({
         renderedContent,
-        title
+        title,
+        description
       })
     );
   };
