@@ -85,7 +85,7 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
   const rootValue = {
     allArticles: async () => {
       const trimBody = fields => {
-        const updatedFields = Object.assign({}, fields);
+        const updatedFields = { ...fields };
         updatedFields.body.content = fields.body.content.slice(0, 4);
         return updatedFields;
       };
@@ -146,11 +146,11 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
     },
 
     review: async ({ id }) => {
-      return Object.assign({}, reviews[id]);
+      return { ...reviews[id] };
     },
 
     allReviews: async () => {
-      return Object.values(Object.assign({}, reviews));
+      return Object.values({ ...reviews });
     },
 
     likeReview: async ({ input }) => {

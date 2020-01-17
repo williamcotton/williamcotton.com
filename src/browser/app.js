@@ -44,7 +44,7 @@ module.exports = ({
   //   })
   // );
   app.use(analyticsMiddleware({ analyticsRouter, fetch }));
-  app.use(reactActionViewMiddleware({ app }));
+  app.use(reactActionViewMiddleware());
   app.use(controllerRouterMiddleware({ app, routes }));
   return app;
 };
