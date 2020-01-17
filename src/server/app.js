@@ -55,7 +55,7 @@ module.exports = ({
   app.use(route, graphqlHTTP({ schema, rootValue, graphiql }));
   app.use(graphqlClientMiddleware({ schema, rootValue, cacheKey }));
   app.use(analyticsMiddleware({ analyticsRouter, app }));
-  app.use(reactActionViewMiddleware({ app }));
+  app.use(reactActionViewMiddleware());
   app.use(controllerRouterMiddleware({ app, routes }));
 
   return app;

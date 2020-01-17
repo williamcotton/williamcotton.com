@@ -11,7 +11,7 @@ require('../../views/pages/show');
 require('../../views/demo/reviews/index');
 require('../../views/demo/reviews/show');
 
-module.exports = ({ app }) => {
+module.exports = () => {
   return (req, res, next) => {
     res.renderView = (params, options) => {
       const { basePath, action } = req.controller;
