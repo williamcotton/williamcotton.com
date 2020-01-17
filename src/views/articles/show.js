@@ -3,12 +3,12 @@ const format = require('date-fns/format');
 const parse = require('date-fns/parse');
 const { useContext } = require('react');
 
-const { RequestContext } = require('../contexts');
+const { RequestContext } = require('../../contexts');
 
-const RichText = require('../vendor/contentful-rich-text');
-const renderNode = require('../common/render-node');
+const RichText = require('../../vendor/contentful-rich-text');
+const renderNode = require('../../common/render-node');
 
-const { articleUrl } = require('../common/url');
+const { articleUrl } = require('../../common/url');
 
 const PublishedDate = ({ publishedDate }) =>
   h('p.published-date', format(parse(publishedDate), 'MMMM Do, YYYY'));

@@ -5,12 +5,13 @@ const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 // const localExecuteGraphqlClient = require('./middleware/local-execute-graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
+const reactActionViewMiddleware = require('./middleware/react-action-view');
 const controllerRouterMiddleware = require('./middleware/controller-router');
 
 const { analyticsRouter } = require('../analytics-events');
 
 const { route, cacheKey } = require('../common/graphql');
-const appLayout = require('../views/layout');
+const appLayout = require('../views/layouts/application');
 const routes = require('../routes');
 
 module.exports = ({
@@ -43,6 +44,7 @@ module.exports = ({
   //   })
   // );
   app.use(analyticsMiddleware({ analyticsRouter, fetch }));
+  app.use(reactActionViewMiddleware({ app }));
   app.use(controllerRouterMiddleware({ app, routes }));
   return app;
 };
