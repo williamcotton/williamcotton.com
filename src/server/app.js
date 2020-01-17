@@ -9,12 +9,13 @@ const csurf = require('csurf');
 const reactRendererMiddleware = require('./middleware/react-renderer');
 const graphqlClientMiddleware = require('./middleware/graphql-client');
 const analyticsMiddleware = require('./middleware/analytics');
+const reactActionViewMiddleware = require('../browser/middleware/react-action-view');
 const controllerRouterMiddleware = require('../browser/middleware/controller-router');
 const expressLinkMiddleware = require('./middleware/express-link');
 const userAuthentication = require('./middleware/user-authentication');
 const clientRequestMiddleware = require('./middleware/client-request');
 
-const appLayout = require('../views/layout');
+const appLayout = require('../views/layouts/application');
 const { route, cacheKey } = require('../common/graphql');
 const { analyticsRouter } = require('../analytics-events');
 const routes = require('../routes');
@@ -54,6 +55,7 @@ module.exports = ({
   app.use(route, graphqlHTTP({ schema, rootValue, graphiql }));
   app.use(graphqlClientMiddleware({ schema, rootValue, cacheKey }));
   app.use(analyticsMiddleware({ analyticsRouter, app }));
+  app.use(reactActionViewMiddleware({ app }));
   app.use(controllerRouterMiddleware({ app, routes }));
 
   return app;

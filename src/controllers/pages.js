@@ -1,7 +1,4 @@
-const h = require('react-hyperscript');
 const ApplicationController = require('./application');
-
-const Page = require('../views/page');
 
 module.exports = class PagesController extends ApplicationController {
   async show(req, res) {
@@ -10,6 +7,6 @@ module.exports = class PagesController extends ApplicationController {
       { slug: req.params.id }
     );
     const { title } = page;
-    res.renderComponent(h(Page, { page }), { title });
+    res.renderView({ page }, { title });
   }
 };

@@ -45,6 +45,13 @@ function initControllerAction({ options, controller, action, method, path }) {
     (options && options.action ? options.action === action : true)
   ) {
     const handler = e(actionFunc.bind(controller));
+    controller.router.use((req, res, next) => {
+      req.controller = {
+        basePath: options ? options.basePath : '/',
+        action
+      };
+      next();
+    });
     controller.router[method](path, handler);
   }
 }

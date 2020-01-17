@@ -1,6 +1,6 @@
 const h = require('react-hyperscript');
 
-const { RequestContext } = require('../contexts');
+const { RequestContext } = require('../../contexts');
 
 const AppLayout = ({ content, req }) => {
   const { Link } = req;

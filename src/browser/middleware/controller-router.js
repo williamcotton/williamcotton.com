@@ -16,7 +16,9 @@ module.exports = ({ app, routes }) => {
       root: ({ label }) => {
         const filepath = `../../controllers/${label}`;
         const Controller = require(filepath);
-        app.use(new Controller().router);
+        app.use(
+          new Controller({ basePath: `/${label}`, action: 'index' }).router
+        );
       },
       namespace: ({ label, children, basePath = '' }) => {
         const path = `${basePath}/${label}`;
@@ -28,7 +30,7 @@ module.exports = ({ app, routes }) => {
         const path = `${basePath}/${label}`;
         const filepath = `../../controllers${path}`;
         const Controller = require(filepath);
-        app.use(path, new Controller({ only }).router);
+        app.use(path, new Controller({ only, basePath: path }).router);
         children.forEach(childRoute => {
           map[childRoute.type](Object.assign(childRoute, { basePath: path }));
         });
@@ -37,7 +39,10 @@ module.exports = ({ app, routes }) => {
         const path = `/`;
         const filepath = `../../controllers/${controller}`;
         const Controller = require(filepath);
-        app.use(path, new Controller({ match, action }).router);
+        app.use(
+          path,
+          new Controller({ match, action, basePath: `/${controller}` }).router
+        );
       },
       error: error => errors.push(error)
     };
@@ -61,6 +66,7 @@ module.exports = ({ app, routes }) => {
     });
 
   app.use((error, req, res, next) => {
+    console.log(error);
     const statusCode = error.statusCode || 500;
     res.statusCode = statusCode;
     const { controller, action } = errors.filter(
