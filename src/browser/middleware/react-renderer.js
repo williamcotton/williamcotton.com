@@ -33,10 +33,10 @@ module.exports = ({ app, appLayout }) => (req, res, next) => {
   req.Form = Form;
 
   res.renderComponent = (content, options = {}) => {
-    const { title } = options;
+    const { title, description } = options;
     const statusCode = options.statusCode || 200;
     const layout = options.layout || appLayout;
-    const { appContainer } = req.renderDocument({ title });
+    const { appContainer } = req.renderDocument({ title, description });
     ReactDOM.hydrate(h(layout, { content, req }), appContainer, () => {
       res.status(statusCode);
       res.send();

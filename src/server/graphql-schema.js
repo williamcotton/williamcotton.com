@@ -13,6 +13,7 @@ const schemaString = `
     title: String
     slug: String
     publishedDate: String
+    description: String
     body: JSON
   }
 
