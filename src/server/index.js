@@ -1,5 +1,3 @@
-require('require-ensure');
-
 const contentful = require('contentful');
 const sendgrid = require('sendgrid');
 const path = require('path');
