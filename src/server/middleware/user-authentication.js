@@ -38,7 +38,6 @@ module.exports = ({ githubClientId, githubSecret, app }) => (
   });
   if (_req.session.user) {
     _req.user = _req.session.user; // eslint-disable-line no-param-reassign
-    _res.clientRequest.user = _req.user; // eslint-disable-line no-param-reassign
   }
   next();
 };

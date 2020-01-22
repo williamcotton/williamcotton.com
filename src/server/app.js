@@ -13,7 +13,6 @@ const reactActionViewMiddleware = require('../browser/middleware/react-action-vi
 const controllerRouterMiddleware = require('../browser/middleware/controller-router');
 const expressLinkMiddleware = require('./middleware/express-link');
 const userAuthentication = require('./middleware/user-authentication');
-const clientRequestMiddleware = require('./middleware/client-request');
 
 const appLayout = require('../views/layouts/application');
 const { route, cacheKey } = require('../common/graphql');
@@ -46,7 +45,6 @@ module.exports = ({
   app.use(express.static(buildDir));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(clientRequestMiddleware());
   app.use(cookieSession(cookieSessionOptions));
   app.use(userAuthentication({ githubClientId, githubSecret, app }));
   app.use(csurf());

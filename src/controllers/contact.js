@@ -1,4 +1,3 @@
-const h = require('react-hyperscript');
 const ApplicationController = require('./application');
 
 module.exports = class ContactController extends ApplicationController {

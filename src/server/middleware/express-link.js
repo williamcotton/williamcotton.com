@@ -6,11 +6,14 @@ const scriptTag =
 const metaViewportTag =
   '<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>';
 
-const renderDocument = ({ defaultTitle, expressLink }) => ({
+function renderDocument({
+  defaultTitle,
+  expressLink,
   renderedContent,
   description,
   title
-}) => `
+}) {
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +32,7 @@ const renderDocument = ({ defaultTitle, expressLink }) => ({
 </body>
 </html>
 `;
+}
 
 module.exports = ({ defaultTitle }) => (req, res, next) => {
   req.csrf = req.csrfToken();
@@ -36,11 +40,14 @@ module.exports = ({ defaultTitle }) => (req, res, next) => {
   res.expressLink = {
     queryCache: {},
     csrf: req.csrf,
+    user: req.user,
     defaultTitle
   };
 
   req.renderDocument = ({ renderedContent, title, description }) =>
-    renderDocument({ defaultTitle, expressLink: res.expressLink })({
+    renderDocument({
+      defaultTitle,
+      expressLink: res.expressLink,
       renderedContent,
       title,
       description
