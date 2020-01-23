@@ -10,43 +10,75 @@ require('../../controllers/demo/reviews/liked-reviews');
 
 module.exports = ({ app, routes }) => {
   const errors = [];
+  const paths = {};
+
+  app.use((req, res, next) => {
+    req.p = paths;
+    next();
+  });
+
+  function loadController({
+    filePath,
+    routePath,
+    action,
+    only,
+    label,
+    options
+  }) {
+    const Controller = require(`../../controllers${filePath}`);
+    const controllerInstance = new Controller({
+      only,
+      filePath,
+      action,
+      routePath,
+      label,
+      options
+    });
+    paths[label] = controllerInstance.paths;
+    app.use(routePath, controllerInstance.router);
+  }
+
+  let map;
+
+  function nestedChildren({ children, basePath }) {
+    if (children) {
+      children.forEach(childRoute => {
+        map[childRoute.type](Object.assign(childRoute, { basePath }));
+      });
+    }
+  }
+
+  map = {
+    root: options => {
+      const { label } = options;
+      const filePath = `/${label}`;
+      const routePath = '';
+      const action = 'index';
+      loadController({ filePath, routePath, action, label, options });
+    },
+    namespace: options => {
+      const { label, children, basePath = '' } = options;
+      const filePath = `${basePath}/${label}`;
+      nestedChildren({ children, basePath: filePath });
+    },
+    resources: options => {
+      const { label, only, children, basePath = '' } = options;
+      const filePath = `${basePath}/${label}`;
+      const routePath = filePath;
+      loadController({ filePath, routePath, only, label, options, children });
+      nestedChildren({ children, basePath: filePath });
+    },
+    match: options => {
+      const { label: match, controller, action } = options;
+      const filePath = `/${controller}`;
+      const routePath = '';
+      const label = controller;
+      loadController({ filePath, routePath, match, action, label, options });
+    },
+    error: error => errors.push(error)
+  };
 
   routes.forEach(route => {
-    const map = {
-      root: ({ label }) => {
-        const filepath = `../../controllers/${label}`;
-        const Controller = require(filepath);
-        app.use(
-          new Controller({ basePath: `/${label}`, action: 'index' }).router
-        );
-      },
-      namespace: ({ label, children, basePath = '' }) => {
-        const path = `${basePath}/${label}`;
-        children.forEach(childRoute => {
-          map[childRoute.type](Object.assign(childRoute, { basePath: path }));
-        });
-      },
-      resources: ({ label, only, children, basePath = '' }) => {
-        const path = `${basePath}/${label}`;
-        const filepath = `../../controllers${path}`;
-        const Controller = require(filepath);
-        app.use(path, new Controller({ only, basePath: path }).router);
-        children.forEach(childRoute => {
-          map[childRoute.type](Object.assign(childRoute, { basePath: path }));
-        });
-      },
-      match: ({ label: match, controller, action }) => {
-        const path = `/`;
-        const filepath = `../../controllers/${controller}`;
-        const Controller = require(filepath);
-        app.use(
-          path,
-          new Controller({ match, action, basePath: `/${controller}` }).router
-        );
-      },
-      error: error => errors.push(error)
-    };
-
     if (map[route.type]) {
       map[route.type](route);
     }

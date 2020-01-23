@@ -1,9 +1,7 @@
 const h = require('react-hyperscript');
 const { INLINES } = require('@contentful/rich-text-types');
 
-const { contentTypes } = require('./url');
-
-const renderNode = ({ Link }) => ({
+const renderNode = ({ Link, p }) => ({
   [INLINES.ENTRY_HYPERLINK]: (node, next, index) => {
     const {
       data: {
@@ -18,8 +16,13 @@ const renderNode = ({ Link }) => ({
       },
       content
     } = node;
-    const urlBuilder = contentTypes[contentType];
-    const url = urlBuilder(slug);
+    const pathBuilder = Object.values(p)
+      .map(v => Object.values(v))
+      .find(o => {
+        const { action } = o[0];
+        return action.options && action.options.contentType === contentType;
+      })[0];
+    const url = pathBuilder({ id: slug });
     const { value: text } = content[0];
     return h(Link, { href: url, title, key: `a-${index}` }, text);
   }

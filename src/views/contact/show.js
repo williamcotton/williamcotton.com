@@ -4,7 +4,10 @@ const { useContext } = require('react');
 const { RequestContext } = require('../../contexts');
 
 module.exports = ({ success }) => {
-  const { Link } = useContext(RequestContext);
+  const {
+    Link,
+    p: { 'front-page': frontPage }
+  } = useContext(RequestContext);
   const message =
     success === 'true'
       ? "Thanks for the message! I'll get back to you promptly."
@@ -12,6 +15,6 @@ module.exports = ({ success }) => {
 
   return h('div', [
     h('p.message', message),
-    h('p', [h(Link, { href: '/' }, 'Back To Front Page')])
+    h('p', [h(Link, { href: frontPage.index() }, 'Back To Front Page')])
   ]);
 };

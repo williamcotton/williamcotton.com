@@ -6,11 +6,14 @@ const { RequestContext } = require('../../contexts');
 const required = true;
 
 module.exports = () => {
-  const { Form, baseUrl } = useContext(RequestContext);
+  const {
+    Form,
+    p: { contact }
+  } = useContext(RequestContext);
   return h('div.contact', [
     h('h2', 'Contact'),
     h('div.form-container', [
-      h(Form, { action: `${baseUrl}`, method: 'post' }, [
+      h(Form, { action: contact.create(), method: 'post' }, [
         h('label', { htmlFor: 'name' }, 'Name'),
         h('input', { type: 'text', name: 'name', id: 'name', required }),
         h('label', { htmlFor: 'replyToAddress' }, 'Email Address'),

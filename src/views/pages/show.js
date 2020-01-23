@@ -9,11 +9,11 @@ const renderNode = require('../../common/render-node');
 const Header = ({ title, slug }) => h('h2', { key: slug }, title);
 
 const Body = ({ slug, body }) => {
-  const { Link } = useContext(RequestContext);
+  const { Link, p } = useContext(RequestContext);
   return h(RichText, {
     key: slug,
     richText: body,
-    options: { renderNode: renderNode({ Link }) }
+    options: { renderNode: renderNode({ Link, p }) }
   });
 };
 

@@ -7,7 +7,13 @@ describe('routes', () => {
   test('draws routes', () => {
     expect(routes).toEqual([
       { children: [], label: 'front-page', type: 'root' },
-      { children: [], label: 'articles', only: ['show'], type: 'resources' },
+      {
+        children: [],
+        label: 'articles',
+        only: ['show'],
+        type: 'resources',
+        contentType: 'blogPost'
+      },
       {
         children: [],
         label: 'contact',
@@ -38,7 +44,8 @@ describe('routes', () => {
         children: [],
         controller: 'pages',
         label: '*',
-        type: 'match'
+        type: 'match',
+        contentType: 'page'
       },
       {
         action: 'notFound',

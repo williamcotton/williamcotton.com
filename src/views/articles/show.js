@@ -8,22 +8,27 @@ const { RequestContext } = require('../../contexts');
 const RichText = require('../../vendor/contentful-rich-text');
 const renderNode = require('../../common/render-node');
 
-const { articleUrl } = require('../../common/url');
-
 const PublishedDate = ({ publishedDate }) =>
   h('p.published-date', format(parse(publishedDate), 'MMMM Do, YYYY'));
 
 const Header = ({ title, slug }) => {
-  const { Link } = useContext(RequestContext);
-  return h('h2', { key: slug }, h(Link, { href: articleUrl(slug) }, title));
+  const {
+    Link,
+    p: { articles }
+  } = useContext(RequestContext);
+  return h(
+    'h2',
+    { key: slug },
+    h(Link, { href: articles.show({ id: slug }) }, title)
+  );
 };
 
 const Body = ({ slug, body }) => {
-  const { Link } = useContext(RequestContext);
+  const { Link, p } = useContext(RequestContext);
   return h(RichText, {
     key: slug,
     richText: body,
-    options: { renderNode: renderNode({ Link }) }
+    options: { renderNode: renderNode({ Link, p }) }
   });
 };
 

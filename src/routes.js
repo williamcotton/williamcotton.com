@@ -3,7 +3,7 @@ const drawRoutes = require('./vendor/draw-routes');
 module.exports = drawRoutes(({ root, resources, namespace, match, error }) => {
   root('front-page');
 
-  resources('articles', { only: ['show'] });
+  resources('articles', { only: ['show'], contentType: 'blogPost' });
 
   resources('contact', { only: ['index', 'create', 'show'] });
 
@@ -13,7 +13,7 @@ module.exports = drawRoutes(({ root, resources, namespace, match, error }) => {
     )
   );
 
-  match('*', { controller: 'pages', action: 'show' });
+  match('*', { controller: 'pages', action: 'show', contentType: 'page' });
 
   error(404, { controller: 'errors', action: 'notFound' });
   error(500, { controller: 'errors', action: 'serverError' });

@@ -1,4 +1,5 @@
 const routerFactory = require('router');
+const { compile } = require('path-to-regexp');
 
 function e(fn) {
   return (req, res, next) => {
@@ -45,14 +46,23 @@ function initControllerAction({ options, controller, action, method, path }) {
     (options && options.action ? options.action === action : true)
   ) {
     const handler = e(actionFunc.bind(controller));
-    controller.router.use((req, res, next) => {
+    const { routePath, filePath } = options;
+    const basePathBuilder = compile(routePath + path);
+    const pathBuilder = opts =>
+      basePathBuilder(opts).replace(/^(.+?)\/*?$/, '$1'); // https://stackoverflow.com/a/45737717
+    pathBuilder.action = options;
+    controller.paths[action] = pathBuilder; // eslint-disable-line no-param-reassign
+    controller.router[method](path, (req, res, next) => {
       req.controller = {
-        basePath: options ? options.basePath : '/',
-        action
+        routePath,
+        filePath,
+        action,
+        method,
+        path,
+        options
       };
-      next();
+      handler(req, res, next);
     });
-    controller.router[method](path, handler);
   }
 }
 
@@ -65,6 +75,8 @@ function initController({ controller, options }) {
 module.exports = class ActionControllerBase {
   constructor(options) {
     this.router = routerFactory();
+    this.options = options;
+    this.paths = {};
     initController({ controller: this, options });
   }
 };

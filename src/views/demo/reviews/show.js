@@ -4,13 +4,17 @@ const { useContext } = require('react');
 const { RequestContext } = require('../../../contexts');
 
 module.exports = ({ title, body, likedByUser, id }) => {
-  const { Link, Form, baseUrl } = useContext(RequestContext);
+  const {
+    Link,
+    Form,
+    p: { reviews, 'liked-reviews': likedReviews }
+  } = useContext(RequestContext);
   return h('.review', [
-    h('.header', [h(Link, { href: `${baseUrl}/${id}` }, title)]),
+    h('.header', [h(Link, { href: reviews.show({ id }) }, title)]),
     h('.body', [h('p', body)]),
     h('.footer', [
       h('div.form-container', [
-        h(Form, { action: `${baseUrl}/liked-reviews`, method: 'post' }, [
+        h(Form, { action: likedReviews.create(), method: 'post' }, [
           h('input', {
             type: 'hidden',
             name: 'liked',

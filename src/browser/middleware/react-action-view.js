@@ -14,8 +14,8 @@ require('../../views/demo/reviews/show');
 module.exports = () => {
   return (req, res, next) => {
     res.renderView = (params, options) => {
-      const { basePath, action } = req.controller;
-      const ViewComponent = require(`../../views${basePath}/${action}`);
+      const { filePath, action } = req.controller;
+      const ViewComponent = require(`../../views${filePath}/${action}`);
       const component = h(ViewComponent, params);
       res.renderComponent(component, options);
     };
