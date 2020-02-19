@@ -7,7 +7,7 @@ module.exports = ({ appLayout }) => (req, res, next) => {
   req.Link = Link;
 
   const Form = props => {
-    const mergedProps = Object.assign({}, props);
+    const mergedProps = { ...props };
     const { children } = mergedProps;
     delete mergedProps.children;
     const formElements = [].concat(children);

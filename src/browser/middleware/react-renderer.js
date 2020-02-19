@@ -8,7 +8,7 @@ module.exports = ({ app, appLayout }) => (req, res, next) => {
       e.preventDefault();
       app.navigate(e.target.href);
     };
-    const mergedProps = Object.assign({ onClick }, props);
+    const mergedProps = { onClick, ...props };
     return h('a', mergedProps);
   };
 
@@ -20,7 +20,7 @@ module.exports = ({ app, appLayout }) => (req, res, next) => {
       const body = serialize(e.target, { hash: true });
       app.submit(e.target.action, e.target.method, body);
     };
-    const mergedProps = Object.assign({ onSubmit }, props);
+    const mergedProps = { onSubmit, ...props };
     const { children } = mergedProps;
     delete mergedProps.children;
     const formElements = [].concat(children);

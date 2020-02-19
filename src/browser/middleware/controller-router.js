@@ -17,25 +17,11 @@ module.exports = ({ app, routes }) => {
     next();
   });
 
-  function loadController({
-    filePath,
-    routePath,
-    action,
-    only,
-    label,
-    options
-  }) {
-    const Controller = require(`../../controllers${filePath}`);
-    const controllerInstance = new Controller({
-      only,
-      filePath,
-      action,
-      routePath,
-      label,
-      options
-    });
-    paths[label] = controllerInstance.paths;
-    app.use(routePath, controllerInstance.router);
+  function loadController(opts) {
+    const Controller = require(`../../controllers${opts.filePath}`);
+    const controllerInstance = new Controller(opts);
+    paths[opts.label] = controllerInstance.paths;
+    app.use(opts.routePath, controllerInstance.router);
   }
 
   let map;

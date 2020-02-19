@@ -14,14 +14,12 @@ module.exports = function drawRoutes(routesDefinitionFunc) {
   function branch(type, ...args) {
     const [label, options] = args;
 
-    const route = Object.assign(
-      {
-        type,
-        label,
-        children: []
-      },
-      typeof options === 'object' ? options : {}
-    );
+    const route = {
+      type,
+      label,
+      children: [],
+      ...(typeof options === 'object' ? options : {})
+    };
 
     branchDepth += 1;
     const child = nested(...args);
