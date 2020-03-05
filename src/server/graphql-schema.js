@@ -124,10 +124,17 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
     sendEmail: async ({ input }) => {
       const { name, replyToAddress, subject, body } = input;
 
+      const modifiedSubject = `From williamcotton.com: ${subject}`;
+
       const fromEmail = new helper.Email(replyToAddress, name);
       const toEmail = new helper.Email('williamcotton@gmail.com');
       const content = new helper.Content('text/plain', body);
-      const mail = new helper.Mail(fromEmail, subject, toEmail, content);
+      const mail = new helper.Mail(
+        fromEmail,
+        modifiedSubject,
+        toEmail,
+        content
+      );
 
       const request = sendgridClient.emptyRequest({
         method: 'POST',

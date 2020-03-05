@@ -154,6 +154,7 @@ const universalAppTest = ({ harness: { start } }) => {
       const name = 'Tester';
       const replyToAddress = 'test@test.com';
       const subject = 'Test Subject';
+      const modifiedSubject = `From williamcotton.com: ${subject}`;
       const body = 'Test Body';
 
       await page.screenshot({
@@ -183,7 +184,7 @@ const universalAppTest = ({ harness: { start } }) => {
           content: [{ type: 'text/plain', value: body }],
           from: { email: replyToAddress, name },
           personalizations: [{ to: [{ email: 'williamcotton@gmail.com' }] }],
-          subject
+          subject: modifiedSubject
         },
         headers: {},
         host: '',
