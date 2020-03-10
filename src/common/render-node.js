@@ -1,7 +1,14 @@
 const h = require('react-hyperscript');
-const { INLINES } = require('@contentful/rich-text-types');
+const { INLINES, BLOCKS } = require('@contentful/rich-text-types');
 
 const renderNode = ({ Link, p }) => ({
+  [BLOCKS.EMBEDDED_ASSET]: node => {
+    const {
+      title,
+      file: { url }
+    } = node.data.target.fields;
+    return h('img', { src: url, alt: title });
+  },
   [INLINES.ENTRY_HYPERLINK]: (node, next, index) => {
     const {
       data: {

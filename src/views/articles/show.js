@@ -2,11 +2,15 @@ const h = require('react-hyperscript');
 const format = require('date-fns/format');
 const parse = require('date-fns/parse');
 const { useContext } = require('react');
+const {
+  documentToReactComponents
+} = require('@contentful/rich-text-react-renderer');
 
 const { RequestContext } = require('../../contexts');
-
-const RichText = require('../../vendor/contentful-rich-text');
 const renderNode = require('../../common/render-node');
+
+const RichText = ({ richText, options }) =>
+  documentToReactComponents(richText, options);
 
 const PublishedDate = ({ publishedDate }) =>
   h('p.published-date', format(parse(publishedDate), 'MMMM Do, YYYY'));

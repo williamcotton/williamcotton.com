@@ -1,10 +1,14 @@
 const h = require('react-hyperscript');
 const { useContext } = require('react');
+const {
+  documentToReactComponents
+} = require('@contentful/rich-text-react-renderer');
 
 const { RequestContext } = require('../../contexts');
-
-const RichText = require('../../vendor/contentful-rich-text');
 const renderNode = require('../../common/render-node');
+
+const RichText = ({ richText, options }) =>
+  documentToReactComponents(richText, options);
 
 const Header = ({ title, slug }) => h('h2', { key: slug }, title);
 
