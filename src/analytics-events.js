@@ -23,6 +23,7 @@ analyticsRouter.get('/articles/:slug', (req, res) => {
 
 analyticsRouter.post('/contact', (req, res) => {
   const payload = req.dataQuery.variables.input;
+  console.log({ title: 'Send Email' }, payload);
   res.event({ title: 'Send Email', payload });
 });
 
