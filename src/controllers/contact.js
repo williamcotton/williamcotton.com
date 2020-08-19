@@ -6,7 +6,12 @@ module.exports = class ContactController extends ApplicationController {
   }
 
   async create(req, res) {
-    const { name, replyToAddress, subject, body } = req.body;
+    const { name, replyToAddress, subject, body, answer, guess } = req.body;
+    if (answer !== guess) {
+      return res.navigate(`${req.baseUrl}/message-confirmation`, {
+        success: false
+      });
+    }
     const response = await req.q(
       'mutation sendEmail($input: EmailMessage) { sendEmail(input: $input) { success } }',
       { input: { name, replyToAddress, subject, body } }
@@ -14,7 +19,7 @@ module.exports = class ContactController extends ApplicationController {
     const {
       sendEmail: { success }
     } = response;
-    res.navigate(`${req.baseUrl}/message-confirmation`, { success });
+    return res.navigate(`${req.baseUrl}/message-confirmation`, { success });
   }
 
   async show(req, res) {

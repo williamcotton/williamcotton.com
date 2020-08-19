@@ -10,10 +10,18 @@ module.exports = () => {
     Form,
     p: { contact }
   } = useContext(RequestContext);
+  const var1 = parseInt(Math.random() * 10 + 1, 10);
+  const var2 = parseInt(Math.random() * 10 + 1, 10);
   return h('div.contact', [
     h('h2', 'Contact'),
     h('div.form-container', [
       h(Form, { action: contact.create(), method: 'post' }, [
+        h('input', {
+          type: 'hidden',
+          name: 'answer',
+          id: 'answer',
+          value: var1 + var2
+        }),
         h('label', { htmlFor: 'name' }, 'Name'),
         h('input', { type: 'text', name: 'name', id: 'name', required }),
         h('label', { htmlFor: 'replyToAddress' }, 'Email Address'),
@@ -32,6 +40,13 @@ module.exports = () => {
         }),
         h('label', { htmlFor: 'body' }, 'Body'),
         h('textarea', { name: 'body', id: 'body', required }),
+        h('label', { htmlFor: 'guess' }, `What is ${var1} + ${var2}?`),
+        h('input', {
+          type: 'text',
+          name: 'guess',
+          id: 'guess',
+          required
+        }),
         h('button.submit', 'Submit')
       ])
     ])
