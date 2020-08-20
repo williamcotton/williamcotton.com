@@ -1,7 +1,7 @@
 const express = require('express');
 const compression = require('compression');
 const bodyParser = require('body-parser');
-const graphqlHTTP = require('express-graphql');
+const { graphqlHTTP } = require('express-graphql');
 const enforce = require('express-sslify');
 const cookieSession = require('cookie-session');
 const csurf = require('csurf');
