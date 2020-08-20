@@ -7,6 +7,12 @@ module.exports = class ContactController extends ApplicationController {
 
   async create(req, res) {
     const { name, replyToAddress, subject, body, answer, guess } = req.body;
+
+    console.log({
+      answer,
+      guess
+    });
+
     if (answer !== guess) {
       return res.navigate(`${req.baseUrl}/message-confirmation`, {
         success: false
