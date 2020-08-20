@@ -4,7 +4,7 @@
   "description": "williamcotton.com",
   "main": "src/server/index.js",
   "engines": {
-    "node": "13.9.0"
+    "node": "14.8.0"
   },
   "scripts": {
     "test": "jest",
