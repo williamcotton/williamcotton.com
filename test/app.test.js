@@ -142,7 +142,7 @@ const universalAppTest = ({ harness: { start } }) => {
   test('/contact', async () => {
     const route = '/contact';
 
-    const { $text, page, currentRoute } = await get$(route);
+    const { $text, page, currentRoute, $value } = await get$(route);
 
     expect(await $text('h2')).toBe('Contact');
 
@@ -156,6 +156,7 @@ const universalAppTest = ({ harness: { start } }) => {
       const subject = 'Test Subject';
       const modifiedSubject = `From williamcotton.com: ${subject}`;
       const body = 'Test Body';
+      const guess = await $value('input[name=answer]');
 
       await page.screenshot({
         path: `${screenshotsPath}/contact.png`,
@@ -170,6 +171,8 @@ const universalAppTest = ({ harness: { start } }) => {
       await page.keyboard.type(subject);
       await page.focus('#body');
       await page.keyboard.type(body);
+      await page.focus('#guess');
+      await page.keyboard.type(guess);
       await page.$eval('button.submit', button => button.click());
 
       await page.waitForNavigation();

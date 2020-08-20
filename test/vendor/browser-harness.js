@@ -36,6 +36,16 @@ module.exports = app => {
           selector
         );
 
+      const $value = async selector =>
+        page.evaluate(
+          /* istanbul ignore next */
+          _selector => {
+            const element = document.querySelector(_selector);
+            return element ? element.value : false;
+          },
+          selector
+        );
+
       const currentRoute = () => page.url().split(baseUrl)[1];
 
       const findByText = async text =>
@@ -47,7 +57,15 @@ module.exports = app => {
         return attr;
       };
 
-      return { $text, currentRoute, page, findByText, getAttr, baseUrl };
+      return {
+        $text,
+        $value,
+        currentRoute,
+        page,
+        findByText,
+        getAttr,
+        baseUrl
+      };
     };
 
     return { close, get$ };
