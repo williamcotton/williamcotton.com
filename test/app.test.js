@@ -142,7 +142,7 @@ const universalAppTest = ({ harness: { start } }) => {
   test('/contact', async () => {
     const route = '/contact';
 
-    const { $text, page, currentRoute, $value } = await get$(route);
+    const { $text, page, currentRoute } = await get$(route);
 
     expect(await $text('h2')).toBe('Contact');
 
@@ -156,23 +156,20 @@ const universalAppTest = ({ harness: { start } }) => {
       const subject = 'Test Subject';
       const modifiedSubject = `From williamcotton.com: ${subject}`;
       const body = 'Test Body';
-      const guess = await $value('input[name=answer]');
+      const question = await $text('label[for=guess]');
+      const match = question.match(/.*([0-9] \+ [0-9]).*/);
+      const guess = eval(match[1], 10).toString(); // eslint-disable-line no-eval
 
       await page.screenshot({
         path: `${screenshotsPath}/contact.png`,
         fullPage: true
       });
 
-      await page.focus('#name');
-      await page.keyboard.type(name);
-      await page.focus('#replyToAddress');
-      await page.keyboard.type(replyToAddress);
-      await page.focus('#subject');
-      await page.keyboard.type(subject);
-      await page.focus('#body');
-      await page.keyboard.type(body);
-      await page.focus('#guess');
-      await page.keyboard.type(guess);
+      await page.type('#name', name);
+      await page.type('#replyToAddress', replyToAddress);
+      await page.type('#subject', subject);
+      await page.type('#body', body);
+      await page.type('#guess', guess);
       await page.$eval('button.submit', button => button.click());
 
       await page.waitForNavigation();

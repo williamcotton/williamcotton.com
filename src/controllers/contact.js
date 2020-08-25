@@ -13,11 +13,12 @@ module.exports = class ContactController extends ApplicationController {
       guess
     });
 
-    if (answer !== guess) {
+    if (parseInt(answer, 10) !== parseInt(guess - 2, 10)) {
       return res.navigate(`${req.baseUrl}/message-confirmation`, {
         success: false
       });
     }
+
     const response = await req.q(
       'mutation sendEmail($input: EmailMessage) { sendEmail(input: $input) { success } }',
       { input: { name, replyToAddress, subject, body } }

@@ -10,8 +10,8 @@ module.exports = () => {
     Form,
     p: { contact }
   } = useContext(RequestContext);
-  const var1 = parseInt(Math.random() * 10 + 1, 10);
-  const var2 = parseInt(Math.random() * 10 + 1, 10);
+  const var1 = parseInt(Math.random() * 9 + 1, 10);
+  const var2 = parseInt(Math.random() * 9 + 1, 10);
   return h('div.contact', [
     h('h2', 'Contact'),
     h('div.form-container', [
@@ -20,7 +20,7 @@ module.exports = () => {
           type: 'hidden',
           name: 'answer',
           id: 'answer',
-          value: var1 + var2
+          value: var1 + var2 - 2
         }),
         h('label', { htmlFor: 'name' }, 'Name'),
         h('input', { type: 'text', name: 'name', id: 'name', required }),
