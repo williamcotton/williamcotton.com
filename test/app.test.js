@@ -23,14 +23,14 @@ const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
 const contentfulClient = contentful.createClient({
   space: contentfulSpace,
-  accessToken: contentfulAccessToken
+  accessToken: contentfulAccessToken,
 });
 
 const sendgridClient = sendgrid('BOGUS');
 
 const graphqlSchema = require('../src/server/graphql-schema')({
   contentfulClient,
-  sendgridClient
+  sendgridClient,
 });
 
 const buildDir = path.join(__dirname, '/../build');
@@ -41,7 +41,7 @@ const app = serverApp({
   graphqlSchema,
   buildDir,
   sessionSecret: 'test',
-  nodeEnv: 'test'
+  nodeEnv: 'test',
 });
 
 const universalAppTest = ({ harness: { start } }) => {
@@ -66,7 +66,7 @@ const universalAppTest = ({ harness: { start } }) => {
     if (page) {
       await page.screenshot({
         path: `${screenshotsPath}/front-page.png`,
-        fullPage: true
+        fullPage: true,
       });
 
       const [readMoreLink] = await page.$x(
@@ -92,7 +92,7 @@ const universalAppTest = ({ harness: { start } }) => {
     if (page) {
       await page.screenshot({
         path: `${screenshotsPath}/article.png`,
-        fullPage: true
+        fullPage: true,
       });
 
       await page.click('h1 a');
@@ -111,7 +111,7 @@ const universalAppTest = ({ harness: { start } }) => {
     if (page) {
       await page.screenshot({
         path: `${screenshotsPath}/article-error.png`,
-        fullPage: true
+        fullPage: true,
       });
 
       await page.click('h1 a');
@@ -130,7 +130,7 @@ const universalAppTest = ({ harness: { start } }) => {
     if (page) {
       await page.screenshot({
         path: `${screenshotsPath}/about.png`,
-        fullPage: true
+        fullPage: true,
       });
 
       await page.click('h1 a');
@@ -162,7 +162,7 @@ const universalAppTest = ({ harness: { start } }) => {
 
       await page.screenshot({
         path: `${screenshotsPath}/contact.png`,
-        fullPage: true
+        fullPage: true,
       });
 
       await page.type('#name', name);
@@ -170,12 +170,12 @@ const universalAppTest = ({ harness: { start } }) => {
       await page.type('#subject', subject);
       await page.type('#body', body);
       await page.type('#guess', guess);
-      await page.$eval('button.submit', button => button.click());
+      await page.$eval('button.submit', (button) => button.click());
 
       await page.waitForNavigation();
       await page.screenshot({
         path: `${screenshotsPath}/contact-message-confirmation.png`,
-        fullPage: true
+        fullPage: true,
       });
 
       expect(currentRoute()).toBe('/contact/message-confirmation?success=true');
@@ -184,7 +184,7 @@ const universalAppTest = ({ harness: { start } }) => {
           content: [{ type: 'text/plain', value: body }],
           from: { email: replyToAddress, name },
           personalizations: [{ to: [{ email: 'williamcotton@gmail.com' }] }],
-          subject: modifiedSubject
+          subject: modifiedSubject,
         },
         headers: {},
         host: '',
@@ -192,7 +192,7 @@ const universalAppTest = ({ harness: { start } }) => {
         path: '/v3/mail/send',
         port: '',
         queryParams: {},
-        test: false
+        test: false,
       });
     }
   });
@@ -205,7 +205,7 @@ const universalAppTest = ({ harness: { start } }) => {
     if (page) {
       await page.screenshot({
         path: `${screenshotsPath}/demo-reviews.png`,
-        fullPage: true
+        fullPage: true,
       });
 
       const likeButtonSelector =
@@ -222,7 +222,7 @@ const universalAppTest = ({ harness: { start } }) => {
       expect(currentRoute()).toBe('/demo/reviews/1');
       await page.screenshot({
         path: `${screenshotsPath}/demo-reviews-1.png`,
-        fullPage: true
+        fullPage: true,
       });
       expect(await $text(likeButtonSelector)).toBe('Like');
       await page.click(likeButtonSelector);

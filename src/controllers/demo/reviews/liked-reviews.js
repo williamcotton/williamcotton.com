@@ -9,8 +9,8 @@ module.exports = class LikedReviewsController extends ApplicationController {
       {
         input: {
           liked,
-          reviewId
-        }
+          reviewId,
+        },
       }
     );
     res.redirect('back');

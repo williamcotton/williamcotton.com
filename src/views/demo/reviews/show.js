@@ -7,7 +7,7 @@ module.exports = ({ title, body, likedByUser, id }) => {
   const {
     Link,
     Form,
-    p: { reviews, 'liked-reviews': likedReviews }
+    p: { reviews, 'liked-reviews': likedReviews },
   } = useContext(RequestContext);
   return h('.review', [
     h('.header', [h(Link, { href: reviews.show({ id }) }, title)]),
@@ -18,16 +18,16 @@ module.exports = ({ title, body, likedByUser, id }) => {
           h('input', {
             type: 'hidden',
             name: 'liked',
-            value: !likedByUser
+            value: !likedByUser,
           }),
           h('input', {
             type: 'hidden',
             name: 'reviewId',
-            value: id
+            value: id,
           }),
-          h('button.submit', likedByUser ? 'Unlike' : 'Like')
-        ])
-      ])
-    ])
+          h('button.submit', likedByUser ? 'Unlike' : 'Like'),
+        ]),
+      ]),
+    ]),
   ]);
 };

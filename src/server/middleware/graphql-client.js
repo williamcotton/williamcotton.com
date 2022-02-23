@@ -23,7 +23,7 @@ module.exports = ({ schema, rootValue, cacheKey }) => (req, res, next) => {
       data,
       errors,
       query,
-      variables
+      variables,
     };
     return data;
   };

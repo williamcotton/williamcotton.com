@@ -4,5 +4,5 @@ const route = '/graphql';
 
 module.exports = {
   cacheKey,
-  route
+  route,
 };

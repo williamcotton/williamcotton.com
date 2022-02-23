@@ -21,7 +21,7 @@ const routes = require('../routes');
 
 const cookieSessionOptions = {
   name: 'session',
-  sameSite: 'lax'
+  sameSite: 'lax',
 };
 
 module.exports = ({
@@ -31,7 +31,7 @@ module.exports = ({
   nodeEnv,
   sessionSecret,
   githubClientId,
-  githubSecret
+  githubSecret,
 }) => {
   const app = express();
   app.disable('x-powered-by');

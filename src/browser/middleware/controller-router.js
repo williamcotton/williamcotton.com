@@ -28,43 +28,43 @@ module.exports = ({ app, routes }) => {
 
   function nestedChildren({ children, basePath }) {
     if (children) {
-      children.forEach(childRoute => {
+      children.forEach((childRoute) => {
         map[childRoute.type](Object.assign(childRoute, { basePath }));
       });
     }
   }
 
   map = {
-    root: options => {
+    root: (options) => {
       const { label } = options;
       const filePath = `/${label}`;
       const routePath = '';
       const action = 'index';
       loadController({ filePath, routePath, action, label, options });
     },
-    namespace: options => {
+    namespace: (options) => {
       const { label, children, basePath = '' } = options;
       const filePath = `${basePath}/${label}`;
       nestedChildren({ children, basePath: filePath });
     },
-    resources: options => {
+    resources: (options) => {
       const { label, only, children, basePath = '' } = options;
       const filePath = `${basePath}/${label}`;
       const routePath = filePath;
       loadController({ filePath, routePath, only, label, options, children });
       nestedChildren({ children, basePath: filePath });
     },
-    match: options => {
+    match: (options) => {
       const { label: match, controller, action } = options;
       const filePath = `/${controller}`;
       const routePath = '';
       const label = controller;
       loadController({ filePath, routePath, match, action, label, options });
     },
-    error: error => errors.push(error)
+    error: (error) => errors.push(error),
   };
 
-  routes.forEach(route => {
+  routes.forEach((route) => {
     if (map[route.type]) {
       map[route.type](route);
     }
@@ -77,7 +77,7 @@ module.exports = ({ app, routes }) => {
     .filter((value, index, self) => {
       return self.indexOf(value) === index;
     })
-    .forEach(controller => {
+    .forEach((controller) => {
       const filepath = `../../controllers/${controller}`;
       const Controller = require(filepath);
       errorControllers[controller] = new Controller();
@@ -88,7 +88,7 @@ module.exports = ({ app, routes }) => {
     const statusCode = error.statusCode || 500;
     res.statusCode = statusCode;
     const { controller, action } = errors.filter(
-      e => e.label === statusCode
+      (e) => e.label === statusCode
     )[0];
     if (controller && action) {
       const controllerInstance = errorControllers[controller];

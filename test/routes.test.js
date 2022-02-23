@@ -12,13 +12,13 @@ describe('routes', () => {
         label: 'articles',
         only: ['show'],
         type: 'resources',
-        contentType: 'blogPost'
+        contentType: 'blogPost',
       },
       {
         children: [],
         label: 'contact',
         only: ['index', 'create', 'show'],
-        type: 'resources'
+        type: 'resources',
       },
       {
         children: [
@@ -28,16 +28,16 @@ describe('routes', () => {
                 children: [],
                 label: 'liked-reviews',
                 only: ['create'],
-                type: 'resources'
-              }
+                type: 'resources',
+              },
             ],
             label: 'reviews',
             only: ['index', 'show'],
-            type: 'resources'
-          }
+            type: 'resources',
+          },
         ],
         label: 'demo',
-        type: 'namespace'
+        type: 'namespace',
       },
       {
         action: 'show',
@@ -45,22 +45,22 @@ describe('routes', () => {
         controller: 'pages',
         label: '*',
         type: 'match',
-        contentType: 'page'
+        contentType: 'page',
       },
       {
         action: 'notFound',
         children: [],
         controller: 'errors',
         label: 404,
-        type: 'error'
+        type: 'error',
       },
       {
         action: 'serverError',
         children: [],
         controller: 'errors',
         label: 500,
-        type: 'error'
-      }
+        type: 'error',
+      },
     ]);
   });
 });

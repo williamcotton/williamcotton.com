@@ -10,14 +10,15 @@ module.exports = ({ analyticsRouter, app }) => {
       method,
       httpVersion,
       username,
-      headers: { referer, 'user-agent': userAgent }
+      headers: { referer, 'user-agent': userAgent },
     } = req;
     const { statusCode } = res;
     const rawRequest = `${method.toUpperCase()} ${url} HTTP/${httpVersion}`;
     const timestamp = format(new Date(), 'ddd, D MMM YYYY HH:mm:ss ZZ');
     console.log(
-      `${ip} - ${username || '-'} [${timestamp}] "${rawRequest}" ${statusCode ||
-        '-'} - "${referer || '-'}" "${userAgent}"`
+      `${ip} - ${username || '-'} [${timestamp}] "${rawRequest}" ${
+        statusCode || '-'
+      } - "${referer || '-'}" "${userAgent}"`
     );
     // ip anonymousId username timestamp "rawRequest" statusCode byteSize "referer" "userAgent"
   };
@@ -49,9 +50,9 @@ module.exports = ({ analyticsRouter, app }) => {
       req.url = req.originalUrl;
       const { url, headers, ip } = req;
       commonLogFormat(req, res);
-      res.pageview = params =>
+      res.pageview = (params) =>
         analyticsPageview({ url, headers, ip, ...params });
-      res.event = params => analyticsEvent({ url, headers, ip, ...params });
+      res.event = (params) => analyticsEvent({ url, headers, ip, ...params });
       analyticsRouter(req, res, () => {});
     });
     next();

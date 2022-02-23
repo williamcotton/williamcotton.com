@@ -10,12 +10,12 @@ module.exports = class ContactController extends ApplicationController {
 
     console.log({
       answer,
-      guess
+      guess,
     });
 
     if (parseInt(answer, 10) !== parseInt(guess - 2, 10)) {
       return res.navigate(`${req.baseUrl}/message-confirmation`, {
-        success: false
+        success: false,
       });
     }
 
@@ -24,7 +24,7 @@ module.exports = class ContactController extends ApplicationController {
       { input: { name, replyToAddress, subject, body } }
     );
     const {
-      sendEmail: { success }
+      sendEmail: { success },
     } = response;
     return res.navigate(`${req.baseUrl}/message-confirmation`, { success });
   }

@@ -1,12 +1,12 @@
 const { renderToString } = require('react-dom/server');
 const h = require('react-hyperscript');
 
-const Link = props => h('a', props);
+const Link = (props) => h('a', props);
 
 module.exports = ({ appLayout }) => (req, res, next) => {
   req.Link = Link;
 
-  const Form = props => {
+  const Form = (props) => {
     const mergedProps = { ...props };
     const { children } = mergedProps;
     delete mergedProps.children;
@@ -29,7 +29,7 @@ module.exports = ({ appLayout }) => (req, res, next) => {
       req.renderDocument({
         renderedContent,
         title,
-        description
+        description,
       })
     );
   };

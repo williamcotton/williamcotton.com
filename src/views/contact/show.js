@@ -6,7 +6,7 @@ const { RequestContext } = require('../../contexts');
 module.exports = ({ success }) => {
   const {
     Link,
-    p: { 'front-page': frontPage }
+    p: { 'front-page': frontPage },
   } = useContext(RequestContext);
   const message =
     success === 'true'
@@ -15,6 +15,6 @@ module.exports = ({ success }) => {
 
   return h('div', [
     h('p.message', message),
-    h('p', [h(Link, { href: frontPage.index() }, 'Back To Front Page')])
+    h('p', [h(Link, { href: frontPage.index() }, 'Back To Front Page')]),
   ]);
 };

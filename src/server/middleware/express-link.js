@@ -11,7 +11,7 @@ function renderDocument({
   expressLink,
   renderedContent,
   description,
-  title
+  title,
 }) {
   return `
 <!DOCTYPE html>
@@ -41,7 +41,7 @@ module.exports = ({ defaultTitle }) => (req, res, next) => {
     queryCache: {},
     csrf: req.csrf,
     user: req.user,
-    defaultTitle
+    defaultTitle,
   };
 
   req.renderDocument = ({ renderedContent, title, description }) =>
@@ -50,7 +50,7 @@ module.exports = ({ defaultTitle }) => (req, res, next) => {
       expressLink: res.expressLink,
       renderedContent,
       title,
-      description
+      description,
     });
 
   res.navigate = (path, query) => {

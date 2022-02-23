@@ -1,7 +1,7 @@
 const h = require('react-hyperscript');
 const { useContext } = require('react');
 const {
-  documentToReactComponents
+  documentToReactComponents,
 } = require('@contentful/rich-text-react-renderer');
 
 const { RequestContext } = require('../../contexts');
@@ -17,14 +17,14 @@ const Body = ({ slug, body }) => {
   return h(RichText, {
     key: slug,
     richText: body,
-    options: { renderNode: renderNode({ Link, p }) }
+    options: { renderNode: renderNode({ Link, p }) },
   });
 };
 
 const Page = ({ page: { title, body, slug } }) =>
   h('div.page', { key: slug }, [
     h(Header, { title, slug }),
-    h(Body, { slug, body })
+    h(Body, { slug, body }),
   ]);
 
 module.exports = Page;

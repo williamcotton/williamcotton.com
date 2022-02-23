@@ -3,7 +3,7 @@ const format = require('date-fns/format');
 const parse = require('date-fns/parse');
 const { useContext } = require('react');
 const {
-  documentToReactComponents
+  documentToReactComponents,
 } = require('@contentful/rich-text-react-renderer');
 
 const { RequestContext } = require('../../contexts');
@@ -18,7 +18,7 @@ const PublishedDate = ({ publishedDate }) =>
 const Header = ({ title, slug }) => {
   const {
     Link,
-    p: { articles }
+    p: { articles },
   } = useContext(RequestContext);
   return h(
     'h2',
@@ -32,7 +32,7 @@ const Body = ({ slug, body }) => {
   return h(RichText, {
     key: slug,
     richText: body,
-    options: { renderNode: renderNode({ Link, p }) }
+    options: { renderNode: renderNode({ Link, p }) },
   });
 };
 
@@ -40,7 +40,7 @@ const Article = ({ article: { title, body, slug, publishedDate } }) =>
   h('article', { key: slug }, [
     h(Header, { title, slug }),
     h(PublishedDate, { publishedDate }),
-    h(Body, { slug, body })
+    h(Body, { slug, body }),
   ]);
 
 Article.renderNode = renderNode;

@@ -3,7 +3,7 @@ const ApplicationController = require('./application');
 module.exports = class PagesController extends ApplicationController {
   async show(req, res) {
     const {
-      page
+      page,
     } = await req.q(
       'query Page($slug: String!) { page(slug: $slug) { title, slug, body } }',
       { slug: req.params.id }

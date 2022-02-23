@@ -10,12 +10,12 @@ let initialRequest = true;
 // merge together any arrays of objects by updating members based on their `id`
 const arrayMerge = (oldArray, newArray) => {
   const oldArrayCopy = oldArray.slice(0);
-  newArray.forEach(newObj => {
+  newArray.forEach((newObj) => {
     const oldObjIndex = oldArrayCopy.findIndex(
-      oldObj => oldObj.id === newObj.id
+      (oldObj) => oldObj.id === newObj.id
     );
     oldArrayCopy[oldObjIndex] = deepmerge(oldArray[oldObjIndex], newObj, {
-      arrayMerge
+      arrayMerge,
     });
   });
   return oldArrayCopy;
@@ -27,7 +27,7 @@ module.exports = ({
   route,
   cacheKey,
   schema,
-  rootValue
+  rootValue,
 }) => (req, res, next) => {
   req.q = async (query, variables, options = {}) => {
     const cache = 'cache' in options ? options.cache : true;
@@ -43,7 +43,7 @@ module.exports = ({
         : cleanDeep(
             await execute(schema, document, rootValue, req, variables),
             {
-              emptyArrays: false
+              emptyArrays: false,
             }
           );
 
@@ -65,9 +65,9 @@ module.exports = ({
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          'X-CSRF-Token': req.csrf
+          'X-CSRF-Token': req.csrf,
         },
-        body: JSON.stringify({ query, variables })
+        body: JSON.stringify({ query, variables }),
       });
       return response.json();
     };
@@ -91,7 +91,7 @@ module.exports = ({
       data,
       errors,
       query,
-      variables
+      variables,
     };
 
     initialRequest = false;

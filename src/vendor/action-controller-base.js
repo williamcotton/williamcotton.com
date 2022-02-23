@@ -5,7 +5,7 @@ function e(fn) {
   return (req, res, next) => {
     const routePromise = fn(req, res, next);
     if (routePromise.catch) {
-      routePromise.catch(err => next(err));
+      routePromise.catch((err) => next(err));
     }
   };
 }
@@ -14,28 +14,28 @@ const ACTIONS = [
   {
     action: 'index',
     method: 'get',
-    path: '/'
+    path: '/',
   },
   {
     action: 'show',
     method: 'get',
-    path: '/:id'
+    path: '/:id',
   },
   {
     action: 'create',
     method: 'post',
-    path: '/'
+    path: '/',
   },
   {
     action: 'update',
     method: 'patch',
-    path: '/:id'
+    path: '/:id',
   },
   {
     action: 'destroy',
     method: 'delete',
-    path: '/:id'
-  }
+    path: '/:id',
+  },
 ];
 
 function initControllerAction({ options, controller, action, method, path }) {
@@ -48,7 +48,7 @@ function initControllerAction({ options, controller, action, method, path }) {
     const handler = e(actionFunc.bind(controller));
     const { routePath, filePath } = options;
     const basePathBuilder = compile(routePath + path);
-    const pathBuilder = opts =>
+    const pathBuilder = (opts) =>
       basePathBuilder(opts).replace(/^(.+?)\/*?$/, '$1'); // https://stackoverflow.com/a/45737717
     pathBuilder.action = options;
     controller.paths[action] = pathBuilder; // eslint-disable-line no-param-reassign
@@ -59,7 +59,7 @@ function initControllerAction({ options, controller, action, method, path }) {
         action,
         method,
         path,
-        options
+        options,
       };
       handler(req, res, next);
     });

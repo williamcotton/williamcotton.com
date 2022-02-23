@@ -49,11 +49,11 @@ module.exports = () => {
       reviews[reviewId] = review;
 
       return { success: true };
-    }
+    },
   };
 
   return {
     schema,
-    rootValue
+    rootValue,
   };
 };

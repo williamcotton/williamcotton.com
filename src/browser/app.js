@@ -15,7 +15,7 @@ const appLayout = require('../views/layouts/application');
 const routes = require('../routes');
 
 module.exports = ({
-  fetch
+  fetch,
   // graphqlSchema: { schema, rootValue },
 }) => {
   const app = express();
@@ -23,14 +23,14 @@ module.exports = ({
   app.use(
     reactRendererMiddleware({
       app,
-      appLayout
+      appLayout,
     })
   );
   app.use(
     graphqlClientMiddleware({
       fetch,
       route,
-      cacheKey
+      cacheKey,
     })
   );
   // app.use(

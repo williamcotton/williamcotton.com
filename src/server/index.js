@@ -14,14 +14,14 @@ const githubSecret = process.env.GITHUB_SECRET;
 
 const contentfulClient = contentful.createClient({
   space: contentfulSpace,
-  accessToken: contentfulAccessToken
+  accessToken: contentfulAccessToken,
 });
 
 const sendgridClient = sendgrid(sendgridApiKey);
 
 const graphqlSchema = require('./graphql-schema')({
   contentfulClient,
-  sendgridClient
+  sendgridClient,
 });
 
 const buildDir = path.join(__dirname, '/../../build');
@@ -33,7 +33,7 @@ const universalServerApp = require('./app')({
   nodeEnv,
   sessionSecret,
   githubClientId,
-  githubSecret
+  githubSecret,
 });
 
 universalServerApp.listen(port, () => {

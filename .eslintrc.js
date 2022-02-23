@@ -3,6 +3,6 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': ['error'],
-    'class-methods-use-this': 'off'
-  }
+    'class-methods-use-this': 'off',
+  },
 };

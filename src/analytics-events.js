@@ -28,5 +28,5 @@ analyticsRouter.post('/contact', (req, res) => {
 });
 
 module.exports = {
-  analyticsRouter
+  analyticsRouter,
 };

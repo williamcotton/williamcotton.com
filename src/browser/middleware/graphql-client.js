@@ -27,9 +27,9 @@ module.exports = ({ fetch, route, cacheKey }) => (req, res, next) => {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          'X-CSRF-Token': req.csrf
+          'X-CSRF-Token': req.csrf,
         },
-        body: JSON.stringify({ query, variables })
+        body: JSON.stringify({ query, variables }),
       });
       return response.json();
     };
@@ -54,7 +54,7 @@ module.exports = ({ fetch, route, cacheKey }) => (req, res, next) => {
       data,
       errors,
       query,
-      variables
+      variables,
     };
 
     initialRequest = false;

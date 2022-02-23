@@ -22,7 +22,7 @@ module.exports = ({ githubClientId, githubSecret, app }) => (
     const { code } = req.query;
     const { access_token: githubToken } = await request.get({
       url: `${githubTokenUrl}?client_id=${githubClientId}&client_secret=${githubSecret}&code=${code}&state=${state}`,
-      json: true
+      json: true,
     });
     req.session.githubToken = githubToken;
     const { login: username, name, email, id } = await request.get({
@@ -30,8 +30,8 @@ module.exports = ({ githubClientId, githubSecret, app }) => (
       json: true,
       headers: {
         Authorization: `token ${githubToken}`,
-        'user-agent': 'node.js'
-      }
+        'user-agent': 'node.js',
+      },
     });
     req.session.user = { username, name, email, id, type: 'github' };
     res.redirect('/');

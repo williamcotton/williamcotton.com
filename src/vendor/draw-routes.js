@@ -18,7 +18,7 @@ module.exports = function drawRoutes(routesDefinitionFunc) {
       type,
       label,
       children: [],
-      ...(typeof options === 'object' ? options : {})
+      ...(typeof options === 'object' ? options : {}),
     };
 
     branchDepth += 1;

@@ -7,7 +7,7 @@ const { expressLink } = window;
 const { defaultTitle } = expressLink;
 
 module.exports = () => (req, res, next) => {
-  Object.keys(expressLink).forEach(key => (req[key] = expressLink[key])); // eslint-disable-line no-return-assign
+  Object.keys(expressLink).forEach((key) => (req[key] = expressLink[key])); // eslint-disable-line no-return-assign
 
   req.renderDocument = ({ title }) => {
     document.querySelector('title').innerText = title || defaultTitle; // eslint-disable-line no-param-reassign

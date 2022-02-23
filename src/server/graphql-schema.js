@@ -3,7 +3,7 @@ const { makeExecutableSchema } = require('graphql-tools');
 const helper = require('sendgrid').mail;
 
 const resolveFunctions = {
-  JSON: GraphQLJSON
+  JSON: GraphQLJSON,
 };
 
 const schemaString = `
@@ -65,26 +65,26 @@ const reviews = {
     id: 1,
     likedByUser: true,
     title: 'A great product!',
-    body: 'I bought it last week. Tried it out the same day. Works great!'
+    body: 'I bought it last week. Tried it out the same day. Works great!',
   },
 
   2: {
     id: 2,
     likedByUser: false,
     title: 'A bad product!',
-    body: 'Works bad, I hate it!'
-  }
+    body: 'Works bad, I hate it!',
+  },
 };
 
 const schema = makeExecutableSchema({
   typeDefs: schemaString,
-  resolvers: resolveFunctions
+  resolvers: resolveFunctions,
 });
 
 module.exports = ({ contentfulClient, sendgridClient }) => {
   const rootValue = {
     allArticles: async () => {
-      const trimBody = fields => {
+      const trimBody = (fields) => {
         const updatedFields = { ...fields };
         updatedFields.body.content = fields.body.content.slice(0, 4);
         return updatedFields;
@@ -92,15 +92,15 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
       const entries = await contentfulClient.getEntries({
         content_type: 'blogPost',
         'fields.hidden': false,
-        order: '-fields.publishedDate'
+        order: '-fields.publishedDate',
       });
-      return entries.items.map(e => trimBody(e.fields));
+      return entries.items.map((e) => trimBody(e.fields));
     },
 
     article: async ({ slug }) => {
       const entries = await contentfulClient.getEntries({
         content_type: 'blogPost',
-        'fields.slug[in]': slug
+        'fields.slug[in]': slug,
       });
       const firstEntry = entries.items[0];
       if (!firstEntry) {
@@ -112,7 +112,7 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
     page: async ({ slug }) => {
       const entries = await contentfulClient.getEntries({
         content_type: 'page',
-        'fields.slug[in]': slug
+        'fields.slug[in]': slug,
       });
       const firstEntry = entries.items[0];
       if (!firstEntry) {
@@ -139,7 +139,7 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
       const request = sendgridClient.emptyRequest({
         method: 'POST',
         path: '/v3/mail/send',
-        body: mail.toJSON()
+        body: mail.toJSON(),
       });
 
       try {
@@ -166,12 +166,12 @@ module.exports = ({ contentfulClient, sendgridClient }) => {
       reviews[reviewId].likedByUser = liked;
 
       return { success: true };
-    }
+    },
   };
 
   return {
     schema,
     rootValue,
-    graphiql: true
+    graphiql: true,
   };
 };
