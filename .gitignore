@@ -43,3 +43,11 @@ test/screenshots/
 
 # Private Keys
 *.pem
+
+# Fsharp builds
+
+obj/
+bin/
+
+# Fable compiled files
+*.fs.js

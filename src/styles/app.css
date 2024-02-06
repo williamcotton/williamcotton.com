@@ -1,12 +1,10 @@
-@import 'styles/variables';
-
-@import 'vendor/reset';
-@import 'styles/layout';
-@import 'styles/article';
-@import 'styles/page';
-@import 'styles/front-page';
-@import 'styles/contact';
-@import 'styles/demo/index';
+@import "reset.css";
+@import "variables.css";
+@import "article.css";
+@import "contact.css";
+@import "front-page.css";
+@import "layout.css";
+@import "page.css";
 
 html,
 body,
@@ -28,47 +26,59 @@ img,
 p {
   margin-bottom: 1em;
 }
+
 p {
   line-height: 1.618;
   font-size: 1em;
-  @media (min-width: $desktop-width) {
+
+  @media (min-width: 790px) {
     font-size: 1.1em;
   }
 }
+
 h2,
 h3,
 h4,
 h5 {
   font-weight: bold;
 }
+
 h2 {
   font-size: 1.33em;
   line-height: 1.25;
-  @media (min-width: $desktop-width) {
+
+  @media (min-width: 790px) {
     font-size: 1.8em;
   }
+
   a {
     text-decoration: none;
     color: black;
   }
 }
+
 h3 {
   font-size: 1.25em;
 }
+
 h4 {
   font-size: 1.125em;
 }
+
 h5 {
   font-size: 1.05em;
 }
+
 blockquote {
   color: dimgrey;
   border-left: 0.1em solid lightgray;
   padding-left: 1em;
 }
+
 b {
   font-weight: bold;
 }
+
 img {
   max-width: 100%;
 }

@@ -1,4 +1,4 @@
-const qs = require('qs');
+import qs from "qs";
 
 const styleTag = '<link rel="stylesheet" href="/app.css" />';
 const scriptTag =
@@ -34,35 +34,36 @@ function renderDocument({
 `;
 }
 
-module.exports = ({ defaultTitle }) => (req, res, next) => {
-  req.csrf = req.csrfToken();
+export default ({ defaultTitle }) =>
+  (req, res, next) => {
+    req.csrf = req.csrfToken();
 
-  res.expressLink = {
-    queryCache: {},
-    csrf: req.csrf,
-    user: req.user,
-    defaultTitle,
-  };
-
-  req.renderDocument = ({ renderedContent, title, description }) =>
-    renderDocument({
+    res.expressLink = {
+      queryCache: {},
+      csrf: req.csrf,
+      user: req.user,
       defaultTitle,
-      expressLink: res.expressLink,
-      renderedContent,
-      title,
-      description,
-    });
+    };
 
-  res.navigate = (path, query) => {
-    const pathname = query ? `${path}?${qs.stringify(query)}` : path;
-    res.redirect(pathname);
+    req.renderDocument = ({ renderedContent, title, description }) =>
+      renderDocument({
+        defaultTitle,
+        expressLink: res.expressLink,
+        renderedContent,
+        title,
+        description,
+      });
+
+    res.navigate = (path, query) => {
+      const pathname = query ? `${path}?${qs.stringify(query)}` : path;
+      res.redirect(pathname);
+    };
+
+    res.redirect = res.redirect.bind(res);
+
+    res.cacheQuery = (key, data) => {
+      res.expressLink.queryCache[key] = data;
+    };
+
+    next();
   };
-
-  res.redirect = res.redirect.bind(res);
-
-  res.cacheQuery = (key, data) => {
-    res.expressLink.queryCache[key] = data;
-  };
-
-  next();
-};

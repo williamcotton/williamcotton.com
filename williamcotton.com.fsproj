@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>williamcotton.com</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="src/Express.fs" />
+    <Compile Include="src/App.fs" />
+    <Compile Include="src/server/Server.fs" />
+    <Compile Include="src/browser/Browser.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fable.Core" Version="4.3.0" />
+    <PackageReference Include="Fable.Import.Express" Version="0.1.0" />
+    <PackageReference Include="Fable.Node" Version="1.2.0" />
+    <PackageReference Include="Feliz" Version="2.7.0" />
+  </ItemGroup>
+
+</Project>

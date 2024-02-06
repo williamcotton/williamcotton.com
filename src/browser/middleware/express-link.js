@@ -1,17 +1,17 @@
 /* global window, document */
 
-const qs = require('qs');
+import qs from "qs";
 
 const { expressLink } = window;
 
 const { defaultTitle } = expressLink;
 
-module.exports = () => (req, res, next) => {
+export default () => (req, res, next) => {
   Object.keys(expressLink).forEach((key) => (req[key] = expressLink[key])); // eslint-disable-line no-return-assign
 
   req.renderDocument = ({ title }) => {
-    document.querySelector('title').innerText = title || defaultTitle; // eslint-disable-line no-param-reassign
-    return { appContainer: document.querySelector('#app') };
+    document.querySelector("title").innerText = title || defaultTitle; // eslint-disable-line no-param-reassign
+    return { appContainer: document.querySelector("#app") };
   };
 
   res.navigate = (path, query) => {

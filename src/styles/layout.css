@@ -1,35 +1,37 @@
-@import './variables';
-
-$responsive-margin: 1em;
-$desktop-margin: 3em;
+:root {
+  --responsive-margin: 1em;
+  --desktop-margin: 3em;
+}
 
 .sitewrapper {
   background-color: white;
   min-height: 100%;
   box-shadow: 0px 6px 12px 3px rgba(0, 0, 0, 0.2);
 
-  @media (min-width: $desktop-width) {
+  @media (min-width: 790px) {
     margin: 0 auto;
-    max-width: $desktop-width;
+    max-width: var(--desktop-width);
   }
 }
 
 header {
   padding-top: 1em;
-  margin: 0 $responsive-margin;
+  margin: 0 var(--responsive-margin);
 
   @media (min-width: 480px) {
     display: flex;
     align-items: flex-end;
   }
 
-  @media (min-width: $desktop-width) {
-    margin: 0 $desktop-margin;
+  @media (min-width: 790px) {
+    margin: 0 var(--desktop-margin);
   }
+
   h1 {
     font-weight: bold;
     font-size: 1.6em;
     margin-right: 1em;
+
     a {
       text-decoration: none;
       color: black;
@@ -39,6 +41,7 @@ header {
   nav {
     margin-top: 0.5em;
     margin-bottom: 0.1em;
+
     a {
       margin-right: 1em;
       text-decoration: none;
@@ -49,12 +52,12 @@ header {
 
 .content {
   padding: 1em 0 1em 0;
-  margin: 0 $responsive-margin;
+  margin: 0 var(--responsive-margin);
   height: 100%;
   min-height: calc(100vh - 3em);
 
-  @media (min-width: $desktop-width) {
-    margin: 0 $desktop-margin;
+  @media (min-width: 790px) {
+    margin: 0 var(--desktop-margin);
   }
 }
 
@@ -62,6 +65,7 @@ footer {
   background-color: black;
   height: 3em;
   margin-top: 1em;
+
   pre {
     font-family: monospace;
   }
