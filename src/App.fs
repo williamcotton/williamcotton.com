@@ -50,7 +50,6 @@ let Articles() =
 
 [<ReactComponent>]
 let FrontPage() =
-    let req : ExpressReq = React.useContext(requestContext)
     Html.div [
         prop.className "front-page"
         prop.children (Articles())
@@ -114,7 +113,6 @@ let universalApp (app: ExpressApp) =
     let errorHandler (err: obj) (req: ExpressReq) (res: ExpressRes) (next: unit -> unit) =
         match err with
         | :? System.Exception as ex ->
-            consoleLog ex.Message
             let message = ex.Message
             res.status 500 |> ignore
             res.send(message) |> ignore

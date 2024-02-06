@@ -7,10 +7,11 @@
   "scripts": {
     "start": "node src/server/Server.fs.js",
     "build": "make",
+    "postinstall": "npm run build",
     "dev": "run-p *-dev",
     "start-server-dev": "nodemon src/server/Server.fs.js -w src/ --ext js",
     "start-browser-dev": "webpack --mode development --watch --env development",
-    "start-fable-dev": "dotnet fable watch",
+    "start-fable-dev": "dotnet fable watch --lang ts ",
     "build-css-dev": "nodemon -w src/styles/ --ext css --exec cp src/styles/*.css build/"
   },
   "keywords": [],

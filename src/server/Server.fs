@@ -16,7 +16,7 @@ let csurf : unit -> unit = jsNative
 let cookieSession : {| name: string; sameSite: string; secret: string |} -> unit = jsNative
 
 [<Import("default", "dotenv")>]
-let dotenv :unit -> unit = jsNative
+let dotenv : unit -> unit = jsNative
 dotenv
 
 [<Emit("dotenv.config()")>]
