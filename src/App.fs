@@ -5,6 +5,7 @@ open Feliz
 open Fable.Core
 open Fable.Core.JsInterop
 open Express
+open GraphQLSchema
 
 let requestContext = React.createContext(name="Request")
 
@@ -90,11 +91,31 @@ let verifyPost (value: string option) =
 
 let universalApp (app: ExpressApp) =
     app.get("/", fun req res _ ->
-        res.renderComponent(FrontPage()) |> ignore
+        promise {
+            let! response = req.q "query { allArticles { title slug publishedDate description body } }" {||}
+            let allArticles : Article[] = response?allArticles
+            allArticles 
+                |> Array.map (fun article ->
+                    Html.article [
+                        Html.h2 [ prop.text article.title ]
+                        Html.p [ prop.text article.description ]
+                    ]
+                ) 
+                |> React.fragment 
+                |> res.renderComponent 
+                |> ignore
+        } |> ignore
     )
 
     app.get("/about", fun req res _ ->
-        res.renderComponent(About()) |> ignore
+        Html.h2 [
+            prop.text "About"
+        ]
+        Html.p [
+            prop.text "This is the about page."
+        ]
+        |> res.renderComponent
+        |> ignore
     )
 
     app.get("/bio", fun req res _ ->

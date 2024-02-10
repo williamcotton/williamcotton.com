@@ -22,6 +22,7 @@ type ExpressReq =
   abstract member secure : bool
   abstract member xhr : bool
   abstract member status : int
+  abstract member q : string -> obj -> JS.Promise<obj>
 
 type ExpressRes =
   abstract member send : obj -> unit
@@ -37,3 +38,6 @@ type ExpressApp =
 
 [<Emit("console.log($0)")>]
 let consoleLog text: unit = jsNative
+
+[<Emit("fetch($0)")>]
+let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string> |}> = jsNative

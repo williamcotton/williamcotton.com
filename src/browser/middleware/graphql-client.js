@@ -9,7 +9,10 @@ class HTTPError extends Error {
   }
 }
 
-module.exports = ({ fetch, route, cacheKey }) => (req, res, next) => {
+const cacheKey = (query, variables) =>
+  `${query}-(${variables ? JSON.stringify(variables) : ""})`;
+
+export default ({ route }) => (req, res, next) => {
   req.q = async (query, variables, options = {}) => {
     const cache = 'cache' in options ? options.cache : true;
     const isMutation = /^mutation/.test(query);
@@ -31,7 +34,7 @@ module.exports = ({ fetch, route, cacheKey }) => (req, res, next) => {
         },
         body: JSON.stringify({ query, variables }),
       });
-      return response.json();
+      return response.json()
     };
 
     // if we don't have a cached response, fetch from the server
