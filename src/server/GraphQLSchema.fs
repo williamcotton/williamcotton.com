@@ -1,11 +1,42 @@
 module GraphQLSchema
 
 open Fable.Core
+open Feliz
 open FSharp.Data
 open Fable.Core.JS
 open Fable.Core.JsInterop
 open Express
 open System
+
+// Function to add ordinal suffix to a day number
+let addOrdinal (day: int) : string =
+    match day % 10 with
+    | 1 when day % 100 <> 11 -> sprintf "%dst" day
+    | 2 when day % 100 <> 12 -> sprintf "%dnd" day
+    | 3 when day % 100 <> 13 -> sprintf "%drd" day
+    | _ -> sprintf "%dth" day
+
+let monthNames monthNumber =
+    match monthNumber with
+    | 1 -> "January"
+    | 2 -> "February"
+    | 3 -> "March"
+    | 4 -> "April"
+    | 5 -> "May"
+    | 6 -> "June"
+    | 7 -> "July"
+    | 8 -> "August"
+    | 9 -> "September"
+    | 10 -> "October"
+    | 11 -> "November"
+    | 12 -> "December"
+    | _ -> failwith "Invalid month number"
+
+let formatDateString (inputDate: string) : string =
+    let parsedDate = DateTime.Parse(inputDate)
+    let monthName = monthNames parsedDate.Month
+    let dayWithOrdinal = addOrdinal parsedDate.Day
+    sprintf "%s %s, %d" monthName dayWithOrdinal parsedDate.Year
 
 [<Import("default", "sendgrid")>]
 let sendgrid : obj -> obj = jsNative
@@ -13,8 +44,15 @@ let sendgrid : obj -> obj = jsNative
 [<Emit("sendgrid.mail")>]
 let helper: unit -> obj = jsNative
 
+[<Import("default", "../common/render_node.js")>]
+let renderNode : obj -> obj = jsNative
+
+type Body = {
+    content: obj array
+}
+
 type Article = {
-    body: obj
+    body: Body
     title: string
     slug: string
     publishedDate: string
@@ -79,34 +117,35 @@ let schemaString = "
 [<Emit("fetch($0)")>]
 let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: unit -> JS.Promise<obj> |}> = jsNative
 
-let fetchAndLog url =
-    fetch(url)
-    |> fun response ->
-        response.``then``(fun r -> 
-            consoleLog r?body
-        )
-
 let rootValueInitializer contentfulAccessToken contentfulSpaceId =
-    let trimBody fields =
-        { fields with body = fields.body.[..3] } // Slice string to get first 4 characters
-
     let allArticles () =
+        let trimBody (item : obj) =
+            let fields : Article = item?fields
+            let body : Body = fields.body
+            let updatedContent = body.content |> Array.take 4
+            {| fields with body = {| body with content = updatedContent |} |}
+            
         promise {
-            let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.hidden=false"
+            let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.hidden=false&order=-fields.publishedDate"
             let! json = res.json()
             let items = json?items
-            let articles = items |> Array.map (fun item -> item?fields)
+            let assets = json?includes?Asset
+            let articles = items |> Array.map (fun item -> trimBody item)
             return articles
         }
 
-    let article slug =
-        consoleLog "Fetching article"
-        // let url = $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/{nodeEnv}/entries?access_token={contentfulAccessToken}"
-        // /spaces/{space_id}/environments/{environment_id}/entries/{entry_id}?access_token={access_token}
-        let url = "https://google.com"
-        fetch url
+    let article params =
+        let slug = params?slug
 
-    let page slug =
+        promise {
+            let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.slug[in]={slug}"
+            let! json = res.json()
+            let item = json?items |> Array.head
+            let article  : Article = item?fields
+            return article
+        }
+
+    let page params =
         fun () -> ()
         // async {
         //     let! entries = contentfulClient.GetEntriesAsync("page", slug = slug)

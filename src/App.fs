@@ -9,6 +9,9 @@ open GraphQLSchema
 
 let requestContext = React.createContext(name="Request")
 
+[<Import("documentToReactComponents", "@contentful/rich-text-react-renderer")>]
+let documentToReactComponents (richText: obj, options: obj): ReactElement = jsNative
+
 [<ReactComponent>]
 let AppLayout (props: {| content: ReactElement; req: ExpressReq |}) =
     React.contextProvider(requestContext, props.req, React.fragment [
@@ -97,38 +100,65 @@ let universalApp (app: ExpressApp) =
             allArticles 
                 |> Array.map (fun article ->
                     Html.article [
-                        Html.h2 [ prop.text article.title ]
-                        Html.p [ prop.text article.description ]
+                        Html.h2 [req.Link {| href = "/articles/" + article.slug; children =[article.title] |}]
+                        Html.p [ 
+                            prop.className "published-date"
+                            prop.text (formatDateString article.publishedDate) 
+                        ]
+                        documentToReactComponents(article.body, {||})
                     ]
                 ) 
                 |> React.fragment 
-                |> res.renderComponent 
-                |> ignore
+                |> res.renderComponent |> ignore
+        } |> ignore
+    )
+
+    app.get("/articles/:slug", fun req res _ ->
+        let slug = req.params?slug
+
+        promise {
+            let! response = req.q "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
+            let article : Article = response?article
+            Html.article [
+                Html.h2 [ prop.text article.title ]
+                Html.p [ 
+                    prop.className "published-date"
+                    prop.text (formatDateString article.publishedDate) 
+                ]
+                documentToReactComponents(article.body, {||})
+            ]
+            |> res.renderComponent |> ignore
         } |> ignore
     )
 
     app.get("/about", fun req res _ ->
-        Html.h2 [
-            prop.text "About"
+        React.fragment [
+            Html.h2 [
+                prop.text "About"
+            ]
+            Html.p [
+                prop.text "This is the about page."
+            ]
         ]
-        Html.p [
-            prop.text "This is the about page."
-        ]
-        |> res.renderComponent
-        |> ignore
+        |> res.renderComponent |> ignore
     )
 
     app.get("/bio", fun req res _ ->
-        res.renderComponent(Bio()) |> ignore
+        Bio()
+        |> res.renderComponent |> ignore
     )
 
     app.get("/contact", fun req res _ ->
-        res.renderComponent(Contact()) |> ignore
+        Contact()
+        |> res.renderComponent |> ignore
     )
 
     app.``use`` (fun (req: ExpressReq) (res: ExpressRes) next ->
         res.status 404 |> ignore
-        res.renderComponent(Html.div "This page isn't here!") |> ignore
+        
+        Html.div "This page isn't here!"
+        |> res.renderComponent 
+        |> ignore
     )
 
     let errorHandler (err: obj) (req: ExpressReq) (res: ExpressRes) (next: unit -> unit) =

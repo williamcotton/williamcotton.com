@@ -6,7 +6,7 @@ open Fable.Import.Express
 open Fable.Core.JsInterop
 
 type ExpressReq =
-  abstract member params' : obj
+  abstract member params : obj
   abstract member body : obj
   abstract member query : obj
   abstract member Link : obj -> ReactElement
