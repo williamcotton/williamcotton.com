@@ -5,6 +5,7 @@ open FSharp.Data
 open Fable.Core.JS
 open Fable.Core.JsInterop
 open Express
+open System
 
 [<Import("default", "sendgrid")>]
 let sendgrid : obj -> obj = jsNative
@@ -76,7 +77,7 @@ let schemaString = "
   }"
 
 [<Emit("fetch($0)")>]
-let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string> |}> = jsNative
+let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: unit -> JS.Promise<obj> |}> = jsNative
 
 let fetchAndLog url =
     fetch(url)
@@ -85,24 +86,22 @@ let fetchAndLog url =
             consoleLog r?body
         )
 
-let rootValueInitializer contentfulAccessToken sendgridClient =
+let rootValueInitializer contentfulAccessToken contentfulSpaceId =
     let trimBody fields =
         { fields with body = fields.body.[..3] } // Slice string to get first 4 characters
 
     let allArticles () =
         promise {
-            let! res = fetch "http://fable.io"
-            let! txt = res.text()
-            consoleLog txt.[..100]
-            return [|
-                { title = "Article 1"; slug = "article-1"; publishedDate = "2019-01-01"; description = "This is the first article"; body = "This is the content of the first article" }
-                { title = "Article 2"; slug = "article-2"; publishedDate = "2019-01-02"; description = "This is the second article"; body = "This is the content of the second article" }
-            |]
+            let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.hidden=false"
+            let! json = res.json()
+            let items = json?items
+            let articles = items |> Array.map (fun item -> item?fields)
+            return articles
         }
 
     let article slug =
         consoleLog "Fetching article"
-        // let url = $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/{contentfulEnvironmentId}/entries?access_token={contentfulAccessToken}"
+        // let url = $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/{nodeEnv}/entries?access_token={contentfulAccessToken}"
         // /spaces/{space_id}/environments/{environment_id}/entries/{entry_id}?access_token={access_token}
         let url = "https://google.com"
         fetch url
