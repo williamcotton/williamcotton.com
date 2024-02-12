@@ -6,37 +6,8 @@ open FSharp.Data
 open Fable.Core.JS
 open Fable.Core.JsInterop
 open Express
+open Global
 open System
-
-// Function to add ordinal suffix to a day number
-let addOrdinal (day: int) : string =
-    match day % 10 with
-    | 1 when day % 100 <> 11 -> sprintf "%dst" day
-    | 2 when day % 100 <> 12 -> sprintf "%dnd" day
-    | 3 when day % 100 <> 13 -> sprintf "%drd" day
-    | _ -> sprintf "%dth" day
-
-let monthNames monthNumber =
-    match monthNumber with
-    | 1 -> "January"
-    | 2 -> "February"
-    | 3 -> "March"
-    | 4 -> "April"
-    | 5 -> "May"
-    | 6 -> "June"
-    | 7 -> "July"
-    | 8 -> "August"
-    | 9 -> "September"
-    | 10 -> "October"
-    | 11 -> "November"
-    | 12 -> "December"
-    | _ -> failwith "Invalid month number"
-
-let formatDateString (inputDate: string) : string =
-    let parsedDate = DateTime.Parse(inputDate)
-    let monthName = monthNames parsedDate.Month
-    let dayWithOrdinal = addOrdinal parsedDate.Day
-    sprintf "%s %s, %d" monthName dayWithOrdinal parsedDate.Year
 
 [<Import("default", "sendgrid")>]
 let sendgrid : obj -> obj = jsNative
@@ -117,13 +88,17 @@ let schemaString = "
 [<Emit("fetch($0)")>]
 let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: unit -> JS.Promise<obj> |}> = jsNative
 
-let rootValueInitializer contentfulAccessToken contentfulSpaceId =
+let rootValueInitializer contentfulAccessToken contentfulSpaceId contentfulClient =
     let allArticles () =
         let trimBody (item : obj) =
+            consoleLog item
             let fields : Article = item?fields
             let body : Body = fields.body
             let updatedContent = body.content |> Array.take 4
-            {| fields with body = {| body with content = updatedContent |} |}
+            let updatedArticle = {| fields with body = {| body with content = updatedContent |} |}
+            
+            consoleLog updatedArticle
+            updatedArticle
             
         promise {
             let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.hidden=false&order=-fields.publishedDate"
@@ -131,7 +106,19 @@ let rootValueInitializer contentfulAccessToken contentfulSpaceId =
             let items = json?items
             let assets = json?includes?Asset
             let articles = items |> Array.map (fun item -> trimBody item)
-            return articles
+            consoleLog "======="
+            let entriesOptions = 
+                dict [
+                    "content_type", box "blogPost"
+                    "fields.hidden", box false
+                    "order", box "-fields.publishedDate"
+                ]
+
+            let! res2 = contentfulClient.getEntries(entriesOptions)
+            let items2 = res2?items
+            consoleLog items2?length
+            let articles2 = items2 |> Array.map (fun item -> trimBody item)
+            return articles2
         }
 
     let article params =

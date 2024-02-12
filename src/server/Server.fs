@@ -5,10 +5,24 @@ open Feliz
 open Fable.Core
 open App
 open Express
+open Global
 open GraphQLSchema
 
+[<Import("default", "dotenv")>]
+let dotenv : unit -> unit = jsNative
+dotenv
+
+[<Emit("dotenv.config()")>]
+let dotenvConfig : unit = jsNative
+dotenvConfig
+
+[<Emit("process.env[$0]")>]
+let env (key : string) : string = jsNative
+
 [<Import("default", "contentful")>]
-let contentful : unit -> unit = jsNative
+let contentful : Contentful = jsNative
+
+let contentfulClient = contentful.createClient { space = env "CONTENTFUL_SPACE"; accessToken = env "CONTENTFUL_ACCESS_TOKEN" }
 
 [<Import("default", "sendgrid")>]
 let sendgrid : unit -> unit = jsNative
@@ -22,22 +36,11 @@ let csurf : unit -> unit = jsNative
 [<Import("default", "cookie-session")>]
 let cookieSession : {| name: string; sameSite: string; secret: string |} -> unit = jsNative
 
-[<Import("default", "dotenv")>]
-let dotenv : unit -> unit = jsNative
-dotenv
-
-[<Emit("dotenv.config()")>]
-let dotenvConfig : unit = jsNative
-dotenvConfig
-
 [<Import("graphqlHTTP", "express-graphql")>]
 let graphqlHTTP : {| schema: obj; rootValue: obj; graphiql: bool |} -> unit = jsNative
 
 [<Import("default", "./graphql-schema-builder.js")>]
 let graphqlSchemaBuilder : {| schemaString: string |} -> obj = jsNative
-
-[<Emit("process.env[$0]")>]
-let env (key : string) : string = jsNative
 
 [<Import("default", "./middleware/express-link.js")>]
 let expressLinkMiddleware : {| defaultTitle: string |} -> unit = jsNative
@@ -64,7 +67,7 @@ let port = env "PORT"
 let schemaObject = graphqlSchemaBuilder {| schemaString = schemaString |}
 let schema = schemaObject :?> {| schema: obj; rootValue: obj |}
 
-let rootValue : obj = rootValueInitializer (env "CONTENTFUL_ACCESS_TOKEN") (env "CONTENTFUL_SPACE")
+let rootValue : obj = rootValueInitializer (env "CONTENTFUL_ACCESS_TOKEN") (env "CONTENTFUL_SPACE") contentfulClient
 
 let app = express()
 useMiddleware(expressStatic("build"))

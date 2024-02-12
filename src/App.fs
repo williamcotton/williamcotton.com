@@ -5,6 +5,7 @@ open Feliz
 open Fable.Core
 open Fable.Core.JsInterop
 open Express
+open Global
 open GraphQLSchema
 
 let requestContext = React.createContext(name="Request")

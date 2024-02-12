@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Include="src/Express.fs" />
+    <Compile Include="src/common/Global.fs" />
     <Compile Include="src/server/GraphQLSchema.fs" />
     <Compile Include="src/App.fs" />
     <Compile Include="src/server/Server.fs" />
