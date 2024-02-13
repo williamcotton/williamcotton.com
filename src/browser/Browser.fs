@@ -5,6 +5,7 @@ open Feliz
 open Fable.Core
 open App
 open Express
+open Global
 
 [<Import("default", "browser-express")>]
 let express : unit -> ExpressApp = jsNative
@@ -17,9 +18,6 @@ let expressLinkMiddleware : unit -> unit = jsNative
 
 [<Import("default", "./middleware/graphql-client.js")>]
 let graphqlClientMiddleware : {| route : string |} -> unit = jsNative
-
-[<Emit("fetch($0)")>]
-let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string> |}> = jsNative
 
 [<Emit("app.use($0)")>]
 let useMiddleware middleware: unit = jsNative

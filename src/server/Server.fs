@@ -67,7 +67,7 @@ let port = env "PORT"
 let schemaObject = graphqlSchemaBuilder {| schemaString = schemaString |}
 let schema = schemaObject :?> {| schema: obj; rootValue: obj |}
 
-let rootValue : obj = rootValueInitializer (env "CONTENTFUL_ACCESS_TOKEN") (env "CONTENTFUL_SPACE") contentfulClient
+let rootValue : obj = rootValueInitializer contentfulClient
 
 let app = express()
 useMiddleware(expressStatic("build"))

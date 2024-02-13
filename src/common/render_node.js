@@ -2,10 +2,8 @@ import { createElement as h } from "react";
 import { INLINES, BLOCKS } from "@contentful/rich-text-types";
 
 const renderNode = ({ Link }) => {
-  console.log(Link);
   return ({
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
-      console.log(node);
       if (node.data.target.fields) {
         const {
           title,

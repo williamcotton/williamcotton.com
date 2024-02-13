@@ -121,7 +121,6 @@ let universalApp (app: ExpressApp) =
         promise {
             let! response = req.q "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
             let article : Article = response?article
-            consoleLog article
             Html.article [
                 Html.h2 [ prop.text article.title ]
                 Html.p [ 
@@ -134,6 +133,12 @@ let universalApp (app: ExpressApp) =
             |> res.renderComponent |> ignore
         } |> ignore
     )
+
+    app.get("/contact", fun req res _ ->
+        Contact()
+        |> res.renderComponent |> ignore
+    )
+
 
     app.get("/about", fun req res _ ->
         React.fragment [
@@ -149,11 +154,6 @@ let universalApp (app: ExpressApp) =
 
     app.get("/bio", fun req res _ ->
         Bio()
-        |> res.renderComponent |> ignore
-    )
-
-    app.get("/contact", fun req res _ ->
-        Contact()
         |> res.renderComponent |> ignore
     )
 

@@ -38,6 +38,3 @@ type ExpressApp =
 
 [<Emit("console.log($0)")>]
 let consoleLog text: unit = jsNative
-
-[<Emit("fetch($0)")>]
-let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string> |}> = jsNative

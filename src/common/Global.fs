@@ -8,6 +8,12 @@ open Fable.Core
 open System
 open System.Collections.Generic
 
+[<Import("default", "../common/render_node.js")>]
+let renderNode : obj -> obj = jsNative
+
+[<Emit("fetch($0)")>]
+let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: unit -> JS.Promise<obj> |}> = jsNative
+
 type ContentfulClientOptions = {
     space: string
     accessToken: string
@@ -20,14 +26,13 @@ type Entry = {
 }
 
 type ContentfulClient = {
-    getEntries: IDictionary<string, obj> -> JS.Promise<Entry[]>
+    getEntries: obj -> JS.Promise<Entry[]>
 }
 
 type Contentful = {
     createClient: ContentfulClientOptions -> ContentfulClient
 }
 
-// Function to add ordinal suffix to a day number
 let addOrdinal (day: int) : string =
     match day % 10 with
     | 1 when day % 100 <> 11 -> sprintf "%dst" day

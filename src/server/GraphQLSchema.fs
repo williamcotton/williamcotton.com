@@ -15,9 +15,6 @@ let sendgrid : obj -> obj = jsNative
 [<Emit("sendgrid.mail")>]
 let helper: unit -> obj = jsNative
 
-[<Import("default", "../common/render_node.js")>]
-let renderNode : obj -> obj = jsNative
-
 type Body = {
     content: obj array
 }
@@ -85,30 +82,24 @@ let schemaString = "
     sendEmail(input: EmailMessage): SuccessResponse
   }"
 
-[<Emit("fetch($0)")>]
-let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: unit -> JS.Promise<obj> |}> = jsNative
-
-let rootValueInitializer contentfulAccessToken contentfulSpaceId contentfulClient =
+let rootValueInitializer contentfulClient =
     let allArticles () =
         let trimBody (item : obj) =
             let fields : Article = item?fields
             let body : Body = fields.body
             let updatedContent = body.content |> Array.take 4
-            let updatedArticle = {| fields with body = {| body with content = updatedContent |} |}
-            updatedArticle
+            {| fields with body = {| body with content = updatedContent |} |}
             
         promise {
             let entriesOptions = 
-                dict [
-                    "content_type", box "blogPost"
-                    "fields.hidden", box false
-                    "order", box "-fields.publishedDate"
+                createObj [
+                    "content_type" ==> "blogPost"
+                    "fields.hidden" ==> false
+                    "order" ==> "-fields.publishedDate"
                 ]
-
             let! entries = contentfulClient.getEntries(entriesOptions)
-            let items = entries?items
-            let articles = items |> Array.filter (fun item -> item?fields?hidden = false) |> Array.map (fun item -> trimBody item)
-            return articles
+            return entries?items
+                |> Array.map (fun item -> trimBody item)
         }
 
     let article params =
@@ -116,26 +107,30 @@ let rootValueInitializer contentfulAccessToken contentfulSpaceId contentfulClien
 
         promise {
             let entriesOptions = 
-                dict [
-                    "content_type", box "blogPost"
-                    "fields.slug[in]", box slug
+                createObj [
+                    "content_type" ==> "blogPost"
+                    "fields.slug[in]" ==> slug
                 ]
-
             let! entries = contentfulClient.getEntries(entriesOptions)
-            let items = entries?items
-            let articles = items |> Array.filter (fun item -> item?fields?hidden = false) |> Array.map (fun item -> item?fields)
-            consoleLog articles
-            return articles |> Array.head
+            return entries?items
+                |> Array.map (fun item -> item?fields)
+                |> Array.head
         }
 
     let page params =
-        fun () -> ()
-        // async {
-        //     let! entries = contentfulClient.GetEntriesAsync("page", slug = slug)
-        //     match entries with
-        //     | firstEntry::_ -> return firstEntry
-        //     | [] -> failwith "NotFound"
-        // }
+        let slug = params?slug
+
+        promise {
+            let entriesOptions = 
+                createObj [
+                    "content_type" ==> "page"
+                    "fields.slug[in]" ==> slug
+                ]
+            let! entries = contentfulClient.getEntries(entriesOptions)
+            return entries?items
+                |> Array.map (fun item -> item?fields)
+                |> Array.head
+        }
 
     let sendEmail input =
         fun () -> ()
