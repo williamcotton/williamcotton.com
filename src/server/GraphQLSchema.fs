@@ -91,22 +91,16 @@ let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: u
 let rootValueInitializer contentfulAccessToken contentfulSpaceId contentfulClient =
     let allArticles () =
         let trimBody (item : obj) =
-            consoleLog item
+            // consoleLog item
             let fields : Article = item?fields
             let body : Body = fields.body
-            let updatedContent = body.content |> Array.take 4
+            let updatedContent = body.content
             let updatedArticle = {| fields with body = {| body with content = updatedContent |} |}
             
-            consoleLog updatedArticle
+            // consoleLog updatedArticle
             updatedArticle
             
         promise {
-            let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.hidden=false&order=-fields.publishedDate"
-            let! json = res.json()
-            let items = json?items
-            let assets = json?includes?Asset
-            let articles = items |> Array.map (fun item -> trimBody item)
-            consoleLog "======="
             let entriesOptions = 
                 dict [
                     "content_type", box "blogPost"
@@ -114,22 +108,32 @@ let rootValueInitializer contentfulAccessToken contentfulSpaceId contentfulClien
                     "order", box "-fields.publishedDate"
                 ]
 
-            let! res2 = contentfulClient.getEntries(entriesOptions)
-            let items2 = res2?items
-            consoleLog items2?length
-            let articles2 = items2 |> Array.map (fun item -> trimBody item)
-            return articles2
+            let! entries = contentfulClient.getEntries(entriesOptions)
+            let items = entries?items
+            let articles = items |> Array.filter (fun item -> item?fields?hidden = false) |> Array.map (fun item -> trimBody item)
+            return articles
         }
 
     let article params =
         let slug = params?slug
 
         promise {
-            let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.slug[in]={slug}"
-            let! json = res.json()
-            let item = json?items |> Array.head
-            let article  : Article = item?fields
-            return article
+            // let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.slug[in]={slug}"
+            // let! json = res.json()
+            // let item = json?items |> Array.head
+            // let article  : Article = item?fields
+            // return article
+            let entriesOptions = 
+                dict [
+                    "content_type", box "blogPost"
+                    "fields.hidden", box false
+                    "order", box "-fields.publishedDate"
+                ]
+
+            let! entries = contentfulClient.getEntries(entriesOptions)
+            let items = entries?items
+            let articles = items |> Array.filter (fun item -> item?fields?hidden = false) |> Array.map (fun item -> item?fields)
+            return articles |> Array.head
         }
 
     let page params =

@@ -106,7 +106,8 @@ let universalApp (app: ExpressApp) =
                             prop.className "published-date"
                             prop.text (formatDateString article.publishedDate) 
                         ]
-                        documentToReactComponents(article.body, {||})
+                        let renderNodeObj = renderNode({| Link = req.Link |})
+                        documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
                     ]
                 ) 
                 |> React.fragment 
