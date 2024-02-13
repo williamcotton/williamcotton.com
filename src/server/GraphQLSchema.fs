@@ -91,13 +91,10 @@ let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: u
 let rootValueInitializer contentfulAccessToken contentfulSpaceId contentfulClient =
     let allArticles () =
         let trimBody (item : obj) =
-            // consoleLog item
             let fields : Article = item?fields
             let body : Body = fields.body
-            let updatedContent = body.content
+            let updatedContent = body.content |> Array.take 4
             let updatedArticle = {| fields with body = {| body with content = updatedContent |} |}
-            
-            // consoleLog updatedArticle
             updatedArticle
             
         promise {
@@ -118,21 +115,16 @@ let rootValueInitializer contentfulAccessToken contentfulSpaceId contentfulClien
         let slug = params?slug
 
         promise {
-            // let! res = fetch $"https://cdn.contentful.com/spaces/{contentfulSpaceId}/environments/master/entries?access_token={contentfulAccessToken}&content_type=blogPost&fields.slug[in]={slug}"
-            // let! json = res.json()
-            // let item = json?items |> Array.head
-            // let article  : Article = item?fields
-            // return article
             let entriesOptions = 
                 dict [
                     "content_type", box "blogPost"
-                    "fields.hidden", box false
-                    "order", box "-fields.publishedDate"
+                    "fields.slug[in]", box slug
                 ]
 
             let! entries = contentfulClient.getEntries(entriesOptions)
             let items = entries?items
             let articles = items |> Array.filter (fun item -> item?fields?hidden = false) |> Array.map (fun item -> item?fields)
+            consoleLog articles
             return articles |> Array.head
         }
 

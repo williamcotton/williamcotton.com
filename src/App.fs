@@ -121,13 +121,15 @@ let universalApp (app: ExpressApp) =
         promise {
             let! response = req.q "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
             let article : Article = response?article
+            consoleLog article
             Html.article [
                 Html.h2 [ prop.text article.title ]
                 Html.p [ 
                     prop.className "published-date"
                     prop.text (formatDateString article.publishedDate) 
                 ]
-                documentToReactComponents(article.body, {||})
+                let renderNodeObj = renderNode({| Link = req.Link |})
+                documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
             ]
             |> res.renderComponent |> ignore
         } |> ignore
