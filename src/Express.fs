@@ -31,7 +31,7 @@ type ExpressRes =
 
 type ExpressApp =
   abstract member get: string * (ExpressReq -> ExpressRes -> (obj -> unit) -> unit) -> unit
-  abstract member post: string * (ExpressReq -> ExpressRes -> unit -> unit) -> unit
+  abstract member post: string * (ExpressReq -> ExpressRes -> (obj -> unit) -> unit) -> unit
   abstract member listen: int * (unit -> unit) -> unit
   abstract member ``use``: (obj -> ExpressReq -> ExpressRes -> (unit -> unit) -> unit) -> unit
   abstract member ``use``: (ExpressReq -> ExpressRes -> (unit -> unit) -> unit) -> unit

@@ -6,6 +6,7 @@ open Fable.Core
 open App
 open Express
 open Global
+open Components
 
 [<Import("default", "browser-express")>]
 let express : unit -> ExpressApp = jsNative

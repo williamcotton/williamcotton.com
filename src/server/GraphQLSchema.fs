@@ -133,6 +133,7 @@ let rootValueInitializer contentfulClient sendgridClient =
         }
 
     let sendEmail params =
+        consoleLog params
         let input = params?input
         let name = input?name
         let replyToAddress = input?replyToAddress

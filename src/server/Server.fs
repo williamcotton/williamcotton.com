@@ -7,6 +7,7 @@ open App
 open Express
 open Global
 open GraphQLSchema
+open Components
 
 [<Import("default", "dotenv")>]
 let dotenv : unit -> unit = jsNative
