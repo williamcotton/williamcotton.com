@@ -16,18 +16,19 @@ let documentToReactComponents (richText: obj, options: obj): ReactElement = jsNa
 
 [<ReactComponent>]
 let AppLayout (props: {| content: ReactElement; req: ExpressReq |}) =
+    let Link = props.req.Link
     React.contextProvider(requestContext, props.req, React.fragment [
         Html.div [
             prop.className "sitewrapper"
             prop.children [
                 Html.header [
                     Html.h1 [
-                        props.req.Link {| href = "/"; children = "williamcotton.com" |}
+                        Link {| href = "/"; children = "williamcotton.com" |}
                     ]
                     Html.nav [
-                        props.req.Link {| href = "/about"; children = "About" |}
-                        props.req.Link {| href = "/bio"; children = "Bio" |}
-                        props.req.Link {| href = "/contact"; children = "Contact" |}
+                        Link {| href = "/about"; children = "About" |}
+                        Link {| href = "/bio"; children = "Bio" |}
+                        Link {| href = "/contact"; children = "Contact" |}
                     ]
                 ]
                 Html.div [
@@ -62,25 +63,6 @@ let FrontPage() =
     ]
 
 [<ReactComponent>]
-let About() =
-    React.fragment [
-        Html.h2 [
-            prop.text "About"
-        ]
-        Html.p [
-            prop.text "This is the about page."
-        ]
-    ]
-
-[<ReactComponent>]
-let Bio() =
-    React.fragment [
-        Html.h2 [
-            prop.text "Bio"
-        ]
-    ]
-
-[<ReactComponent>]
 let Contact() =
     React.fragment [
         Html.h2 [
@@ -97,7 +79,8 @@ let verifyPost (value: string option) =
 let universalApp (app: ExpressApp) =
     app.get("/", fun req res next ->
         promise {
-            let! response = req |> query "query { allArticles { title slug publishedDate description body } }" {||}
+            let! response = 
+                req |> gql "query { allArticles { title slug publishedDate description body } }" {||}
             match response with
             | Ok response -> 
                 let allArticles : Article[] = response?allArticles
@@ -123,7 +106,8 @@ let universalApp (app: ExpressApp) =
     app.get("/articles/:slug", fun req res next ->
         promise {
             let slug = req.params?slug
-            let! response = req |> query "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
+            let! response =
+                req |> gql "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
             match response with
             | Ok response -> 
                 let article : Article = response?article
@@ -147,26 +131,27 @@ let universalApp (app: ExpressApp) =
         |> res.renderComponent |> ignore
     )
 
-    app.get("/about", fun req res _ ->
-        React.fragment [
-            Html.h2 [
-                prop.text "About"
-            ]
-            Html.p [
-                prop.text "This is the about page."
-            ]
-        ]
-        |> res.renderComponent |> ignore
-    )
-
-    app.get("/bio", fun req res _ ->
-        Bio()
-        |> res.renderComponent |> ignore
+    app.get("/:slug", fun req res next ->
+        promise {
+            let slug = req.params?slug
+            let! response = 
+                req |> gql "query Page($slug: String!) { page(slug: $slug) { title, slug, body } }" {| slug = slug |}
+            match response with
+            | Ok response -> 
+                let page : Page = response?page
+                React.fragment [
+                    Html.h2 [ prop.text page.title ]
+                    let renderNodeObj = renderNode({| Link = req.Link |})
+                    documentToReactComponents(page.body, {| renderNode = renderNodeObj |})
+                ]
+                |> res.renderComponent |> ignore
+            | Error message ->
+                next()
+        } |> ignore
     )
 
     app.``use`` (fun (req: ExpressReq) (res: ExpressRes) next ->
         res.status 404 |> ignore
-        
         Html.div "This page isn't here!"
         |> res.renderComponent 
         |> ignore

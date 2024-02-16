@@ -13,7 +13,7 @@ const cacheKey = (query, variables) =>
   `${query}-(${variables ? JSON.stringify(variables) : ""})`;
 
 export default ({ route }) => (req, res, next) => {
-  req.q = async (query, variables, options = {}) => {
+  req.gql = async (query, variables, options = {}) => {
     const cache = 'cache' in options ? options.cache : true;
     const isMutation = /^mutation/.test(query);
     const key = cacheKey(query, variables);

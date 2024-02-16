@@ -13,7 +13,7 @@ const cacheKey = (query, variables) =>
 
 export default ({ schema, rootValue }) =>
   (req, res, next) => {
-    req.q = async (query, variables) => {
+    req.gql = async (query, variables) => {
       const isMutation = /^mutation/.test(query);
       const key = cacheKey(query, variables);
       const response = await graphql(schema, query, rootValue, req, variables);
