@@ -19,13 +19,15 @@ dotenvConfig
 [<Emit("process.env[$0]")>]
 let env (key : string) : string = jsNative
 
+[<Import("default", "sendgrid")>]
+let sendgrid : obj -> obj = jsNative
+
+let sendgridClient = sendgrid(env "SENDGRID_API_KEY")
+
 [<Import("default", "contentful")>]
 let contentful : Contentful = jsNative
 
 let contentfulClient = contentful.createClient { space = env "CONTENTFUL_SPACE"; accessToken = env "CONTENTFUL_ACCESS_TOKEN" }
-
-[<Import("default", "sendgrid")>]
-let sendgrid : unit -> unit = jsNative
 
 [<Import("default", "express")>]
 let express : unit -> ExpressApp = jsNative
@@ -67,7 +69,7 @@ let port = env "PORT"
 let schemaObject = graphqlSchemaBuilder {| schemaString = schemaString |}
 let schema = schemaObject :?> {| schema: obj; rootValue: obj |}
 
-let rootValue : obj = rootValueInitializer contentfulClient
+let rootValue : obj = rootValueInitializer contentfulClient sendgridClient
 
 let app = express()
 useMiddleware(expressStatic("build"))

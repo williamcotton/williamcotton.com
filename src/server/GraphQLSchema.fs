@@ -82,7 +82,7 @@ let schemaString = "
     sendEmail(input: EmailMessage): SuccessResponse
   }"
 
-let rootValueInitializer contentfulClient =
+let rootValueInitializer contentfulClient sendgridClient =
     let allArticles () =
         let trimBody (item : obj) =
             let fields : Article = item?fields
@@ -132,21 +132,15 @@ let rootValueInitializer contentfulClient =
                 |> Array.head
         }
 
-    let sendEmail input =
-        fun () -> ()
-    //     async {
-    //         try
-    //             let modifiedSubject = $"From williamcotton.com: {input.subject}"
-    //             let fromEmail = helper.Email(input.replyToAddress, input.name)
-    //             let toEmail = helper.Email("williamcotton@gmail.com")
-    //             let content = helper.Content("text/plain", input.body)
-    //             let mailMessage = helper.Mail(fromEmail, modifiedSubject, toEmail, content)
-    //             // Assuming sendgridClient is a configured SMTP client or similar
-    //             let! result = sendgridClient.SendMailAsync(mailMessage)
-    //             return { success = true }
-    //         with
-    //         | _ -> return { success = false }
-    //     }
+    let sendEmail params =
+        let input = params?input
+        let name = input?name
+        let replyToAddress = input?replyToAddress
+        let subject = input?subject
+        let body = input?body
+
+        let modifiedSubject = "From williamcotton.com: " + subject
+        {| success = true |}
 
     {|
         allArticles = allArticles;

@@ -64,11 +64,20 @@ let FrontPage() =
 
 [<ReactComponent>]
 let Contact() =
+    let req = React.useContext(requestContext)
+    let Form = req.Form
     React.fragment [
         Html.h2 [
             prop.text "Contact"
         ]
-    ]
+        Form {| action = "/contact"; method = "post"; children = [
+                Html.input [ prop.type' "text"; prop.name "name"; prop.placeholder "Name" ]
+                Html.input [ prop.type' "email"; prop.name "email"; prop.placeholder "Email" ]
+                Html.textarea [ prop.placeholder "Message"; prop.name "message" ]
+                Html.button [ prop.text "Send" ]
+            ]
+        |}
+        ]
 
 let verifyPost (value: string option) =
     match value with
@@ -129,6 +138,10 @@ let universalApp (app: ExpressApp) =
     app.get("/contact", fun req res _ ->
         Contact()
         |> res.renderComponent |> ignore
+    )
+
+    app.post("/contact", fun req res _ ->
+        consoleLog req.body
     )
 
     app.get("/:slug", fun req res next ->
