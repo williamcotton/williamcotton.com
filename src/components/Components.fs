@@ -12,6 +12,9 @@ let requestContext = React.createContext(name="Request")
 [<Import("documentToReactComponents", "@contentful/rich-text-react-renderer")>]
 let documentToReactComponents (richText: obj, options: obj): ReactElement = jsNative
 
+[<Import("default", "../common/render_node.js")>]
+let renderNode : obj -> obj = jsNative
+
 [<ReactComponent>]
 let AppLayout (props: {| content: ReactElement; req: ExpressReq |}) =
     let Link = props.req.Link

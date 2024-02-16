@@ -11,9 +11,6 @@ open System.Collections.Generic
 [<Emit("console.log($0)")>]
 let consoleLog text: unit = jsNative
 
-[<Import("default", "../common/render_node.js")>]
-let renderNode : obj -> obj = jsNative
-
 [<Emit("fetch($0)")>]
 let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: unit -> JS.Promise<obj> |}> = jsNative
 

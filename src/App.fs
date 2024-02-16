@@ -21,29 +21,30 @@ let universalApp (app: ExpressApp) =
         promise {
             let! response = 
                 req |> gql "query { allArticles { title slug publishedDate description body } }" {||}
+                
             match response with
             | Ok response -> 
                 let allArticles : Article[] = response?allArticles
                 FrontPage({| allArticles = allArticles |})
                 |> res.renderComponent |> ignore
-            | Error message ->
-                next()
+            | Error message -> next()
+
         } |> ignore
     )
 
     app.get("/articles/:slug", fun req res next ->
         promise {
             let slug = req.params?slug
+
             let! response =
                 req |> gql "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
-            consoleLog response
             match response with
             | Ok response -> 
                 let article : Article = response?article
                 Article({| article = article |})
                 |> res.renderComponent |> ignore
-            | Error message ->
-                next()
+            | Error message -> next()
+
         } |> ignore
     )
 
@@ -59,28 +60,32 @@ let universalApp (app: ExpressApp) =
             let replyToAddress = req.body?email
             let subject = req.body?subject
             let body = req.body?body
+
             let! response = 
                 req |> gql "mutation sendEmail($input: EmailMessage) { sendEmail(input: $input) { success } }" {| input = {| name = name; replyToAddress = replyToAddress; subject = subject; body = body |} |}
+
             match response with
             | Ok response -> 
                 consoleLog response 
-            | Error message ->
-                next()
+            | Error message -> next()
+
         } |> ignore
     )
 
     app.get("/:slug", fun req res next ->
         promise {
             let slug = req.params?slug
+
             let! response = 
                 req |> gql "query Page($slug: String!) { page(slug: $slug) { title, slug, body } }" {| slug = slug |}
+
             match response with
             | Ok response -> 
                 let page : Page = response?page
                 Page({| page = page |})
                 |> res.renderComponent |> ignore
-            | Error message ->
-                next()
+            | Error message -> next()
+
         } |> ignore
     )
 
@@ -99,7 +104,6 @@ let universalApp (app: ExpressApp) =
             Html.div message
             |> res.renderComponent
             |> ignore
-        | _ ->
-            next()
+        | _ -> next()
 
     app.``use`` errorHandler

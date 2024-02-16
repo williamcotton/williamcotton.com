@@ -10,10 +10,10 @@ open Global
 open System
 
 [<Import("default", "sendgrid")>]
-let sendgrid : obj -> obj = jsNative
+let sendgrid : {| helper = {| {| Mail: {| replyToAddress: string; name: string |} -> obj |} |} |} -> obj = jsNative
 
 [<Emit("sendgrid.mail")>]
-let helper: unit -> obj = jsNative
+let helper: {| Mail: {| replyToAddress: string; name: string |} -> obj |} = jsNative
 
 type Body = {
     content: obj array
@@ -141,6 +141,9 @@ let rootValueInitializer contentfulClient sendgridClient =
         let body = input?body
 
         let modifiedSubject = "From williamcotton.com: " + subject
+
+        let fromMail = helper.Mail({| replyToAddress = replyToAddress; name = name |})
+
         {| success = true |}
 
     {|
