@@ -8,6 +8,9 @@ open Fable.Core
 open System
 open System.Collections.Generic
 
+[<Emit("console.log($0)")>]
+let consoleLog text: unit = jsNative
+
 [<Import("default", "../common/render_node.js")>]
 let renderNode : obj -> obj = jsNative
 

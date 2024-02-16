@@ -30,11 +30,17 @@ type ExpressRes =
   abstract member status : int -> ExpressReq
 
 type ExpressApp =
-  abstract member get: string * (ExpressReq -> ExpressRes -> unit -> unit) -> unit
+  abstract member get: string * (ExpressReq -> ExpressRes -> (obj -> unit) -> unit) -> unit
   abstract member post: string * (ExpressReq -> ExpressRes -> unit -> unit) -> unit
   abstract member listen: int * (unit -> unit) -> unit
   abstract member ``use``: (obj -> ExpressReq -> ExpressRes -> (unit -> unit) -> unit) -> unit
   abstract member ``use``: (ExpressReq -> ExpressRes -> (unit -> unit) -> unit) -> unit
 
-[<Emit("console.log($0)")>]
-let consoleLog text: unit = jsNative
+let query (query: string) (variables: obj) (req: ExpressReq) : JS.Promise<Result<obj, string>> =
+  promise {
+    try
+      let! result = req.q query variables
+      return Ok result
+    with
+    | ex -> return Error (sprintf "Error in query: %s" ex.Message)
+  }

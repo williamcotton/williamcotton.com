@@ -7,6 +7,7 @@ open Fable.Core.JsInterop
 open Express
 open Global
 open GraphQLSchema
+open System
 
 let requestContext = React.createContext(name="Request")
 
@@ -94,43 +95,50 @@ let verifyPost (value: string option) =
     | None -> Error "No value provided."
 
 let universalApp (app: ExpressApp) =
-    app.get("/", fun req res _ ->
+    app.get("/", fun req res next ->
         promise {
-            let! response = req.q "query { allArticles { title slug publishedDate description body } }" {||}
-            let allArticles : Article[] = response?allArticles
-            allArticles 
-                |> Array.map (fun article ->
-                    Html.article [
-                        Html.h2 [req.Link {| href = "/articles/" + article.slug; children =[article.title] |}]
-                        Html.p [ 
-                            prop.className "published-date"
-                            prop.text (formatDateString article.publishedDate) 
+            let! response = req |> query "query { allArticles { title slug publishedDate description body } }" {||}
+            match response with
+            | Ok response -> 
+                let allArticles : Article[] = response?allArticles
+                allArticles 
+                    |> Array.map (fun article ->
+                        Html.article [
+                            Html.h2 [req.Link {| href = "/articles/" + article.slug; children =[article.title] |}]
+                            Html.p [ 
+                                prop.className "published-date"
+                                prop.text (formatDateString article.publishedDate) 
+                            ]
+                            let renderNodeObj = renderNode({| Link = req.Link |})
+                            documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
                         ]
-                        let renderNodeObj = renderNode({| Link = req.Link |})
-                        documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
-                    ]
-                ) 
-                |> React.fragment 
-                |> res.renderComponent |> ignore
+                    ) 
+                    |> React.fragment 
+                    |> res.renderComponent |> ignore
+            | Error message ->
+                next()
         } |> ignore
     )
 
-    app.get("/articles/:slug", fun req res _ ->
-        let slug = req.params?slug
-
+    app.get("/articles/:slug", fun req res next ->
         promise {
-            let! response = req.q "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
-            let article : Article = response?article
-            Html.article [
-                Html.h2 [ prop.text article.title ]
-                Html.p [ 
-                    prop.className "published-date"
-                    prop.text (formatDateString article.publishedDate) 
+            let slug = req.params?slug
+            let! response = req |> query "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
+            match response with
+            | Ok response -> 
+                let article : Article = response?article
+                Html.article [
+                    Html.h2 [ prop.text article.title ]
+                    Html.p [ 
+                        prop.className "published-date"
+                        prop.text (formatDateString article.publishedDate) 
+                    ]
+                    let renderNodeObj = renderNode({| Link = req.Link |})
+                    documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
                 ]
-                let renderNodeObj = renderNode({| Link = req.Link |})
-                documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
-            ]
-            |> res.renderComponent |> ignore
+                |> res.renderComponent |> ignore
+            | Error message ->
+                next()
         } |> ignore
     )
 
@@ -138,7 +146,6 @@ let universalApp (app: ExpressApp) =
         Contact()
         |> res.renderComponent |> ignore
     )
-
 
     app.get("/about", fun req res _ ->
         React.fragment [
@@ -170,7 +177,9 @@ let universalApp (app: ExpressApp) =
         | :? System.Exception as ex ->
             let message = ex.Message
             res.status 500 |> ignore
-            res.send(message) |> ignore
+            Html.div message
+            |> res.renderComponent
+            |> ignore
         | _ ->
             next()
 
