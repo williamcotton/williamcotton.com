@@ -1,12 +1,7 @@
 module Global
 
-open Browser.Dom
-open Fable.Core.JS
-open Fable.Core.JsInterop
-open Feliz
 open Fable.Core
 open System
-open System.Collections.Generic
 
 [<Emit("console.log($0)")>]
 let consoleLog text: unit = jsNative

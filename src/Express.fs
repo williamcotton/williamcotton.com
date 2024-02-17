@@ -2,8 +2,6 @@ module Express
 
 open Feliz
 open Fable.Core
-open Fable.Import.Express
-open Fable.Core.JsInterop
 
 type ExpressReq =
   abstract member params : obj

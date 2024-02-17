@@ -1,13 +1,10 @@
 ﻿module App
 
-open Node.Api
 open Feliz
-open Fable.Core
 open Fable.Core.JsInterop
 open Express
 open Global
 open GraphQLSchema
-open System
 open Components
 
 let verifyPost (value: string option) =
@@ -41,7 +38,7 @@ let universalApp (app: ExpressApp) =
             match response with
             | Ok response -> 
                 let article : Article = response?article
-                Article({| article = article |})
+                ArticlePage({| article = article |})
                 |> res.renderComponent |> ignore
             | Error message -> next()
 
@@ -49,7 +46,7 @@ let universalApp (app: ExpressApp) =
     )
 
     app.get("/contact", fun req res _ ->
-        Contact()
+        ContactPage()
         |> res.renderComponent |> ignore
     )
 

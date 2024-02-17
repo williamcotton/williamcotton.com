@@ -1,19 +1,9 @@
 module GraphQLSchema
 
 open Fable.Core
-open Feliz
-open FSharp.Data
-open Fable.Core.JS
 open Fable.Core.JsInterop
-open Express
 open Global
 open System
-
-
-[<Import("default", "dotenv")>]
-let dotenv : unit -> unit = jsNative
-dotenv
-
 
 type SendGridHelper = {
     Email: string -> string -> obj
@@ -176,7 +166,7 @@ let rootValueInitializer contentfulClient sendgridClient =
             | :? Exception as ex ->
                 consoleLog ex.Message
                 return {| success = false |}
-        }
+        } |> ignore
 
         {| success = true |}
 

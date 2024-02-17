@@ -1,11 +1,9 @@
 module Browser
 
-open Browser.Dom
 open Feliz
 open Fable.Core
 open App
 open Express
-open Global
 open Components
 
 [<Import("default", "browser-express")>]

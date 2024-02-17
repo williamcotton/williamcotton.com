@@ -4,7 +4,6 @@ open Feliz
 open Global
 open GraphQLSchema
 open Fable.Core
-open Fable.Core.JsInterop
 open Express
 
 let requestContext = React.createContext(name="Request")
@@ -49,7 +48,21 @@ let AppLayout (props: {| content: ReactElement; req: ExpressReq |}) =
 
 [<ReactComponent>]
 let Article(props: {| article : Article |}) =
-    let req = React.useContext(requestContext)
+    let req = React.useContext requestContext
+    let article = props.article
+    React.fragment [
+        Html.h2 [ prop.text article.title ]
+        Html.p [ 
+            prop.className "published-date"
+            prop.text (formatDateString article.publishedDate) 
+        ]
+        let renderNodeObj = renderNode({| Link = req.Link |})
+        documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
+    ]
+
+[<ReactComponent>]
+let ArticlePage(props: {| article : Article |}) =
+    let req = React.useContext requestContext
     let article = props.article
     Html.article [
         Html.h2 [ prop.text article.title ]
@@ -63,7 +76,7 @@ let Article(props: {| article : Article |}) =
 
 [<ReactComponent>]
 let FrontPage(props: {| allArticles : Article[] |}) =
-    let req = React.useContext(requestContext)
+    let req = React.useContext requestContext
     props.allArticles 
         |> Array.map (fun article ->
             Html.article [
@@ -79,7 +92,7 @@ let FrontPage(props: {| allArticles : Article[] |}) =
         |> React.fragment 
         
 [<ReactComponent>]
-let Contact() =
+let ContactPage() =
     // sendgrid API key has expired
     // let req = React.useContext(requestContext)
     // let Form = req.Form
@@ -107,7 +120,7 @@ let Contact() =
 
 [<ReactComponent>]
 let Page(props: {| page : Page |}) =
-    let req = React.useContext(requestContext)
+    let req = React.useContext requestContext
     let page = props.page
     React.fragment [
         Html.h2 [ prop.text page.title ]

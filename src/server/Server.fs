@@ -1,6 +1,5 @@
 module Server
 
-open Node.Api
 open Feliz
 open Fable.Core
 open App
