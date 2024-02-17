@@ -170,9 +170,11 @@ let rootValueInitializer contentfulClient sendgridClient =
         promise {
             try
                 let! response = sendgridClient?API(request)
+                consoleLog response
                 return {| success = true |}
             with
             | :? Exception as ex ->
+                consoleLog ex.Message
                 return {| success = false |}
         }
 

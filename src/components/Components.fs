@@ -80,20 +80,29 @@ let FrontPage(props: {| allArticles : Article[] |}) =
         
 [<ReactComponent>]
 let Contact() =
-    let req = React.useContext(requestContext)
-    let Form = req.Form
+    // sendgrid API key has expired
+    // let req = React.useContext(requestContext)
+    // let Form = req.Form
+    // React.fragment [
+    //     Html.h2 [
+    //         prop.text "Contact"
+    //     ]
+    //     Form {| action = "/contact"; method = "post"; children = [
+    //             Html.input [ prop.type' "text"; prop.name "name"; prop.placeholder "Name" ]
+    //             Html.input [ prop.type' "email"; prop.name "email"; prop.placeholder "Email" ]
+    //             Html.input [ prop.type' "subject"; prop.name "subject"; prop.placeholder "Subject" ]
+    //             Html.textarea [ prop.placeholder "Message"; prop.name "body" ]
+    //             Html.button [ prop.text "Send" ]
+    //         ]
+    //     |}
+    // ]
     React.fragment [
         Html.h2 [
             prop.text "Contact"
         ]
-        Form {| action = "/contact"; method = "post"; children = [
-                Html.input [ prop.type' "text"; prop.name "name"; prop.placeholder "Name" ]
-                Html.input [ prop.type' "email"; prop.name "email"; prop.placeholder "Email" ]
-                Html.input [ prop.type' "subject"; prop.name "subject"; prop.placeholder "Subject" ]
-                Html.textarea [ prop.placeholder "Message"; prop.name "body" ]
-                Html.button [ prop.text "Send" ]
-            ]
-        |}
+        Html.p [
+            prop.text "Email me at this domain name, minus the dot com, at gmail dot com"
+        ]
     ]
 
 [<ReactComponent>]
