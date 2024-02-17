@@ -89,6 +89,7 @@ let Contact() =
         Form {| action = "/contact"; method = "post"; children = [
                 Html.input [ prop.type' "text"; prop.name "name"; prop.placeholder "Name" ]
                 Html.input [ prop.type' "email"; prop.name "email"; prop.placeholder "Email" ]
+                Html.input [ prop.type' "subject"; prop.name "subject"; prop.placeholder "Subject" ]
                 Html.textarea [ prop.placeholder "Message"; prop.name "body" ]
                 Html.button [ prop.text "Send" ]
             ]

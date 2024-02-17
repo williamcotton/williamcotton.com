@@ -100,6 +100,7 @@ let universalApp (app: ExpressApp) =
         match err with
         | :? System.Exception as ex ->
             let message = ex.Message
+            consoleLog message
             res.status 500 |> ignore
             Html.div message
             |> res.renderComponent

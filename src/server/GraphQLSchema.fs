@@ -9,11 +9,22 @@ open Express
 open Global
 open System
 
-[<Import("default", "sendgrid")>]
-let sendgrid : {| helper = {| {| Mail: {| replyToAddress: string; name: string |} -> obj |} |} |} -> obj = jsNative
 
-[<Emit("sendgrid.mail")>]
-let helper: {| Mail: {| replyToAddress: string; name: string |} -> obj |} = jsNative
+[<Import("default", "dotenv")>]
+let dotenv : unit -> unit = jsNative
+dotenv
+
+
+type SendGridHelper = {
+    Email: string -> string -> obj
+    Content: string -> string -> obj
+    Mail: obj -> obj -> obj -> obj -> {| toJSON: unit -> string |}
+}
+
+[<Import("default", "sendgrid")>]
+let sendgrid : {| mail : SendGridHelper |} -> obj = jsNative
+
+let helper : SendGridHelper = sendgrid?mail
 
 type Body = {
     content: obj array
@@ -133,16 +144,37 @@ let rootValueInitializer contentfulClient sendgridClient =
         }
 
     let sendEmail params =
+        consoleLog "sendEmail"
         consoleLog params
         let input = params?input
         let name = input?name
         let replyToAddress = input?replyToAddress
         let subject = input?subject
+        let modifiedSubject = "From williamcotton.com: " + subject
         let body = input?body
 
-        let modifiedSubject = "From williamcotton.com: " + subject
+        let fromMail = helper.Email replyToAddress name
+        let toMail = helper.Email "williamcotton@gmail.com" "William Cotton"
+        let content = helper.Content "text/plain" body
+        let mail = helper.Mail fromMail modifiedSubject toMail content
 
-        let fromMail = helper.Mail({| replyToAddress = replyToAddress; name = name |})
+        let sendGridOptions = 
+            createObj [
+                "method" ==> "POST"
+                "path" ==> "/v3/mail/send"
+                "body" ==> mail.toJSON()
+            ]
+
+        let request = sendgridClient?emptyRequest(sendGridOptions)
+
+        promise {
+            try
+                let! response = sendgridClient?API(request)
+                return {| success = true |}
+            with
+            | :? Exception as ex ->
+                return {| success = false |}
+        }
 
         {| success = true |}
 

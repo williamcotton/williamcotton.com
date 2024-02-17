@@ -21,7 +21,7 @@ dotenvConfig
 let env (key : string) : string = jsNative
 
 [<Import("default", "sendgrid")>]
-let sendgrid : obj -> obj = jsNative
+let sendgrid : string -> {| mail : obj |} = jsNative
 
 let sendgridClient = sendgrid(env "SENDGRID_API_KEY")
 
@@ -34,7 +34,7 @@ let contentfulClient = contentful.createClient { space = env "CONTENTFUL_SPACE";
 let express : unit -> ExpressApp = jsNative
 
 [<Import("default", "csurf")>]
-let csurf : unit -> unit = jsNative
+let csurf : obj -> unit = jsNative
 
 [<Import("default", "cookie-session")>]
 let cookieSession : {| name: string; sameSite: string; secret: string |} -> unit = jsNative

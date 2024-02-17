@@ -14,6 +14,17 @@ let consoleLog text: unit = jsNative
 [<Emit("fetch($0)")>]
 let fetch (url: string): JS.Promise<{| text: unit -> JS.Promise<string>; json: unit -> JS.Promise<obj> |}> = jsNative
 
+[<Import("default", "dotenv")>]
+let dotenv : unit -> unit = jsNative
+dotenv
+
+[<Emit("dotenv.config()")>]
+let dotenvConfig : unit = jsNative
+dotenvConfig
+
+[<Emit("process.env[$0]")>]
+let env (key : string) : string = jsNative
+
 type ContentfulClientOptions = {
     space: string
     accessToken: string
