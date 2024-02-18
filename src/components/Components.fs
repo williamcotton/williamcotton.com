@@ -11,8 +11,11 @@ let requestContext = React.createContext(name="Request")
 [<Import("documentToReactComponents", "@contentful/rich-text-react-renderer")>]
 let documentToReactComponents (richText: obj, options: obj): ReactElement = jsNative
 
-[<Import("default", "../common/render_node.js")>]
+[<Import("renderNode", "../common/render_node.js")>]
 let renderNode : obj -> obj = jsNative
+
+[<Import("renderMark", "../common/render_node.js")>]
+let renderMark : obj -> obj = jsNative
 
 [<ReactComponent>]
 let AppLayout (props: {| content: ReactElement; req: ExpressReq |}) =
@@ -47,20 +50,6 @@ let AppLayout (props: {| content: ReactElement; req: ExpressReq |}) =
     ])
 
 [<ReactComponent>]
-let Article(props: {| article : Article |}) =
-    let req = React.useContext requestContext
-    let article = props.article
-    React.fragment [
-        Html.h2 [ prop.text article.title ]
-        Html.p [ 
-            prop.className "published-date"
-            prop.text (formatDateString article.publishedDate) 
-        ]
-        let renderNodeObj = renderNode({| Link = req.Link |})
-        documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
-    ]
-
-[<ReactComponent>]
 let ArticlePage(props: {| article : Article |}) =
     let req = React.useContext requestContext
     let article = props.article
@@ -71,7 +60,7 @@ let ArticlePage(props: {| article : Article |}) =
             prop.text (formatDateString article.publishedDate) 
         ]
         let renderNodeObj = renderNode({| Link = req.Link |})
-        documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
+        documentToReactComponents(article.body, {| renderNode = renderNodeObj; renderMark = renderMark |})
     ]
 
 [<ReactComponent>]
@@ -86,7 +75,7 @@ let FrontPage(props: {| allArticles : Article[] |}) =
                     prop.text (formatDateString article.publishedDate) 
                 ]
                 let renderNodeObj = renderNode({| Link = req.Link |})
-                documentToReactComponents(article.body, {| renderNode = renderNodeObj |})
+                documentToReactComponents(article.body, {| renderNode = renderNodeObj; renderMark = renderMark |})
             ]
         ) 
         |> React.fragment 

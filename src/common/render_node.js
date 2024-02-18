@@ -1,8 +1,9 @@
 import { createElement as h } from "react";
 import { INLINES, BLOCKS } from "@contentful/rich-text-types";
+import highlightjs from "highlight.js";
 
-const renderNode = ({ Link }) => {
-  return ({
+export const renderNode = ({ Link }) => {
+  return {
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
       if (node.data.target.fields) {
         const {
@@ -31,8 +32,31 @@ const renderNode = ({ Link }) => {
       const url = "/articles/" + slug;
       const { value: text } = content[0];
       return h(Link, { href: url, title, key: `a-${index}` }, text);
-    }
-  });
+    },
+    
+    [BLOCKS.EMBEDDED_ENTRY]: (node) => {
+      // https://stein.sh/rendering-code-blocks-with-contentful-typescript-and-vue
+      
+      const { sys, fields } = node.data.target;
+
+      if (
+        sys?.contentType?.sys?.id !== "codeBlock" &&
+        sys?.contentType?.sys?.id !== "codeSample"
+      ) {
+        return undefined;
+      }
+
+      const { value: code } = highlightjs.highlight(fields.code, {
+        language: fields.lang,
+      });
+
+      return h(
+        "pre",
+        {},
+        h("code", { dangerouslySetInnerHTML: { __html: code } })
+      );
+    },
+  };
 };
 
-export default renderNode;
+export const renderMark = {};

@@ -5,6 +5,7 @@
 @import "front-page.css";
 @import "layout.css";
 @import "page.css";
+@import "github.css";
 
 html,
 body,
@@ -81,4 +82,13 @@ b {
 
 img {
   max-width: 100%;
+}
+
+pre {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
+  border-radius: 0.25em;
+  padding: 1.25em 1.25em;
+  border: 1px solid lightgray;
+  margin-bottom: 1.25em;
 }
