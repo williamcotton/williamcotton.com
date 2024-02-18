@@ -30,8 +30,8 @@ let csurf : obj -> unit = jsNative
 [<Import("default", "cookie-session")>]
 let cookieSession : {| name: string; sameSite: string; secret: string |} -> unit = jsNative
 
-[<Import("graphqlHTTP", "express-graphql")>]
-let graphqlHTTP : {| schema: obj; rootValue: obj; graphiql: bool |} -> unit = jsNative
+[<Import("createHandler", "graphql-http/lib/use/express")>]
+let createHandler : {| schema: obj; rootValue: obj; graphiql: bool |} -> unit = jsNative
 
 [<Import("default", "./graphql-schema-builder.js")>]
 let graphqlSchemaBuilder : {| schemaString: string |} -> obj = jsNative
@@ -67,7 +67,7 @@ let app = express()
 useMiddleware(expressStatic("build"))
 useMiddleware(cookieSession({| name = "session"; sameSite = "lax"; secret = sessionSecret |}))
 useMiddleware(csurf())
-useMiddlewareRoute "/graphql" (graphqlHTTP({| schema = schema.schema; rootValue = rootValue; graphiql = true |}));
+useMiddlewareRoute "/graphql" (createHandler({| schema = schema.schema; rootValue = rootValue; graphiql = true |}));
 useMiddleware(graphqlClientMiddleware({| schema = schema.schema; rootValue = rootValue |}));
 useMiddleware(expressLinkMiddleware({| defaultTitle = defaultTitle |}))
 useMiddleware(reactRendererMiddleware({| appLayout = AppLayout |}))

@@ -1,5 +1,5 @@
 import GraphQLJSON from 'graphql-type-json';
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import sendgrid from 'sendgrid';
 const helper = sendgrid.mail;
 
