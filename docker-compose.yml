@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: williamcotton-com:v1.0
+    container_name: williamcotton-com-container
+    ports:
+      - "5005:5005" # Map the port from your Express app to the host
+    environment:
+      - NODE_ENV=production # Set the environment variable for Node.js
+      - PORT=5005 # Override the PORT variable to '5005'
+      
+

@@ -1,6 +1,6 @@
 all: build
 
-build: build/app.css build/app.js
+build: build/app.css build/app.js .env
 
 build/app.css:
 	mkdir -p build
@@ -11,6 +11,9 @@ build/app.js:
 	dotnet fable
 	npx webpack --mode production --env production
 	npx uglifyjs $@ -o $@
+
+.env:
+	cp default.env .env
 
 clean:
 	rm -rf build
