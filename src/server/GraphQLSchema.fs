@@ -3,7 +3,6 @@ module GraphQLSchema
 open Fable.Core
 open Fable.Core.JsInterop
 open Global
-open System
 
 type SendGridHelper = {
     Email: string -> string -> obj
@@ -103,8 +102,8 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.map (fun item -> trimBody item)
         }
 
-    let article opts =
-        let slug = opts?slug
+    let article args =
+        let slug = args?slug
 
         promise {
             let entriesOptions = 
@@ -118,8 +117,8 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.head
         }
 
-    let page opts =
-        let slug = opts?slug
+    let page args =
+        let slug = args?slug
 
         promise {
             let entriesOptions = 
@@ -133,8 +132,8 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.head
         }
 
-    let sendEmail opts =
-        let input = opts?input
+    let sendEmail args =
+        let input = args?input
         let name = input?name
         let replyToAddress = input?replyToAddress
         let subject = input?subject

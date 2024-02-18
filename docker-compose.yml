@@ -9,8 +9,10 @@ services:
     container_name: williamcotton-com-container
     ports:
       - "5005:5005" # Map the port from your Express app to the host
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production # Set the environment variable for Node.js
       - PORT=5005 # Override the PORT variable to '5005'
-      
+
 
