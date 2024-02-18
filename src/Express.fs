@@ -4,7 +4,7 @@ open Feliz
 open Fable.Core
 
 type ExpressReq =
-  abstract member params : obj
+  abstract member ``params`` : obj
   abstract member body : obj
   abstract member query : obj
   abstract member Link : obj -> ReactElement
@@ -25,7 +25,7 @@ type ExpressReq =
 type ExpressRes =
   abstract member send : obj -> unit
   abstract member renderComponent : ReactElement -> unit
-  abstract member status : int -> ExpressReq
+  abstract member status : int -> unit
 
 type ExpressApp =
   abstract member get: string * (ExpressReq -> ExpressRes -> (obj -> unit) -> unit) -> unit

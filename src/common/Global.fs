@@ -28,7 +28,7 @@ type Contentful = {
     createClient: ContentfulClientOptions -> ContentfulClient
 }
 
-let addOrdinal (day: int) : string =
+let addOrdinal day =
     match day % 10 with
     | 1 when day % 100 <> 11 -> sprintf "%dst" day
     | 2 when day % 100 <> 12 -> sprintf "%dnd" day
@@ -51,7 +51,7 @@ let monthNames monthNumber =
     | 12 -> "December"
     | _ -> failwith "Invalid month number"
 
-let formatDateString (inputDate: string) : string =
+let formatDateString inputDate =
     let parsedDate = DateTime.Parse(inputDate)
     let monthName = monthNames parsedDate.Month
     let dayWithOrdinal = addOrdinal parsedDate.Day

@@ -9,12 +9,8 @@ open GraphQLSchema
 open Components
 
 [<Import("default", "dotenv")>]
-let dotenv : unit -> unit = jsNative
-dotenv
-
-[<Emit("dotenv.config()")>]
-let dotenvConfig : unit = jsNative
-dotenvConfig
+let dotenv : {| config : unit -> unit |}= jsNative
+dotenv.config()
 
 [<Emit("process.env[$0]")>]
 let env (key : string) : string = jsNative

@@ -103,8 +103,8 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.map (fun item -> trimBody item)
         }
 
-    let article params =
-        let slug = params?slug
+    let article opts =
+        let slug = opts?slug
 
         promise {
             let entriesOptions = 
@@ -118,8 +118,8 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.head
         }
 
-    let page params =
-        let slug = params?slug
+    let page opts =
+        let slug = opts?slug
 
         promise {
             let entriesOptions = 
@@ -133,10 +133,8 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.head
         }
 
-    let sendEmail params =
-        consoleLog "sendEmail"
-        consoleLog params
-        let input = params?input
+    let sendEmail opts =
+        let input = opts?input
         let name = input?name
         let replyToAddress = input?replyToAddress
         let subject = input?subject
@@ -162,8 +160,7 @@ let rootValueInitializer contentfulClient sendgridClient =
                 let! response = sendgridClient?API(request)
                 consoleLog response
                 return {| success = true |}
-            with
-            | :? Exception as ex ->
+            with ex ->
                 consoleLog ex.Message
                 return {| success = false |}
         } |> ignore

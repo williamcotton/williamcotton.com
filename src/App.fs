@@ -22,7 +22,7 @@ let universalApp (app: ExpressApp) =
             match response with
             | Ok response -> 
                 let allArticles : Article[] = response?allArticles
-                FrontPage({| allArticles = allArticles |})
+                FrontPage ({| allArticles = allArticles |})
                 |> res.renderComponent |> ignore
             | Error message -> next()
 
@@ -31,14 +31,14 @@ let universalApp (app: ExpressApp) =
 
     app.get("/articles/:slug", fun req res next ->
         promise {
-            let slug = req.params?slug
+            let slug = req.``params``?slug
 
             let! response =
                 req |> gql "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
             match response with
             | Ok response -> 
                 let article : Article = response?article
-                ArticlePage({| article = article |})
+                ArticlePage ({| article = article |})
                 |> res.renderComponent |> ignore
             | Error message -> next()
 
@@ -51,7 +51,6 @@ let universalApp (app: ExpressApp) =
     )
 
     app.post("/contact", fun req res next ->
-        consoleLog req.body
         promise {
             let name = req.body?name
             let replyToAddress = req.body?email
@@ -71,7 +70,7 @@ let universalApp (app: ExpressApp) =
 
     app.get("/:slug", fun req res next ->
         promise {
-            let slug = req.params?slug
+            let slug = req.``params``?slug
 
             let! response = 
                 req |> gql "query Page($slug: String!) { page(slug: $slug) { title, slug, body } }" {| slug = slug |}
@@ -79,7 +78,7 @@ let universalApp (app: ExpressApp) =
             match response with
             | Ok response -> 
                 let page : Page = response?page
-                Page({| page = page |})
+                Page ({| page = page |})
                 |> res.renderComponent |> ignore
             | Error message -> next()
 
