@@ -63,10 +63,14 @@ header {
 
 footer {
   background-color: black;
-  height: 3em;
-  margin-top: 1em;
-
-  pre {
-    font-family: monospace;
+  padding: 0 1em;
+  height: 5em;
+  color: white;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  p {
+    line-height: 1em;
+    margin: 0 1em 0 0;
   }
 }

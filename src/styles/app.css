@@ -1,11 +1,11 @@
 @import "reset.css";
+@import "code.css";
 @import "variables.css";
 @import "article.css";
 @import "contact.css";
 @import "front-page.css";
 @import "layout.css";
 @import "page.css";
-@import "github.css";
 
 html,
 body,
@@ -29,7 +29,7 @@ p {
 }
 
 p {
-  line-height: 1.618;
+  line-height: 1.618em;
   font-size: 1em;
 
   @media (min-width: 790px) {
@@ -82,13 +82,4 @@ b {
 
 img {
   max-width: 100%;
-}
-
-pre {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.9em;
-  border-radius: 0.25em;
-  padding: 1.25em 1.25em;
-  border: 1px solid lightgray;
-  margin-bottom: 1.25em;
 }

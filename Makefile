@@ -1,6 +1,6 @@
 all: build
 
-build: build/app.css build/app.js .env
+build: build/app.css build/app.js fonts .env
 
 build/app.css:
 	mkdir -p build
@@ -11,6 +11,10 @@ build/app.js:
 	dotnet fable
 	npx webpack --mode production --env production
 	npx uglifyjs $@ -o $@
+
+fonts:
+	mkdir -p build
+	cp -r src/fonts/* build/
 
 .env:
 	cp default.env .env
