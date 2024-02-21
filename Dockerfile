@@ -14,6 +14,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_21.x | bash - && \
 COPY . ./
 
 # Restore and build .NET dependencies
+RUN dotnet new tool-manifest
+RUN dotnet tool install fable
 RUN dotnet tool restore
 RUN dotnet restore
 
