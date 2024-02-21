@@ -52,3 +52,4 @@ bin/
 # Fable compiled files
 *.fs.js
 .fake
+.config/
