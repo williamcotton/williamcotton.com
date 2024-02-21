@@ -78,7 +78,7 @@ let FrontPage(props: {| allArticles : Article[] |}) =
                 documentToReactComponents(article.body, {| renderNode = renderNodeObj; renderMark = renderMark |})
             ]
         ) 
-        |> React.fragment 
+        |> React.fragment
         
 [<ReactComponent>]
 let ContactPage() =

@@ -102,7 +102,7 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.map (fun item -> trimBody item)
         }
 
-    let article args =
+    let article (args : {| slug : string |}) =
         let slug = args?slug
 
         promise {
@@ -117,7 +117,7 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.head
         }
 
-    let page args =
+    let page (args : {| slug : string |}) =
         let slug = args?slug
 
         promise {
