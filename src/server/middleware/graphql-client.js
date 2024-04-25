@@ -8,15 +8,16 @@ class HTTPError extends Error {
   }
 }
 
-const cacheKey = (query, variables) =>
-  `${query}-(${variables ? JSON.stringify(variables) : ""})`;
+const cacheKey = (source, variableValues) =>
+  `${source}-(${variableValues ? JSON.stringify(variableValues) : ""})`;
 
 export default ({ schema, rootValue }) =>
   (req, res, next) => {
-    req.gql = async (query, variables) => {
-      const isMutation = /^mutation/.test(query);
-      const key = cacheKey(query, variables);
-      const response = await graphql(schema, query, rootValue, req, variables);
+    req.gql = async (source, variableValues) => {
+      const isMutation = /^mutation/.test(source);
+      const key = cacheKey(source, variableValues);
+      const contextValue = req;
+      const response = await graphql({ schema, source, rootValue, contextValue, variableValues });
       if (!isMutation) res.cacheQuery(key, response);
       const { data, errors } = response;
       if (errors) {
@@ -26,8 +27,8 @@ export default ({ schema, rootValue }) =>
       req.dataQuery = {
         data,
         errors,
-        query,
-        variables,
+        source,
+        variableValues,
       };
       return data;
     };
