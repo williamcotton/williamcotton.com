@@ -103,7 +103,7 @@ let rootValueInitializer contentfulClient sendgridClient =
         }
 
     let article (args : {| slug : string |}) =
-        let slug = args?slug
+        let slug = args.slug
 
         promise {
             let entriesOptions = 
@@ -118,7 +118,7 @@ let rootValueInitializer contentfulClient sendgridClient =
         }
 
     let page (args : {| slug : string |}) =
-        let slug = args?slug
+        let slug = args.slug
 
         promise {
             let entriesOptions = 
@@ -132,13 +132,13 @@ let rootValueInitializer contentfulClient sendgridClient =
                 |> Array.head
         }
 
-    let sendEmail args =
-        let input = args?input
-        let name = input?name
-        let replyToAddress = input?replyToAddress
-        let subject = input?subject
+    let sendEmail (args : {| input: {| name: string; replyToAddress: string; subject: string; body: string |} |}) =
+        let input = args.input
+        let name = input.name
+        let replyToAddress = input.replyToAddress
+        let subject = input.subject
         let modifiedSubject = "From williamcotton.com: " + subject
-        let body = input?body
+        let body = input.body
 
         let fromMail = helper.Email replyToAddress name
         let toMail = helper.Email "williamcotton@gmail.com" "William Cotton"
