@@ -34,11 +34,18 @@ type ExpressApp =
   abstract member ``use``: (obj -> ExpressReq -> ExpressRes -> (unit -> unit) -> unit) -> unit
   abstract member ``use``: (ExpressReq -> ExpressRes -> (unit -> unit) -> unit) -> unit
 
-let gql (query: string) (variables: obj) (req: ExpressReq) : JS.Promise<Result<obj, string>> =
-  promise {
-    try
-      let! result = req.gql query variables
-      return Ok result
-    with
-    | ex -> return Error (sprintf "Error in query: %s" ex.Message)
-  }
+let inline convert<'T> (value: obj): 'T =
+    value :?> 'T
+
+let gql<'T> (query: string) (variables: obj) (req: ExpressReq) : JS.Promise<Result<'T, string>> =
+    promise {
+        try
+            let! result = req.gql query variables
+            let data = convert<'T>(result)
+            return Ok data
+        with
+        | :? System.InvalidCastException ->
+            return Error "Failed to cast result to type"
+        | ex ->
+            return Error (sprintf "Error in query: %s" ex.Message)
+    }

@@ -17,14 +17,17 @@ let universalApp (app: ExpressApp) =
     app.get("/", fun req res next ->
         promise {
             let! response = 
-                req |> gql "query { allArticles { title slug publishedDate description body } }" {||}
+                req |> gql<{| allArticles: Article[] |}> 
+                    "query { allArticles { title slug publishedDate description body } }" 
+                    {||}
                 
             match response with
             | Ok response -> 
-                let allArticles : Article[] = response?allArticles
-                FrontPage ({| allArticles = allArticles |})
+                FrontPage ({| allArticles = response.allArticles |})
                 |> res.renderComponent |> ignore
-            | Error message -> next()
+            | Error message -> 
+                consoleLog message
+                next()
 
         } |> ignore
     )
@@ -34,13 +37,16 @@ let universalApp (app: ExpressApp) =
             let slug = req.``params``?slug
 
             let! response =
-                req |> gql "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" {| slug = slug |}
+                req |> gql<{| article: Article |}>
+                    "query ($slug: String!) { article(slug: $slug) { title slug publishedDate description body } }" 
+                    {| slug = slug |}
             match response with
-            | Ok response -> 
-                let article : Article = response?article
-                ArticlePage ({| article = article |})
+            | Ok response ->
+                ArticlePage ({| article = response.article |})
                 |> res.renderComponent |> ignore
-            | Error message -> next()
+            | Error message -> 
+                consoleLog message
+                next()
 
         } |> ignore
     )
@@ -58,12 +64,16 @@ let universalApp (app: ExpressApp) =
             let body = req.body?body
 
             let! response = 
-                req |> gql "mutation sendEmail($input: EmailMessage) { sendEmail(input: $input) { success } }" {| input = {| name = name; replyToAddress = replyToAddress; subject = subject; body = body |} |}
+                req |> gql 
+                    "mutation sendEmail($input: EmailMessage) { sendEmail(input: $input) { success } }" 
+                    {| input = {| name = name; replyToAddress = replyToAddress; subject = subject; body = body |} |}
 
             match response with
             | Ok response -> 
                 consoleLog response 
-            | Error message -> next()
+            | Error message -> 
+                consoleLog message
+                next()
 
         } |> ignore
     )
@@ -73,14 +83,17 @@ let universalApp (app: ExpressApp) =
             let slug = req.``params``?slug
 
             let! response = 
-                req |> gql "query Page($slug: String!) { page(slug: $slug) { title, slug, body } }" {| slug = slug |}
+                req |> gql<{| page: Page |}> 
+                    "query Page($slug: String!) { page(slug: $slug) { title, slug, body } }" 
+                    {| slug = slug |}
 
             match response with
-            | Ok response -> 
-                let page : Page = response?page
-                Page ({| page = page |})
+            | Ok response ->
+                Page ({| page = response.page |})
                 |> res.renderComponent |> ignore
-            | Error message -> next()
+            | Error message -> 
+                consoleLog message
+                next()
 
         } |> ignore
     )
