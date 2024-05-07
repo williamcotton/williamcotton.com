@@ -7,7 +7,7 @@ RUN apt-get update && \
   apt-get install -y build-essential
 
 # Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_21.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
   apt-get install -y nodejs
 
 # Copy necessary files for build
@@ -24,7 +24,7 @@ RUN npm install
 RUN npm run build
 
 # Runtime stage
-FROM node:21-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 # Copy the built assets from the previous stage
