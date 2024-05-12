@@ -1,5 +1,5 @@
 {
-  "name": "fable-test",
+  "name": "williamcotton.com",
   "version": "1.0.0",
   "type": "module",
   "description": "",
@@ -11,7 +11,7 @@
     "dev": "run-p *-dev",
     "start-server-dev": "nodemon dotenv -e .env src/server/Server.fs.js -w src/ --ext js",
     "start-browser-dev": "webpack --mode development --watch --env development",
-    "start-fable-dev": "dotnet fable -s watch",
+    "start-fable-dev": "dotnet fable watch --sourceMaps",
     "build-css-dev": "nodemon -w src/styles/ --ext css --exec cp src/styles/*.css build/"
   },
   "keywords": [],
@@ -22,7 +22,7 @@
     "@contentful/rich-text-types": "^16.3.5",
     "@graphql-tools/schema": "^10.0.3",
     "browser-express": "^4.8.0",
-    "contentful": "^10.9.3",
+    "contentful": "^10.10.0",
     "cookie-session": "^2.1.0",
     "csurf": "^1.11.0",
     "dotenv": "^16.4.5",
