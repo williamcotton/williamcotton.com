@@ -16,7 +16,7 @@ let sendgrid : string -> {| mail : obj |} = jsNative
 
 let sendgridClient = sendgrid(env "SENDGRID_API_KEY")
 
-[<Import("default", "contentful")>]
+[<Import("*", "contentful")>]
 let contentful : Contentful = jsNative
 
 let contentfulClient = contentful.createClient { space = env "CONTENTFUL_SPACE"; accessToken = env "CONTENTFUL_ACCESS_TOKEN" }
