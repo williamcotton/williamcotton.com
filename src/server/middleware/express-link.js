@@ -19,6 +19,7 @@ function renderDocument({
 <head>
   <meta charset="utf-8">
   ${metaViewportTag}
+  <link rel="preload" href="LigaMenlo-Regular.woff" as="font" type="font/woff" crossorigin>
   <title>${title || defaultTitle}</title>
   ${styleTag}
   <meta name="description" content="${description || title || defaultTitle}">
