@@ -1,6 +1,9 @@
 import { createElement as h } from "react";
 import { INLINES, BLOCKS } from "@contentful/rich-text-types";
 import highlightjs from "highlight.js";
+import webpipe from "./webpipe.js";
+
+highlightjs.registerLanguage('webpipe', webpipe);
 
 export const renderNode = ({ Link }) => {
   return {
