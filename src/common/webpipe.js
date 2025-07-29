@@ -120,6 +120,25 @@ export default function(hljs) {
       {
         scope: 'literal',
         match: '\\b(true|false)\\b'
+      },
+
+      // BDD test keywords with quoted strings
+      {
+        begin: '\\b(describe|it)\\s+',
+        beginScope: 'keyword',
+        end: '$',
+        contains: [
+          {
+            scope: 'string',
+            match: '"[^"]*"'
+          }
+        ]
+      },
+
+      // Other BDD keywords
+      {
+        scope: 'keyword',
+        match: '\\b(with|when|then|and|executing|calling|input|output|equals|status|mock|returning)\\b'
       }
     ]
   };
