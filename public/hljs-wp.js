@@ -1,10 +1,5 @@
-/*
-Language: WebPipe
-Description: Syntax highlighting for WebPipe language files
-Author: WebPipe Language Team
-*/
-
-export default function(hljs) {
+// Register WebPipe language definition
+hljs.registerLanguage('webpipe', function(hljs) {
   return {
     name: 'WebPipe',
     case_insensitive: false,
@@ -24,10 +19,6 @@ export default function(hljs) {
         match: '\\b(config|pipeline)\\b'
       },
 
-      // ────────────────────────────────────────────────
-      //  NEW: middleware keyword in *variable assignment*
-      //       e.g.  pg pageQuery = `…`
-      // ────────────────────────────────────────────────
       {
         scope: 'keyword',
         match: '^\\s*[a-zA-Z_][a-zA-Z0-9_]*(?=\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*=)'
@@ -142,4 +133,5 @@ export default function(hljs) {
       }
     ]
   };
-}
+});
+hljs.highlightAll();
