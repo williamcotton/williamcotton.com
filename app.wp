@@ -208,15 +208,15 @@ mustache baseLayout = `
         <div class="sitewrapper">
             <header>
                 <h1>
-                    <a href="/">williamcotton.com</a>
+                    <a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">williamcotton.com</a>
                 </h1>
                 <nav>
-                    <a href="/about">About</a>
-                    <a href="/bio">Bio</a>
-                    <a href="/contact">Contact</a>
+                    <a href="/about" hx-get="/htmx/about" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/about">About</a>
+                    <a href="/bio" hx-get="/htmx/bio" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/bio">Bio</a>
+                    <a href="/contact" hx-get="/htmx/contact" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/contact">Contact</a>
                 </nav>
             </header>
-            <div class="content">
+            <div class="content" id="main-content">
                 {{$content}}Default content{{/content}}
             </div>
             <footer>
@@ -234,6 +234,7 @@ mustache blogLayout = `
   {{$title}}{{#pageTitle}}{{pageTitle}} - {{/pageTitle}}William Cotton{{/title}}
   {{$metaTags}}{{#seoDescription}}<meta name="description" content="{{seoDescription}}">{{/seoDescription}}{{/metaTags}}
   {{$headExtras}}
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/fsharp.min.js"></script>
     <script src="/hljs-wp.js"></script>
@@ -242,6 +243,20 @@ mustache blogLayout = `
     {{$pageContent}}Default page content{{/pageContent}}
   {{/content}}
 {{/baseLayout}}
+`
+
+mustache articleListItem = `
+<article>
+    <h2>
+        <a href="/articles/{{fields.slug}}" 
+           hx-get="/htmx/articles/{{fields.slug}}" 
+           hx-target="#main-content" 
+           hx-swap="innerHTML show:window:top"
+           hx-push-url="/articles/{{fields.slug}}">{{fields.title}}</a>
+    </h2>
+    {{#fields.formattedDate}}<p class="published-date">{{fields.formattedDate}}</p>{{/fields.formattedDate}}
+    {{#fields.bodyPreview}}{{{fields.bodyPreview}}}{{/fields.bodyPreview}}
+</article>
 `
 
 ## Front page with site structure
@@ -254,13 +269,7 @@ GET /
           {{$title}}William Cotton{{/title}}
           {{$pageContent}}
             {{#articles}}
-            <article>
-                <h2>
-                    <a href="/articles/{{fields.slug}}">{{fields.title}}</a>
-                </h2>
-                {{#fields.formattedDate}}<p class="published-date">{{fields.formattedDate}}</p>{{/fields.formattedDate}}
-                {{#fields.bodyPreview}}{{{fields.bodyPreview}}}{{/fields.bodyPreview}}
-            </article>
+            {{>articleListItem}}
             {{/articles}}
             {{^articles}}
               <p>No articles found.</p>
@@ -277,7 +286,7 @@ GET /
             <div class="error">
               <h2>Error Loading Articles</h2>
               <p>{{errorMessage}}</p>
-              <p><a href="/">← Try again</a></p>
+              <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Try again</a></p>
             </div>
           {{/pageContent}}
         {{/blogLayout}}
@@ -290,7 +299,7 @@ GET /
             <div class="error">
               <h2>Unexpected Error</h2>
               <p>Something went wrong while loading the articles.</p>
-              <p><a href="/">← Try again</a></p>
+              <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Try again</a></p>
             </div>
           {{/pageContent}}
         {{/blogLayout}}
@@ -323,7 +332,7 @@ GET /articles/:article
             <article>
                 <h2>Article Not Found</h2>
                 <p>{{errorMessage}}</p>
-                <p><a href="/">← Back to home</a></p>
+                <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
             </article>
           {{/pageContent}}
         {{/blogLayout}}
@@ -337,7 +346,7 @@ GET /articles/:article
             <article>
                 <h2>Error Loading Article</h2>
                 <p>{{errorMessage}}</p>
-                <p><a href="/">← Back to home</a></p>
+                <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
             </article>
           {{/pageContent}}
         {{/blogLayout}}
@@ -350,10 +359,86 @@ GET /articles/:article
             <article>
                 <h2>Unexpected Error</h2>
                 <p>Something went wrong while loading the article.</p>
-                <p><a href="/">← Back to home</a></p>
+                <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
             </article>
           {{/pageContent}}
         {{/blogLayout}}
+      `
+
+## HTMX Homepage endpoint (returns just content)
+GET /htmx/
+  |> pipeline: contentfulArticles
+  |> result
+    ok(200):
+      |> mustache: `
+        {{#articles}}
+        {{>articleListItem}}
+        {{/articles}}
+        {{^articles}}
+          <p>No articles found.</p>
+        {{/articles}}
+        <script>hljs.highlightAll();</script>
+      `
+    default(500):
+      |> mustache: `
+        <div class="error">
+          <h2>Error Loading Articles</h2>
+          <p>Something went wrong while loading the articles.</p>
+        </div>
+      `
+
+## HTMX Article endpoint (returns just article content)
+GET /htmx/articles/:article
+  |> pipeline: contentfulByArticle
+  |> result
+    ok(200):
+      |> mustache: `
+        <article>
+            <h2>{{title}}</h2>
+            {{#formattedDate}}<p class="published-date">{{formattedDate}}</p>{{/formattedDate}}
+            {{{bodyHtml}}}
+        </article>
+        <script>hljs.highlightAll();</script>
+      `
+    notFound(404):
+      |> jq: `{ articleSlug: .errors[0].slug, errorMessage: .errors[0].message }`
+      |> mustache: `
+        <article>
+            <h2>Article Not Found</h2>
+            <p>{{errorMessage}}</p>
+            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
+        </article>
+      `
+    default(500):
+      |> mustache: `
+        <article>
+            <h2>Error Loading Article</h2>
+            <p>Something went wrong while loading the article.</p>
+            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
+        </article>
+      `
+
+## HTMX Page endpoint (returns just page content)
+GET /htmx/:page
+  |> pipeline: contentfulPages
+  |> result
+    ok(200):
+      |> mustache: `
+        <h2>{{title}}</h2>
+        {{{bodyHtml}}}
+      `
+    notFound(404):
+      |> jq: `{ pageSlug: .errors[0].slug, errorMessage: .errors[0].message }`
+      |> mustache: `
+        <h2>Page Not Found</h2>
+        <p>{{errorMessage}}</p>
+        <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
+      `
+    default(500):
+      |> mustache: `
+        <h2>Error Loading Page</h2>
+        <p>Something went wrong while loading the page.</p>
+        <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
       `
 
 ## Page
@@ -379,7 +464,7 @@ GET /:page
           {{$content}}
             <h2>Page Not Found</h2>
             <p>{{errorMessage}}</p>
-            <p><a href="/">← Back to home</a></p>
+            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
           {{/content}}
         {{/baseLayout}}
       `
@@ -391,7 +476,7 @@ GET /:page
           {{$content}}
             <h2>Error Loading Page</h2>
             <p>{{errorMessage}}</p>
-            <p><a href="/">← Back to home</a></p>
+            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
           {{/content}}
         {{/baseLayout}}
       `
@@ -402,7 +487,7 @@ GET /:page
           {{$content}}
             <h2>Unexpected Error</h2>
             <p>Something went wrong while loading the page.</p>
-            <p><a href="/">← Back to home</a></p>
+            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
           {{/content}}
         {{/baseLayout}}
       `
