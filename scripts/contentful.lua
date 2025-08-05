@@ -57,13 +57,37 @@ function contentful.renderRichText(richTextObj, includes)
     return nil
   end
   
+  -- Helper function to resolve asset references from includes
+  local function resolveAsset(assetId)
+    if not includes or not includes.Asset then return nil end
+    for _, asset in ipairs(includes.Asset) do
+      if asset.sys and asset.sys.id == assetId then
+        return asset
+      end
+    end
+    return nil
+  end
+  
   local html = ""
   for _, node in ipairs(richTextObj.content) do
     
     -- Handle embedded assets (images)
     if node.nodeType == "embedded-asset-block" then
+      local asset = nil
+      
+      -- Try to get asset from direct data first
       if node.data and node.data.target and node.data.target.fields then
-        local asset = node.data.target.fields
+        asset = node.data.target.fields
+      -- Otherwise resolve from includes
+      elseif node.data and node.data.target and node.data.target.sys then
+        local assetId = node.data.target.sys.id
+        local resolvedAsset = resolveAsset(assetId)
+        if resolvedAsset and resolvedAsset.fields then
+          asset = resolvedAsset.fields
+        end
+      end
+      
+      if asset then
         local url = asset.file and asset.file.url or ""
         local title = asset.title or ""
         local description = asset.description or title
@@ -134,11 +158,27 @@ function contentful.renderRichText(richTextObj, includes)
               linkText = linkText .. contentful.renderTextWithMarks(linkContent)
             end
           end
-          local target = inline.data and inline.data.target
-          local url = target and target.fields and target.fields.file and target.fields.file.url or "#"
           
-          if url:sub(1, 2) == "//" then
-            url = "https:" .. url
+          local asset = nil
+          local url = "#"
+          
+          -- Try to get asset from direct data first
+          if inline.data and inline.data.target and inline.data.target.fields then
+            asset = inline.data.target.fields
+          -- Otherwise resolve from includes
+          elseif inline.data and inline.data.target and inline.data.target.sys then
+            local assetId = inline.data.target.sys.id
+            local resolvedAsset = resolveAsset(assetId)
+            if resolvedAsset and resolvedAsset.fields then
+              asset = resolvedAsset.fields
+            end
+          end
+          
+          if asset and asset.file and asset.file.url then
+            url = asset.file.url
+            if url:sub(1, 2) == "//" then
+              url = "https:" .. url
+            end
           end
           
           html = html .. string.format('<a href="%s" download>%s</a>', contentful.escapeHtml(url), linkText)
