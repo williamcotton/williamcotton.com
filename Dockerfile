@@ -1,4 +1,4 @@
-FROM ghcr.io/williamcotton/webpipe:latest
+FROM ghcr.io/williamcotton/webpipe-rs:latest
 
 COPY app.wp /app/
 COPY public /app/public/
