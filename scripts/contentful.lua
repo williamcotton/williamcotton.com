@@ -11,9 +11,12 @@ function contentful.generateEntryUrl(target)
   local slug = target.fields.slug
   
   if contentType == "blogPost" and slug then
-    return "/contentful/article/" .. slug
+    return "/articles/" .. slug
   elseif contentType == "page" and slug then
-    return "/contentful/page/" .. slug
+    return "/" .. slug
+  elseif slug then
+    -- Fallback: if slug exists but contentType is missing, assume blog post
+    return "/articles/" .. slug
   else
     return "#"
   end
@@ -48,8 +51,12 @@ function contentful.renderRichText(richTextObj, includes)
   
   -- Helper function to resolve entry references from includes
   local function resolveEntry(entryId)
-    if not includes or not includes.Entry then return nil end
-    for _, entry in ipairs(includes.Entry) do
+    local effectiveIncludes = includes
+    if effectiveIncludes and effectiveIncludes.includes then
+      effectiveIncludes = effectiveIncludes.includes
+    end
+    if not effectiveIncludes or not effectiveIncludes.Entry then return nil end
+    for _, entry in ipairs(effectiveIncludes.Entry) do
       if entry.sys and entry.sys.id == entryId then
         return entry
       end
@@ -59,8 +66,12 @@ function contentful.renderRichText(richTextObj, includes)
   
   -- Helper function to resolve asset references from includes
   local function resolveAsset(assetId)
-    if not includes or not includes.Asset then return nil end
-    for _, asset in ipairs(includes.Asset) do
+    local effectiveIncludes = includes
+    if effectiveIncludes and effectiveIncludes.includes then
+      effectiveIncludes = effectiveIncludes.includes
+    end
+    if not effectiveIncludes or not effectiveIncludes.Asset then return nil end
+    for _, asset in ipairs(effectiveIncludes.Asset) do
       if asset.sys and asset.sys.id == assetId then
         return asset
       end
@@ -145,11 +156,25 @@ function contentful.renderRichText(richTextObj, includes)
               linkText = linkText .. contentful.renderTextWithMarks(linkContent)
             end
           end
+
           local target = inline.data and inline.data.target
-          local href = contentful.generateEntryUrl(target)
-          local title = target and target.fields and target.fields.title or ""
-          
-          html = html .. string.format('<a href="%s" title="%s">%s</a>', 
+          local entryForUrl = target
+          -- If the target only contains a sys.id, resolve the full entry from includes
+          if entryForUrl and (not entryForUrl.fields) and entryForUrl.sys and entryForUrl.sys.id then
+            local resolvedEntry = resolveEntry(entryForUrl.sys.id)
+            if resolvedEntry then
+              entryForUrl = resolvedEntry
+            end
+          end
+
+          local href = contentful.generateEntryUrl(entryForUrl)
+          if href == "#" and target and target.sys and target.sys.id then
+            -- Fallback to ID-based route if we couldn't resolve a full entry
+            href = "/articles/id/" .. contentful.escapeHtml(target.sys.id)
+          end
+          local title = entryForUrl and entryForUrl.fields and entryForUrl.fields.title or ""
+
+          html = html .. string.format('<a href="%s" title="%s">%s</a>',
                                       contentful.escapeHtml(href), contentful.escapeHtml(title), linkText)
         elseif inline.nodeType == "asset-hyperlink" then
           local linkText = ""
@@ -237,7 +262,7 @@ function contentful.renderRichText(richTextObj, includes)
               end
             else
               -- Recursively handle nested content
-              html = html .. contentful.renderRichText(itemContent)
+              html = html .. contentful.renderRichText(itemContent, includes)
             end
           end
           html = html .. "</li>\n"
@@ -255,7 +280,7 @@ function contentful.renderRichText(richTextObj, includes)
                 html = html .. contentful.renderTextWithMarks(textNode)
               end
             else
-              html = html .. contentful.renderRichText(itemContent)
+              html = html .. contentful.renderRichText(itemContent, includes)
             end
           end
           html = html .. "</li>\n"
@@ -274,7 +299,7 @@ function contentful.renderRichText(richTextObj, includes)
           end
           html = html .. "</p>\n"
         else
-          html = html .. contentful.renderRichText(quoteContent)
+          html = html .. contentful.renderRichText(quoteContent, includes)
         end
       end
       html = html .. "</blockquote>\n"
@@ -295,7 +320,7 @@ function contentful.renderRichText(richTextObj, includes)
               html = html .. "<" .. tag .. ">"
               if cell.content then
                 for _, cellContent in ipairs(cell.content) do
-                  html = html .. contentful.renderRichText(cellContent)
+                  html = html .. contentful.renderRichText(cellContent, includes)
                 end
               end
               html = html .. "</" .. tag .. ">\n"

@@ -32,7 +32,7 @@ pipeline contentfulFetch =
     local filters = request.filters or ""
     
     return {
-      fetchUrl = "https://cdn.contentful.com/spaces/" .. cf.spaceId .. "/entries?content_type=" .. contentType .. filters,
+      fetchUrl = "https://cdn.contentful.com/spaces/" .. cf.spaceId .. "/entries?content_type=" .. contentType .. filters .. "&include=10",
       fetchHeaders = {
         ["Authorization"] = "Bearer " .. cf.token
       },
@@ -42,7 +42,7 @@ pipeline contentfulFetch =
       originalRequest = request.originalRequest
     }
   `
-  |> fetch: `placeholder`
+  |> fetch: `_`
 
 # Blog posts list pipeline
 pipeline contentfulArticles =
@@ -82,7 +82,7 @@ pipeline contentfulArticles =
         processedFields.body = trimmedBody
         
         -- Render the trimmed body content for preview
-        processedFields.bodyPreview = contentful.renderRichText(trimmedBody, request.data.response.includes)
+        processedFields.bodyPreview = contentful.renderRichText(trimmedBody, request.data.response)
         
         -- Format published date
         processedFields.formattedDate = dateFormatter.formatPublishedDate(fields.publishedDate)
@@ -130,7 +130,7 @@ pipeline contentfulByArticle =
         
         return {
           title = fields.title or "Untitled",
-          bodyHtml = contentful.renderRichText(fields.body, request.data.response.includes),
+          bodyHtml = contentful.renderRichText(fields.body, request.data.response),
           slug = fields.slug or "",
           publishedDate = fields.publishedDate or entry.sys.createdAt,
           formattedDate = formattedDate,
@@ -155,6 +155,54 @@ pipeline contentfulByArticle =
           type = "contentfulError",
           message = "Failed to fetch article from Contentful",
           slug = request.params.article
+        }}
+      }
+    end
+  `
+
+# Single entry by ID pipeline (fallback for unresolved entry-hyperlinks)
+pipeline contentfulById =
+  |> pipeline: contentfulAuth
+  |> jq: `. + { filters: ("&sys.id[in]=" + .params.id) }`
+  |> cache: `
+    enabled: true,
+    ttl: 120
+  `
+  |> pipeline: contentfulFetch
+  |> lua: `
+    if request.data and request.data.response and request.data.response.items then
+      local items = request.data.response.items
+      if #items > 0 then
+        local entry = items[1]
+        local fields = entry.fields or {}
+        local formattedDate = dateFormatter.formatPublishedDate(fields.publishedDate)
+        return {
+          title = fields.title or "Untitled",
+          bodyHtml = contentful.renderRichText(fields.body, request.data.response.includes),
+          slug = fields.slug or "",
+          publishedDate = fields.publishedDate or entry.sys.createdAt,
+          formattedDate = formattedDate,
+          author = fields.author or "William Cotton",
+          excerpt = fields.excerpt or "",
+          tags = fields.tags or {},
+          seoDescription = fields.seoDescription or fields.excerpt or "",
+          contentType = entry.sys.contentType.sys.id
+        }
+      else
+        return {
+          errors = {{
+            type = "notFound",
+            message = "Article not found with id: " .. request.params.id,
+            id = request.params.id
+          }}
+        }
+      end
+    else
+      return {
+        errors = {{
+          type = "contentfulError",
+          message = "Failed to fetch article from Contentful",
+          id = request.params.id
         }}
       }
     end
@@ -333,6 +381,46 @@ GET /articles/:article
           </article>
         {{/blogLayout}}
       `
+
+## Blog article by ID (fallback route)
+GET /articles/id/:id
+  |> pipeline: contentfulById
+  |> result
+    ok(200):
+      |> handlebars: `
+        {{#> blogLayout}}
+          {{#*inline "title"}}{{title}} - William Cotton{{/inline}}
+          {{#*inline "metaTags"}}{{#if seoDescription}}<meta name="description" content="{{seoDescription}}">{{/if}}{{/inline}}
+          <article>
+              <h2>{{title}}</h2>
+              {{#if formattedDate}}<p class="published-date">{{formattedDate}}</p>{{/if}}
+              {{{bodyHtml}}}
+          </article>
+        {{/blogLayout}}
+      `
+    notFound(404):
+      |> jq: `{ articleId: .errors[0].id, errorMessage: .errors[0].message }`
+      |> handlebars: `
+        {{#> blogLayout}}
+          {{#*inline "title"}}Article Not Found - William Cotton{{/inline}}
+          <article>
+              <h2>Article Not Found</h2>
+              <p>{{errorMessage}}</p>
+              <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
+          </article>
+        {{/blogLayout}}
+      `
+    default(500):
+      |> handlebars: `
+        {{#> blogLayout}}
+          {{#*inline "title"}}Error - William Cotton{{/inline}}
+          <article>
+              <h2>Unexpected Error</h2>
+              <p>Something went wrong while loading the article.</p>
+              <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
+          </article>
+        {{/blogLayout}}
+      `
     notFound(404):
       |> jq: `{ articleSlug: .errors[0].slug, errorMessage: .errors[0].message }`
       |> handlebars: `
@@ -404,6 +492,38 @@ GET /htmx/articles/:article
         </article>
         <title id="page-title" hx-swap-oob="true">{{title}} - William Cotton</title>
         <script>hljs.highlightAll();</script>
+      `
+
+## HTMX Article endpoint by ID (fallback)
+GET /htmx/articles/id/:id
+  |> pipeline: contentfulById
+  |> result
+    ok(200):
+      |> handlebars: `
+        <article>
+            <h2>{{title}}</h2>
+            {{#if formattedDate}}<p class="published-date">{{formattedDate}}</p>{{/if}}
+            {{{bodyHtml}}}
+        </article>
+        <title id="page-title" hx-swap-oob="true">{{title}} - William Cotton</title>
+        <script>hljs.highlightAll();</script>
+      `
+    notFound(404):
+      |> jq: `{ articleId: .errors[0].id, errorMessage: .errors[0].message }`
+      |> handlebars: `
+        <article>
+            <h2>Article Not Found</h2>
+            <p>{{errorMessage}}</p>
+            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
+        </article>
+      `
+    default(500):
+      |> handlebars: `
+        <article>
+            <h2>Error Loading Article</h2>
+            <p>Something went wrong while loading the article.</p>
+            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
+        </article>
       `
     notFound(404):
       |> jq: `{ articleSlug: .errors[0].slug, errorMessage: .errors[0].message }`
