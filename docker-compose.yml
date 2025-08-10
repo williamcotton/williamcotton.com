@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: williamcotton-com:latest
+    container_name: williamcotton-com
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # If PORT is not set in .env, default to 8090
+      PORT: ${PORT:-8090}
+    ports:
+      # Map host 8090 to whatever PORT the app listens on in the container
+      - "${HOST_PORT:-8090}:${PORT:-8090}"
+    volumes:
+      - ./app.wp:/app/app.wp:ro
+      - ./public:/app/public:ro
+      - ./scripts:/app/scripts:ro
+
+
