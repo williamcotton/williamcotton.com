@@ -215,7 +215,7 @@ handlebars baseLayout = `
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>
     <link rel="preload" href="LigaMenlo-Regular.woff" as="font" type="font/woff" crossorigin>
-    <title>{{> title}}</title>
+    <title id="page-title">{{> title}}</title>
     <link rel="stylesheet" href="/app.css"/>
     {{> metaTags}}
     {{> headExtras}}
@@ -249,7 +249,6 @@ handlebars baseLayout = `
 
 handlebars blogLayout = `
 {{#> baseLayout}}
-  {{#*inline "title"}}{{#if pageTitle}}{{pageTitle}} - {{/if}}William Cotton{{/inline}}
   {{#*inline "metaTags"}}{{#if seoDescription}}<meta name="description" content="{{seoDescription}}">{{/if}}{{/inline}}
   {{#*inline "headExtras"}}
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
@@ -381,6 +380,7 @@ GET /htmx/
         {{else}}
           <p>No articles found.</p>
         {{/each}}
+        <title id="page-title" hx-swap-oob="true">William Cotton</title>
         <script>hljs.highlightAll();</script>
       `
     default(500):
@@ -402,6 +402,7 @@ GET /htmx/articles/:article
             {{#if formattedDate}}<p class="published-date">{{formattedDate}}</p>{{/if}}
             {{{bodyHtml}}}
         </article>
+        <title id="page-title" hx-swap-oob="true">{{title}} - William Cotton</title>
         <script>hljs.highlightAll();</script>
       `
     notFound(404):
@@ -430,6 +431,7 @@ GET /htmx/:page
       |> handlebars: `
         <h2>{{title}}</h2>
         {{{bodyHtml}}}
+        <title id="page-title" hx-swap-oob="true">{{title}} - William Cotton</title>
       `
     notFound(404):
       |> jq: `{ pageSlug: .errors[0].slug, errorMessage: .errors[0].message }`
