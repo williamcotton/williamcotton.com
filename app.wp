@@ -137,7 +137,7 @@ pipeline contentfulByArticle =
           author = fields.author or "William Cotton",
           excerpt = fields.excerpt or "",
           tags = fields.tags or {},
-          seoDescription = fields.seoDescription or fields.excerpt or "",
+          description = fields.description or fields.excerpt or "",
           contentType = entry.sys.contentType.sys.id
         }
       else
@@ -180,7 +180,7 @@ pipeline contentfulPages =
           title = fields.title or "Untitled",
           bodyHtml = contentful.renderBasicRichText(fields.body, request.data.response.includes),
           slug = fields.slug or "",
-          seoDescription = fields.seoDescription or "",
+          description = fields.description or "",
           contentType = entry.sys.contentType.sys.id
         }
       else
@@ -249,7 +249,7 @@ handlebars baseLayout = `
 
 handlebars blogLayout = `
 {{#> baseLayout}}
-  {{#*inline "metaTags"}}{{#if seoDescription}}<meta name="description" content="{{seoDescription}}">{{/if}}{{/inline}}
+  {{#*inline "metaTags"}}{{#if description}}<meta name="description" content="{{description}}">{{/if}}{{/inline}}
   {{#*inline "headExtras"}}
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
