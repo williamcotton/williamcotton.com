@@ -160,54 +160,6 @@ pipeline contentfulByArticle =
     end
   `
 
-# Single entry by ID pipeline (fallback for unresolved entry-hyperlinks)
-pipeline contentfulById =
-  |> pipeline: contentfulAuth
-  |> jq: `. + { filters: ("&sys.id[in]=" + .params.id) }`
-  |> cache: `
-    enabled: true,
-    ttl: 120
-  `
-  |> pipeline: contentfulFetch
-  |> lua: `
-    if request.data and request.data.response and request.data.response.items then
-      local items = request.data.response.items
-      if #items > 0 then
-        local entry = items[1]
-        local fields = entry.fields or {}
-        local formattedDate = dateFormatter.formatPublishedDate(fields.publishedDate)
-        return {
-          title = fields.title or "Untitled",
-          bodyHtml = contentful.renderRichText(fields.body, request.data.response.includes),
-          slug = fields.slug or "",
-          publishedDate = fields.publishedDate or entry.sys.createdAt,
-          formattedDate = formattedDate,
-          author = fields.author or "William Cotton",
-          excerpt = fields.excerpt or "",
-          tags = fields.tags or {},
-          seoDescription = fields.seoDescription or fields.excerpt or "",
-          contentType = entry.sys.contentType.sys.id
-        }
-      else
-        return {
-          errors = {{
-            type = "notFound",
-            message = "Article not found with id: " .. request.params.id,
-            id = request.params.id
-          }}
-        }
-      end
-    else
-      return {
-        errors = {{
-          type = "contentfulError",
-          message = "Failed to fetch article from Contentful",
-          id = request.params.id
-        }}
-      }
-    end
-  `
-
 # Pages by page pipeline  
 pipeline contentfulPages =
   |> pipeline: contentfulAuth
@@ -404,7 +356,7 @@ GET /articles/:article
         {{#> blogLayout}}
           {{#*inline "title"}}{{title}} - William Cotton{{/inline}}
           {{#*inline "metaTags"}}{{#if description}}<meta name="description" content="{{description}}">{{/if}}{{/inline}}
-          {{> article}}
+{{> article}}
         {{/blogLayout}}
       `
 
