@@ -294,17 +294,18 @@ handlebars article = `
   </article>
   `
 
+handlebars articleListLayout = `
+{{#> blogLayout}}
+  {{#*inline "title"}}William Cotton{{/inline}}
+{{> articleList}}
+{{/blogLayout}}`
+
 ## Front page with site structure
 GET /
   |> pipeline: contentfulArticles
   |> result
     ok(200):
-      |> handlebars: `
-{{#> blogLayout}}
-  {{#*inline "title"}}William Cotton{{/inline}}
-{{> articleList}}
-{{/blogLayout}}
-      `
+      |> handlebars: articleListLayout
     contentfulError(500):
       |> jq: `{ errorMessage: .errors[0].message, errorDetails: .errors[0].details }`
       |> handlebars: `
