@@ -204,8 +204,11 @@ pipeline contentfulPages =
   `
 
 handlebars title = `William Cotton`
+
 handlebars metaTags = `<meta name="description" content="William Cotton">`
+
 handlebars headExtras = ``
+
 handlebars footerScripts = ``
 
 handlebars baseLayout = `
