@@ -441,3 +441,94 @@ GET /:page
           <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
         {{/baseLayout}}
       `
+
+describe "contentfulArticles pipeline"
+  it "fetches and processes articles from live data"
+    when executing pipeline contentfulArticles
+    with input `{}`
+    then output contains `{ "articles": [] }`
+
+describe "contentfulByArticle pipeline"
+  it "fetches specific article by slug"
+    when executing pipeline contentfulByArticle
+    with input `{ "params": { "article": "a-burrito-is-a-monad" } }`
+    then output `.title` equals "A Burrito Is a Monad"
+    and output `.slug` equals "a-burrito-is-a-monad"
+    and output `.contentType` equals "blogPost"
+
+  it "returns not found error for nonexistent article"
+    when executing pipeline contentfulByArticle
+    with input `{ "params": { "article": "this-article-does-not-exist-12345" } }`
+    then output contains `{
+      "errors": [{
+        "type": "notFound",
+        "message": "Article not found with slug: this-article-does-not-exist-12345",
+        "slug": "this-article-does-not-exist-12345"
+      }]
+    }`
+
+describe "contentfulPages pipeline"
+  it "fetches about page"
+    when executing pipeline contentfulPages
+    with input `{ "params": { "page": "about" } }`
+    then output `.slug` equals "about"
+    and output `.contentType` equals "page"
+
+  it "returns not found error for missing page"
+    when executing pipeline contentfulPages
+    with input `{ "params": { "page": "nonexistent-page-12345" } }`
+    then output contains `{
+      "errors": [{
+        "type": "notFound",
+        "message": "Page not found with slug: nonexistent-page-12345",
+        "slug": "nonexistent-page-12345"
+      }]
+    }`
+
+describe "homepage route"
+  it "returns homepage with articles"
+    when calling GET /
+    then status is 200
+    and output contains "williamcotton.com"
+    and output contains "<article>"
+
+describe "htmx homepage route"
+  it "returns article content for htmx requests"
+    when calling GET /htmx/
+    then status is 200
+    and output contains `<title id="page-title" hx-swap-oob="true">William Cotton</title>`
+    and output contains "<article>"
+
+describe "article route"
+  it "returns burrito monad article page"
+    when calling GET /articles/a-burrito-is-a-monad
+    then status is 200
+    and output contains "A Burrito Is a Monad"
+    and output contains "Some Chicken"
+    and output contains `<title id="page-title">A Burrito Is a Monad - William Cotton</title>`
+
+describe "htmx article route"
+  it "returns article content for htmx requests"
+    when calling GET /htmx/articles/a-burrito-is-a-monad
+    then status is 200
+    and output contains "A Burrito Is a Monad"
+    and output contains "Some Chicken"
+    and output contains `<title id="page-title" hx-swap-oob="true">A Burrito Is a Monad - William Cotton</title>`
+
+describe "page route"
+  it "returns about page"
+    when calling GET /about
+    then status is 200
+    and output contains "williamcotton.com"
+
+describe "htmx page route"
+  it "returns page content for htmx requests"
+    when calling GET /htmx/about
+    then status is 200
+    and output contains `<title id="page-title" hx-swap-oob="true">`
+
+  it "returns 404 for missing htmx page"
+    when calling GET /htmx/nonexistent-page-12345
+    then status is 404
+    and output contains "Page Not Found"
+    and output contains "Page not found with slug: nonexistent-page-12345"
