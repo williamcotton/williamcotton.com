@@ -363,6 +363,26 @@ GET /articles/:article
 {{> article}}
         {{/blogLayout}}
       `
+    notFound(404):
+      |> handlebars: `
+        {{#> blogLayout}}
+          {{#*inline "title"}}Error - William Cotton{{/inline}}
+          <div class="error">
+            <h2>Error Loading Article</h2>
+            <p>Article not found.</p>
+          </div>
+        {{/blogLayout}}
+      `
+    default(500):
+      |> handlebars: `
+        {{#> blogLayout}}
+          {{#*inline "title"}}Error - William Cotton{{/inline}}
+          <div class="error">
+            <h2>Unexpected Error</h2>
+            <p>Something went wrong while loading the article.</p>  
+          </div>
+        {{/blogLayout}}
+      `
 
 ## HTMX Article endpoint (returns just article content)
 GET /htmx/articles/:article
@@ -373,6 +393,20 @@ GET /htmx/articles/:article
         {{> article}}
         <title id="page-title" hx-swap-oob="true">{{title}} - William Cotton</title>
         <script>hljs.highlightAll();</script>
+      `
+    notFound(404):
+      |> handlebars: `
+        <div class="error">
+          <h2>Error Loading Article</h2>
+          <p>Article not found.</p>
+        </div>
+      `
+    default(500):
+      |> handlebars: `
+        <div class="error">
+          <h2>Unexpected Error</h2>
+          <p>Something went wrong while loading the article.</p>
+        </div>
       `
 
 ## HTMX Page endpoint (returns just page content)
