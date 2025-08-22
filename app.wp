@@ -245,7 +245,6 @@ handlebars baseLayout = `
         </div>
     </div>
     {{> footerScripts}}
-
 </body>
 </html>
 `
@@ -281,6 +280,35 @@ handlebars articleListItem = `
 </article>
 `
 
+handlebars errorPage = `
+{{#> blogLayout}}
+  {{#*inline "title"}}{{errorTitle}} - William Cotton{{/inline}}
+  <div class="error">
+    <h2>{{errorHeading}}</h2>
+    <p>{{errorMessage}}</p>
+    {{#if showRetryLink}}<p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Try again</a></p>{{/if}}
+    {{#if showBackLink}}<p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>{{/if}}
+  </div>
+{{/blogLayout}}
+`
+
+handlebars errorContent = `
+<div class="error">
+  <h2>{{errorHeading}}</h2>
+  <p>{{errorMessage}}</p>
+  {{#if showBackLink}}<p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>{{/if}}
+</div>
+`
+
+handlebars baseErrorPage = `
+{{#> baseLayout}}
+  {{#*inline "title"}}{{errorTitle}} - William Cotton{{/inline}}
+  <h2>{{errorHeading}}</h2>
+  <p>{{errorMessage}}</p>
+  {{#if showBackLink}}<p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>{{/if}}
+{{/baseLayout}}
+`
+
 handlebars articleList = `
   {{#each articles}}
 {{> articleListItem}}
@@ -310,28 +338,11 @@ GET /
     ok(200):
       |> handlebars: articleListLayout
     contentfulError(500):
-      |> jq: `{ errorMessage: .errors[0].message, errorDetails: .errors[0].details }`
-      |> handlebars: `
-        {{#> blogLayout}}
-          {{#*inline "title"}}Error - William Cotton{{/inline}}
-          <div class="error">
-            <h2>Error Loading Articles</h2>
-            <p>{{errorMessage}}</p>
-            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Try again</a></p>
-          </div>
-        {{/blogLayout}}
-      `
+      |> jq: `{ errorTitle: "Error", errorHeading: "Error Loading Articles", errorMessage: .errors[0].message, showRetryLink: true }`
+      |> handlebars: errorPage
     default(500):
-      |> handlebars: `
-        {{#> blogLayout}}
-          {{#*inline "title"}}Error - William Cotton{{/inline}}
-          <div class="error">
-            <h2>Unexpected Error</h2>
-            <p>Something went wrong while loading the articles.</p>
-            <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Try again</a></p>
-          </div>
-        {{/blogLayout}}
-      `
+      |> jq: `{ errorTitle: "Error", errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the articles.", showRetryLink: true }`
+      |> handlebars: errorPage
 
 ## HTMX Homepage endpoint (returns just content)
 GET /htmx/
@@ -344,12 +355,8 @@ GET /htmx/
         <script>hljs.highlightAll();</script>
       `
     default(500):
-      |> handlebars: `
-        <div class="error">
-          <h2>Error Loading Articles</h2>
-          <p>Something went wrong while loading the articles.</p>
-        </div>
-      `
+      |> jq: `{ errorHeading: "Error Loading Articles", errorMessage: "Something went wrong while loading the articles." }`
+      |> handlebars: errorContent
 
 ## Blog article
 GET /articles/:article
@@ -364,25 +371,11 @@ GET /articles/:article
         {{/blogLayout}}
       `
     notFound(404):
-      |> handlebars: `
-        {{#> blogLayout}}
-          {{#*inline "title"}}Error - William Cotton{{/inline}}
-          <div class="error">
-            <h2>Error Loading Article</h2>
-            <p>Article not found.</p>
-          </div>
-        {{/blogLayout}}
-      `
+      |> jq: `{ errorTitle: "Error", errorHeading: "Error Loading Article", errorMessage: "Article not found." }`
+      |> handlebars: errorPage
     default(500):
-      |> handlebars: `
-        {{#> blogLayout}}
-          {{#*inline "title"}}Error - William Cotton{{/inline}}
-          <div class="error">
-            <h2>Unexpected Error</h2>
-            <p>Something went wrong while loading the article.</p>  
-          </div>
-        {{/blogLayout}}
-      `
+      |> jq: `{ errorTitle: "Error", errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the article." }`
+      |> handlebars: errorPage
 
 ## HTMX Article endpoint (returns just article content)
 GET /htmx/articles/:article
@@ -395,19 +388,11 @@ GET /htmx/articles/:article
         <script>hljs.highlightAll();</script>
       `
     notFound(404):
-      |> handlebars: `
-        <div class="error">
-          <h2>Error Loading Article</h2>
-          <p>Article not found.</p>
-        </div>
-      `
+      |> jq: `{ errorHeading: "Error Loading Article", errorMessage: "Article not found." }`
+      |> handlebars: errorContent
     default(500):
-      |> handlebars: `
-        <div class="error">
-          <h2>Unexpected Error</h2>
-          <p>Something went wrong while loading the article.</p>
-        </div>
-      `
+      |> jq: `{ errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the article." }`
+      |> handlebars: errorContent
 
 ## HTMX Page endpoint (returns just page content)
 GET /htmx/:page
@@ -420,18 +405,11 @@ GET /htmx/:page
         <title id="page-title" hx-swap-oob="true">{{title}} - William Cotton</title>
       `
     notFound(404):
-      |> jq: `{ pageSlug: .errors[0].slug, errorMessage: .errors[0].message }`
-      |> handlebars: `
-        <h2>Page Not Found</h2>
-        <p>{{errorMessage}}</p>
-        <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
-      `
+      |> jq: `{ errorHeading: "Page Not Found", errorMessage: .errors[0].message, showBackLink: true }`
+      |> handlebars: errorContent
     default(500):
-      |> handlebars: `
-        <h2>Error Loading Page</h2>
-        <p>Something went wrong while loading the page.</p>
-        <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
-      `
+      |> jq: `{ errorHeading: "Error Loading Page", errorMessage: "Something went wrong while loading the page.", showBackLink: true }`
+      |> handlebars: errorContent
 
 ## Page
 GET /:page
@@ -447,34 +425,14 @@ GET /:page
         {{/baseLayout}}
       `
     notFound(404):
-      |> jq: `{ pageSlug: .errors[0].slug, errorMessage: .errors[0].message }`
-      |> handlebars: `
-        {{#> baseLayout}}
-          {{#*inline "title"}}Page Not Found - William Cotton{{/inline}}
-          <h2>Page Not Found</h2>
-          <p>{{errorMessage}}</p>
-          <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
-        {{/baseLayout}}
-      `
+      |> jq: `{ errorTitle: "Page Not Found", errorHeading: "Page Not Found", errorMessage: .errors[0].message, showBackLink: true }`
+      |> handlebars: baseErrorPage
     contentfulError(500):
-      |> jq: `{ pageSlug: .errors[0].slug, errorMessage: .errors[0].message }`
-      |> handlebars: `
-        {{#> baseLayout}}
-          {{#*inline "title"}}Error - William Cotton{{/inline}}
-          <h2>Error Loading Page</h2>
-          <p>{{errorMessage}}</p>
-          <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
-        {{/baseLayout}}
-      `
+      |> jq: `{ errorTitle: "Error", errorHeading: "Error Loading Page", errorMessage: .errors[0].message, showBackLink: true }`
+      |> handlebars: baseErrorPage
     default(500):
-      |> handlebars: `
-        {{#> baseLayout}}
-          {{#*inline "title"}}Error - William Cotton{{/inline}}
-          <h2>Unexpected Error</h2>
-          <p>Something went wrong while loading the page.</p>
-          <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
-        {{/baseLayout}}
-      `
+      |> jq: `{ errorTitle: "Error", errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the page.", showBackLink: true }`
+      |> handlebars: baseErrorPage
 
 describe "contentfulArticles pipeline"
   it "fetches and processes articles from live data"
