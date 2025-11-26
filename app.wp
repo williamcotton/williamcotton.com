@@ -48,10 +48,6 @@ pipeline contentfulFetch =
 pipeline contentfulArticles =
   |> pipeline: contentfulAuth
   |> jq: `. + { contentType: "blogPost", filters: "&fields.hidden=false&order=-fields.publishedDate" }`
-  |> cache: `
-    enabled: true,
-    ttl: 60
-  `
   |> pipeline: contentfulFetch
   |> lua: `
     if request.data and request.data.response then
@@ -113,10 +109,6 @@ pipeline contentfulArticles =
 pipeline contentfulByArticle =
   |> pipeline: contentfulAuth
   |> jq: `. + { filters: ("&fields.slug[in]=" + .params.article) }`
-  |> cache: `
-    enabled: true,
-    ttl: 120
-  `
   |> pipeline: contentfulFetch
   |> lua: `
     if request.data and request.data.response and request.data.response.items then
@@ -164,10 +156,6 @@ pipeline contentfulByArticle =
 pipeline contentfulPages =
   |> pipeline: contentfulAuth
   |> jq: `. + { contentType: "page", filters: ("&fields.slug[in]=" + .params.page) }`
-  |> cache: `
-    enabled: true,
-    ttl: 120
-  `
   |> pipeline: contentfulFetch
   |> lua: `
     if request.data and request.data.response and request.data.response.items then
@@ -296,6 +284,7 @@ handlebars article = `
 
 ## Front page with site structure
 GET /
+  |> cache: `enabled: true, ttl: 60, keyTemplate: front-page`
   |> pipeline: contentfulArticles
   |> result
     ok(200):
@@ -331,6 +320,7 @@ GET /
 
 ## HTMX Homepage endpoint (returns just content)
 GET /htmx/
+  |> cache: `enabled: true, ttl: 60, keyTemplate: front-page-htmx`
   |> pipeline: contentfulArticles
   |> result
     ok(200):
@@ -349,6 +339,7 @@ GET /htmx/
 
 ## Blog article
 GET /articles/:article
+  |> cache: `enabled: true, ttl: 60, keyTemplate: article-{params.article}`
   |> pipeline: contentfulByArticle
   |> result
     ok(200):
@@ -362,6 +353,7 @@ GET /articles/:article
 
 ## HTMX Article endpoint (returns just article content)
 GET /htmx/articles/:article
+  |> cache: `enabled: true, ttl: 60, keyTemplate: article-htmx-{params.article}`
   |> pipeline: contentfulByArticle
   |> result
     ok(200):
@@ -373,6 +365,7 @@ GET /htmx/articles/:article
 
 ## HTMX Page endpoint (returns just page content)
 GET /htmx/:page
+  |> cache: `enabled: true, ttl: 60, keyTemplate: page-htmx-{params.page}`
   |> pipeline: contentfulPages
   |> result
     ok(200):
@@ -397,6 +390,7 @@ GET /htmx/:page
 
 ## Page
 GET /:page
+  |> cache: `enabled: true, ttl: 60, keyTemplate: page-{params.page}`
   |> pipeline: contentfulPages
   |> result
     ok(200):
