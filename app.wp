@@ -17,38 +17,20 @@ pipeline contentfulAuth =
       contentful = {
         spaceId = spaceId,
         token = token
-      },
-      params = request.params or {},
-      query = request.query or {},
-      originalRequest = request
+      }
     }
   `
 
 # Generic Contentful API fetcher
 pipeline contentfulFetch =
-  |> lua: `
-    local cf = request.contentful
-    local contentType = request.contentType or "blogPost"
-    local filters = request.filters or ""
-    
-    return {
-      fetchUrl = "https://cdn.contentful.com/spaces/" .. cf.spaceId .. "/entries?content_type=" .. contentType .. filters .. "&include=10",
-      fetchHeaders = {
-        ["Authorization"] = "Bearer " .. cf.token
-      },
-      contentful = cf,
-      params = request.params,
-      query = request.query,
-      originalRequest = request.originalRequest
-    }
-  `
-  |> fetch: `_`
+  |> fetch("https://cdn.contentful.com/spaces/" 
+      + .contentful.spaceId + "/entries?content_type=" + (.contentType // "blogPost") + (.filters // "") + "&include=10",
+      { headers: { Authorization: ("Bearer " + .contentful.token) } })
 
 # Blog posts list pipeline
 pipeline contentfulArticles =
   |> pipeline: contentfulAuth
-  |> jq: `. + { contentType: "blogPost", filters: "&fields.hidden=false&order=-fields.publishedDate" }`
-  |> pipeline: contentfulFetch
+  |> pipeline({ contentType: "blogPost", filters: "&fields.hidden=false&order=-fields.publishedDate" }): contentfulFetch
   |> lua: `
     if request.data and request.data.response then
       local entries = request.data.response.items or {}
@@ -431,19 +413,3 @@ GET /:page
           <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
         {{/baseLayout}}
       `
-GET /resilient/user-data/:userId
-  |> jq: `{ userId: .params.userId }`
-
-  # Primary data source (will succeed)
-  |> fetch("https://jsonplaceholder.typicode.com/users/" + (.userId | tostring)) @result(primary)
-
-  # Secondary data source (might fail, but won't break the pipeline)
-  # Note: In real scenarios, you'd handle errors with @guard or error handling middleware
-  |> jq: `. + { fallbackData: "available" }`
-
-  |> jq: `{
-      hasUserData: (.data.primary.response.name != null),
-      userName: (.data.primary.response.name // "Unknown"),
-      userEmail: (.data.primary.response.email // "N/A"),
-      dataSource: (if .data.primary then "primary" else "fallback" end)
-    }`
