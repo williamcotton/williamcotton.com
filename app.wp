@@ -431,3 +431,19 @@ GET /:page
           <p><a href="/" hx-get="/htmx/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">← Back to home</a></p>
         {{/baseLayout}}
       `
+GET /resilient/user-data/:userId
+  |> jq: `{ userId: .params.userId }`
+
+  # Primary data source (will succeed)
+  |> fetch("https://jsonplaceholder.typicode.com/users/" + (.userId | tostring)) @result(primary)
+
+  # Secondary data source (might fail, but won't break the pipeline)
+  # Note: In real scenarios, you'd handle errors with @guard or error handling middleware
+  |> jq: `. + { fallbackData: "available" }`
+
+  |> jq: `{
+      hasUserData: (.data.primary.response.name != null),
+      userName: (.data.primary.response.name // "Unknown"),
+      userEmail: (.data.primary.response.email // "N/A"),
+      dataSource: (if .data.primary then "primary" else "fallback" end)
+    }`

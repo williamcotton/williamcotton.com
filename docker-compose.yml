@@ -11,11 +11,11 @@ services:
     env_file:
       - .env
     environment:
-      # If PORT is not set in .env, default to 8090
-      PORT: ${PORT:-8090}
+      # If PORT is not set in .env, default to 7770
+      PORT: ${PORT:-7770}
     ports:
-      # Map host 8090 to whatever PORT the app listens on in the container
-      - "${HOST_PORT:-8090}:${PORT:-8090}"
+      # Map host 7770 to whatever PORT the app listens on in the container
+      - "${HOST_PORT:-7770}:${PORT:-7770}"
     volumes:
       - ./app.wp:/app/app.wp:ro
       - ./public:/app/public:ro
