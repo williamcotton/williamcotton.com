@@ -90,8 +90,7 @@ pipeline contentfulArticles =
 # Single entry by article pipeline
 pipeline contentfulByArticle =
   |> pipeline: contentfulAuth
-  |> jq: `. + { filters: ("&fields.slug[in]=" + .params.article) }`
-  |> pipeline: contentfulFetch
+  |> pipeline({ filters: ("&fields.slug[in]=" + .params.article) }): contentfulFetch
   |> lua: `
     if request.data and request.data.response and request.data.response.items then
       local items = request.data.response.items
@@ -137,8 +136,7 @@ pipeline contentfulByArticle =
 # Pages by page pipeline  
 pipeline contentfulPages =
   |> pipeline: contentfulAuth
-  |> jq: `. + { contentType: "page", filters: ("&fields.slug[in]=" + .params.page) }`
-  |> pipeline: contentfulFetch
+  |> pipeline({ contentType: "page", filters: ("&fields.slug[in]=" + .params.page) }): contentfulFetch
   |> lua: `
     if request.data and request.data.response and request.data.response.items then
       local items = request.data.response.items
