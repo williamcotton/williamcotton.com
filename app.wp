@@ -46,13 +46,13 @@ pipeline contentfulFetch =
 
 # Blog posts list pipeline
 pipeline contentfulArticles =
-  |> pipeline: contentfulAuth
+  |> contentfulAuth
   |> jq: `. + { contentType: "blogPost", filters: "&fields.hidden=false&order=-fields.publishedDate" }`
   |> cache: `
     enabled: true,
     ttl: 60
   `
-  |> pipeline: contentfulFetch
+  |> contentfulFetch
   |> lua: `
     if request.data and request.data.response then
       local entries = request.data.response.items or {}
@@ -111,13 +111,13 @@ pipeline contentfulArticles =
 
 # Single entry by article pipeline
 pipeline contentfulByArticle =
-  |> pipeline: contentfulAuth
+  |> contentfulAuth
   |> jq: `. + { filters: ("&fields.slug[in]=" + .params.article) }`
   |> cache: `
     enabled: true,
     ttl: 120
   `
-  |> pipeline: contentfulFetch
+  |> contentfulFetch
   |> lua: `
     if request.data and request.data.response and request.data.response.items then
       local items = request.data.response.items
@@ -162,13 +162,13 @@ pipeline contentfulByArticle =
 
 # Pages by page pipeline  
 pipeline contentfulPages =
-  |> pipeline: contentfulAuth
+  |> contentfulAuth
   |> jq: `. + { contentType: "page", filters: ("&fields.slug[in]=" + .params.page) }`
   |> cache: `
     enabled: true,
     ttl: 120
   `
-  |> pipeline: contentfulFetch
+  |> contentfulFetch
   |> lua: `
     if request.data and request.data.response and request.data.response.items then
       local items = request.data.response.items
@@ -333,7 +333,7 @@ handlebars articleListLayout = `
 
 ## Front page with site structure
 GET /
-  |> pipeline: contentfulArticles
+  |> contentfulArticles
   |> result
     ok(200):
       |> handlebars: articleListLayout
@@ -346,7 +346,7 @@ GET /
 
 ## HTMX Homepage endpoint (returns just content)
 GET /htmx/
-  |> pipeline: contentfulArticles
+  |> contentfulArticles
   |> result
     ok(200):
       |> handlebars: `
@@ -360,7 +360,7 @@ GET /htmx/
 
 ## Blog article
 GET /articles/:article
-  |> pipeline: contentfulByArticle
+  |> contentfulByArticle
   |> result
     ok(200):
       |> handlebars: `
@@ -379,7 +379,7 @@ GET /articles/:article
 
 ## HTMX Article endpoint (returns just article content)
 GET /htmx/articles/:article
-  |> pipeline: contentfulByArticle
+  |> contentfulByArticle
   |> result
     ok(200):
       |> handlebars: `
@@ -396,7 +396,7 @@ GET /htmx/articles/:article
 
 ## HTMX Page endpoint (returns just page content)
 GET /htmx/:page
-  |> pipeline: contentfulPages
+  |> contentfulPages
   |> result
     ok(200):
       |> handlebars: `
@@ -413,7 +413,7 @@ GET /htmx/:page
 
 ## Page
 GET /:page
-  |> pipeline: contentfulPages
+  |> contentfulPages
   |> result
     ok(200):
       |> handlebars: `
