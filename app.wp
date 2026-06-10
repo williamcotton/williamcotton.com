@@ -1,3 +1,67 @@
+assert ContentfulArticlesResult = `{
+  articles: [{
+    fields: {
+      slug?: string,
+      title?: string,
+      formattedDate?: string | null,
+      bodyPreview?: string | null,
+      ...
+    },
+    sys: { ... }
+  }],
+  total: number,
+  message: string,
+  description?: string
+} | {
+  errors: [{
+    type: "contentfulError",
+    message: string,
+    details?: unknown
+  }]
+}`
+
+assert ContentfulArticleResult = `{
+  title: string,
+  bodyHtml: string,
+  slug: string,
+  formattedDate?: string | null,
+  description: string,
+  contentType: string,
+  ...
+} | {
+  errors: [{
+    type: "notFound",
+    message: string,
+    slug: string | number
+  }]
+} | {
+  errors: [{
+    type: "contentfulError",
+    message: string,
+    slug?: string | number
+  }]
+}`
+
+assert ContentfulPageResult = `{
+  title: string,
+  bodyHtml: string,
+  slug: string,
+  description: string,
+  contentType: string
+} | {
+  errors: [{
+    type: "notFound",
+    message: string,
+    slug: string | number
+  }]
+} | {
+  errors: [{
+    type: "contentfulError",
+    message: string,
+    slug?: string | number
+  }]
+}`
+
 # Base authentication and environment validation
 pipeline contentfulAuth =
   |> lua: `
@@ -108,6 +172,7 @@ pipeline contentfulArticles =
       }
     end
   `
+  |> assert: ContentfulArticlesResult
 
 # Single entry by article pipeline
 pipeline contentfulByArticle =
@@ -159,6 +224,7 @@ pipeline contentfulByArticle =
       }
     end
   `
+  |> assert: ContentfulArticleResult
 
 # Pages by page pipeline  
 pipeline contentfulPages =
@@ -202,6 +268,7 @@ pipeline contentfulPages =
       }
     end
   `
+  |> assert: ContentfulPageResult
 
 handlebars title = `William Cotton`
 
@@ -338,10 +405,10 @@ GET /
     ok(200):
       |> handlebars: articleListLayout
     contentfulError(500):
-      |> jq: `{ errorTitle: "Error", errorHeading: "Error Loading Articles", errorMessage: .errors[0].message, showRetryLink: true }`
+      |> jq: `{ errorTitle: "Error", errorHeading: "Error Loading Articles", errorMessage: .errors[0].message, showRetryLink: true, showBackLink: false, description: "" }`
       |> handlebars: errorPage
     default(500):
-      |> jq: `{ errorTitle: "Error", errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the articles.", showRetryLink: true }`
+      |> jq: `{ errorTitle: "Error", errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the articles.", showRetryLink: true, showBackLink: false, description: "" }`
       |> handlebars: errorPage
 
 ## HTMX Homepage endpoint (returns just content)
@@ -355,7 +422,7 @@ GET /htmx/
         <script>hljs.highlightAll();</script>
       `
     default(500):
-      |> jq: `{ errorHeading: "Error Loading Articles", errorMessage: "Something went wrong while loading the articles." }`
+      |> jq: `{ errorHeading: "Error Loading Articles", errorMessage: "Something went wrong while loading the articles.", showBackLink: false }`
       |> handlebars: errorContent
 
 ## Blog article
@@ -371,10 +438,10 @@ GET /articles/:article
         {{/blogLayout}}
       `
     notFound(404):
-      |> jq: `{ errorTitle: "Error", errorHeading: "Error Loading Article", errorMessage: "Article not found." }`
+      |> jq: `{ errorTitle: "Error", errorHeading: "Error Loading Article", errorMessage: "Article not found.", showRetryLink: false, showBackLink: false, description: "" }`
       |> handlebars: errorPage
     default(500):
-      |> jq: `{ errorTitle: "Error", errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the article." }`
+      |> jq: `{ errorTitle: "Error", errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the article.", showRetryLink: false, showBackLink: false, description: "" }`
       |> handlebars: errorPage
 
 ## HTMX Article endpoint (returns just article content)
@@ -388,10 +455,10 @@ GET /htmx/articles/:article
         <script>hljs.highlightAll();</script>
       `
     notFound(404):
-      |> jq: `{ errorHeading: "Error Loading Article", errorMessage: "Article not found." }`
+      |> jq: `{ errorHeading: "Error Loading Article", errorMessage: "Article not found.", showBackLink: false }`
       |> handlebars: errorContent
     default(500):
-      |> jq: `{ errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the article." }`
+      |> jq: `{ errorHeading: "Unexpected Error", errorMessage: "Something went wrong while loading the article.", showBackLink: false }`
       |> handlebars: errorContent
 
 ## HTMX Page endpoint (returns just page content)
